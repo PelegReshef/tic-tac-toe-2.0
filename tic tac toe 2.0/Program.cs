@@ -178,7 +178,9 @@ public enum Turns
 {
     Player1,
     Player2,
-    AI
+    AI,
+    hahaha,
+    t4t4t
 }
 
 class BoardLogic
