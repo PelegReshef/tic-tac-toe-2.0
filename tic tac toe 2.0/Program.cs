@@ -181,7 +181,7 @@ public enum Turns
     AI,
     hahaha,
     t4t4t,
-    errtyyuuiioggd
+    rewrewrew
 }
 
 class BoardLogic
