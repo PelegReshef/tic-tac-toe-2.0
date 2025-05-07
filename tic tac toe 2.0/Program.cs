@@ -180,7 +180,8 @@ public enum Turns
     Player2,
     AI,
     hahaha,
-    t4t4t
+    t4t4t,
+    errtyyuuiioggd
 }
 
 class BoardLogic
