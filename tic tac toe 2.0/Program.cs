@@ -179,9 +179,6 @@ public enum Turns
     Player1,
     Player2,
     AI,
-    hahaha,
-    t4t4t,
-    rewrewrew
 }
 
 class BoardLogic
