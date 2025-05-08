@@ -383,55 +383,61 @@ static class GameLogic // check for win/draw/loss
     public static GameState CheckGameState(BoardLogic boardLogic)
     {
         // check for win
+        CellState[] topLine = new CellState[3] { boardLogic.boardCells[0].state, boardLogic.boardCells[1].state, boardLogic.boardCells[2].state };
+        CellState[] midLine = new CellState[3] { boardLogic.boardCells[3].state, boardLogic.boardCells[4].state, boardLogic.boardCells[5].state };
+        CellState[] bottomLine = new CellState[3] { boardLogic.boardCells[6].state, boardLogic.boardCells[7].state, boardLogic.boardCells[8].state };
 
-        // lines
-        if ((boardLogic.boardCells[0].state == CellState.X && boardLogic.boardCells[1].state == CellState.X && boardLogic.boardCells[2].state == CellState.X) || (boardLogic.boardCells[0].state == CellState.O && boardLogic.boardCells[1].state == CellState.O && boardLogic.boardCells[2].state == CellState.O))
-        {
-            return GameState.Win; 
-        }
-        else if (boardLogic.boardCells[3].state == boardLogic.boardCells[4].state && boardLogic.boardCells[4].state == boardLogic.boardCells[5].state)
-        {
-            return GameState.Win; 
-        }
-        else if (boardLogic.boardCells[6].state == boardLogic.boardCells[7].state && boardLogic.boardCells[7].state == boardLogic.boardCells[8].state)
-        {
-            return GameState.Win; 
-        }
+        CellState[] leftCollumn = new CellState[3] { boardLogic.boardCells[0].state, boardLogic.boardCells[3].state, boardLogic.boardCells[6].state };
+        CellState[] midCollumn = new CellState[3] { boardLogic.boardCells[1].state, boardLogic.boardCells[4].state, boardLogic.boardCells[7].state };
+        CellState[] rightCollumn = new CellState[3] { boardLogic.boardCells[2].state, boardLogic.boardCells[5].state, boardLogic.boardCells[8].state };
 
-        // colums
-        else if (boardLogic.boardCells[0].state == boardLogic.boardCells[3].state && boardLogic.boardCells[3].state == boardLogic.boardCells[6].state)
-        {
-            return GameState.Win; 
-        }
-        else if (boardLogic.boardCells[1].state == boardLogic.boardCells[4].state && boardLogic.boardCells[4].state == boardLogic.boardCells[7].state)
-        {
-            return GameState.Win; 
-        }
-        else if (boardLogic.boardCells[2].state == boardLogic.boardCells[5].state && boardLogic.boardCells[5].state == boardLogic.boardCells[8].state)
-        {
-            return GameState.Win; 
-        }
+        CellState[] diagonalLeftToRight = new CellState[3] { boardLogic.boardCells[0].state, boardLogic.boardCells[4].state, boardLogic.boardCells[8].state };
+        CellState[] diagonalRightToLeft = new CellState[3] { boardLogic.boardCells[2].state, boardLogic.boardCells[4].state, boardLogic.boardCells[6].state };
 
-        // diagonals
-        else if (boardLogic.boardCells[0].state == boardLogic.boardCells[4].state && boardLogic.boardCells[4].state == boardLogic.boardCells[8].state)
+        if (topLine[0] == topLine[1] && topLine[1] == topLine[2] && topLine[0] != CellState.Empty) // check for win
         {
-            return GameState.Win; 
+            return GameState.Win; // return win
         }
-        else if (boardLogic.boardCells[2].state == boardLogic.boardCells[4].state && boardLogic.boardCells[4].state == boardLogic.boardCells[6].state)
+        else if (midLine[0] == midLine[1] && midLine[1] == midLine[2] && midLine[0] != CellState.Empty) // check for win
         {
-            return GameState.Win; 
+            return GameState.Win; // return win
         }
-
-        // check for draw/in progress
-
-        foreach (Cell cell in boardLogic.boardCells)
+        else if (bottomLine[0] == bottomLine[1] && bottomLine[1] == bottomLine[2] && bottomLine[0] != CellState.Empty) // check for win
         {
-            if (cell.state == CellState.Empty) // check if the cell is empty
+            return GameState.Win; // return win
+        }
+        else if (leftCollumn[0] == leftCollumn[1] && leftCollumn[1] == leftCollumn[2] && leftCollumn[0] != CellState.Empty) // check for win
+        {
+            return GameState.Win; // return win
+        }
+        else if (midCollumn[0] == midCollumn[1] && midCollumn[1] == midCollumn[2] && midCollumn[0] != CellState.Empty) // check for win
+        {
+            return GameState.Win; // return win
+        }
+        else if (rightCollumn[0] == rightCollumn[1] && rightCollumn[1] == rightCollumn[2] && rightCollumn[0] != CellState.Empty) // check for win
+        {
+            return GameState.Win; // return win
+        }
+        else if (diagonalLeftToRight[0] == diagonalLeftToRight[1] && diagonalLeftToRight[1] == diagonalLeftToRight[2] && diagonalLeftToRight[0] != CellState.Empty) // check for win
+        {
+            return GameState.Win; // return win
+        }
+        else if (diagonalRightToLeft[0] == diagonalRightToLeft[1] && diagonalRightToLeft[1] == diagonalRightToLeft[2] && diagonalRightToLeft[0] != CellState.Empty) // check for win
+        {
+            return GameState.Win; // return win
+        }
+        else
+        {
+            // check for draw
+            foreach (Cell cell in boardLogic.boardCells)
             {
-                return GameState.InProgress; 
+                if (cell.state == CellState.Empty) // check if there is an empty cell
+                {
+                    return GameState.InProgress; // return in progress
+                }
             }
+            return GameState.Draw; // return draw
         }
-        return GameState.Draw; // if return GameState.InProgress was not triggered, game is a draw
     }
 }
     /* in charge of:
