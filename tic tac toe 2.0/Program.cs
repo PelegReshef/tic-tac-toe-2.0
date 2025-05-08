@@ -96,7 +96,23 @@ class Game // control the game: draw the board, swithch turns, end the game, etc
 
                     } while (!validAction); // repeat until a valid action is made
 
-                    turn = Turns.Player2; // switch turns
+                    GameState gameState = GameLogic.CheckGameState(boardLogic); 
+                    if (gameState == GameState.Win) // check if the game is won
+                    {
+                        Console.SetCursorPosition(0, 0); // reset the cursor position
+                        Console.WriteLine("Player 1 wins!"); // print the winner
+                        gameOver = true; // end the game
+                    }
+                    else if (gameState == GameState.Draw) // check if the game is a draw
+                    {
+                        Console.SetCursorPosition(0, 0); // reset the cursor position
+                        Console.WriteLine("Draw!"); // print the draw
+                        gameOver = true; // end the game
+                    }
+                    else
+                    {
+                        turn = Turns.Player2; // game continues + switch turns
+                    }
                 }
                 else if (turn == Turns.Player2)
                 {
@@ -109,8 +125,25 @@ class Game // control the game: draw the board, swithch turns, end the game, etc
                         validAction = ExamineActionPVP(p2, cursor); // examine the action
 
                     } while (!validAction); // repeat until a valid action is made
+                    
+                    GameState gameState = GameLogic.CheckGameState(boardLogic);
+                    if (gameState == GameState.Win) // check if the game is won
+                    {
+                        Console.SetCursorPosition(0, 0); // reset the cursor position
+                        Console.WriteLine("Player 2 wins!"); // print the winner
+                        gameOver = true; // end the game
+                    }
+                    else if (gameState == GameState.Draw) // check if the game is a draw
+                    {
+                        Console.SetCursorPosition(0, 0); // reset the cursor position
+                        Console.WriteLine("Draw!"); // print the draw
+                        gameOver = true; // end the game
+                    }
+                    else
+                    {
+                        turn = Turns.Player1; // switch turns
+                    }
 
-                    turn = Turns.Player1; // switch turns
                 }
                 else
                 {
@@ -337,17 +370,75 @@ class Cell
 
 
 }
+public enum GameState
+{
+    Win,
+    Draw,
+    Loss,
+    InProgress
+}
 
 static class GameLogic // check for win/draw/loss
 {
+    public static GameState CheckGameState(BoardLogic boardLogic)
+    {
+        // check for win
 
+        // lines
+        if ((boardLogic.boardCells[0].state == CellState.X && boardLogic.boardCells[1].state == CellState.X && boardLogic.boardCells[2].state == CellState.X) || (boardLogic.boardCells[0].state == CellState.O && boardLogic.boardCells[1].state == CellState.O && boardLogic.boardCells[2].state == CellState.O))
+        {
+            return GameState.Win; 
+        }
+        else if (boardLogic.boardCells[3].state == boardLogic.boardCells[4].state && boardLogic.boardCells[4].state == boardLogic.boardCells[5].state)
+        {
+            return GameState.Win; 
+        }
+        else if (boardLogic.boardCells[6].state == boardLogic.boardCells[7].state && boardLogic.boardCells[7].state == boardLogic.boardCells[8].state)
+        {
+            return GameState.Win; 
+        }
+
+        // colums
+        else if (boardLogic.boardCells[0].state == boardLogic.boardCells[3].state && boardLogic.boardCells[3].state == boardLogic.boardCells[6].state)
+        {
+            return GameState.Win; 
+        }
+        else if (boardLogic.boardCells[1].state == boardLogic.boardCells[4].state && boardLogic.boardCells[4].state == boardLogic.boardCells[7].state)
+        {
+            return GameState.Win; 
+        }
+        else if (boardLogic.boardCells[2].state == boardLogic.boardCells[5].state && boardLogic.boardCells[5].state == boardLogic.boardCells[8].state)
+        {
+            return GameState.Win; 
+        }
+
+        // diagonals
+        else if (boardLogic.boardCells[0].state == boardLogic.boardCells[4].state && boardLogic.boardCells[4].state == boardLogic.boardCells[8].state)
+        {
+            return GameState.Win; 
+        }
+        else if (boardLogic.boardCells[2].state == boardLogic.boardCells[4].state && boardLogic.boardCells[4].state == boardLogic.boardCells[6].state)
+        {
+            return GameState.Win; 
+        }
+
+        // check for draw/in progress
+
+        foreach (Cell cell in boardLogic.boardCells)
+        {
+            if (cell.state == CellState.Empty) // check if the cell is empty
+            {
+                return GameState.InProgress; 
+            }
+        }
+        return GameState.Draw; // if return GameState.InProgress was not triggered, game is a draw
+    }
 }
-
-/* in charge of:
- - player type
- - player icon
-  */
-struct Player // move the player that let you choose where to go
+    /* in charge of:
+     - player type
+     - player icon
+      */
+    struct Player // move the player that let you choose where to go
 {
     public const string playerIcon = @"\/"; // player character
     public PlayerType playerType; // type of player. player 1, player 2, AI
