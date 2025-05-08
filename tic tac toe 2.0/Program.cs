@@ -220,23 +220,6 @@ class BoardLogic
     public int X; // X position of the board. top left corner
     public int Y; // Y position of the board. top left corner
 
-    public BoardLogic()
-    {
-
-        // create all cells
-        boardCells = new Cell[9] // create the cells
-        {
-            new (X , Y), // cell 1
-            new (X + ((boardWidth - 2) / 3), Y), // cell 2
-            new (X + 2*((boardWidth - 2) / 3), Y), // cell 3
-            new (X , Y + ((boardHeight - 1) / 3)), // cell 4
-            new (X + ((boardWidth - 2) / 3), Y + ((boardHeight - 1) / 3)), // cell 5
-            new (X + 2*((boardWidth - 2) / 3), Y + ((boardHeight - 1) / 3)), // cell 6
-            new (X , Y + 2*((boardHeight - 1) / 3)), // cell 7
-            new (X + ((boardWidth - 2) / 3), Y + 2*((boardHeight - 1) / 3)), // cell 8
-            new (X + 2*((boardWidth - 2) / 3), Y + 2 *((boardHeight - 1) / 3)), // cell 9
-        };
-    }
     public void NewBoard(int x, int y, bool centered) // create a new board
     {
         X = x; // set the X position of the board
