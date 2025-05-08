@@ -67,11 +67,11 @@ class Game // control the game: draw the board, swithch turns, end the game, etc
         // create the players and cursor
 
         cursor = new Cursor(boardLogic); // create the cursor
-        p1 = new Player(boardLogic, PlayerType.Player1, cursor); // player 1
+        p1 = new Player(PlayerType.Player1); // player 1
 
         playingAgainstRealPlayer = realPlayer;
-        p2 = new Player(boardLogic, PlayerType.Player2, cursor); // player 2
-        AI = new Player(boardLogic, PlayerType.AI, cursor); // AI
+        p2 = new Player(PlayerType.Player2); // player 2
+        AI = new Player(PlayerType.AI); // AI
 
 
     }
@@ -164,10 +164,9 @@ class Game // control the game: draw the board, swithch turns, end the game, etc
                 }
                 break;
             default:
-                Utilities.Error("unexpected error"); // if the player type is not recognized
+                Utilities.Error("unexpected error. player not recognized"); // if the player type is not recognized
                 return false;
         }
-        Utilities.Error("unexpected error"); // if the cell is not empty
         return false; // return false if the cell is not empty
 
     }
@@ -348,38 +347,15 @@ static class GameLogic // check for win/draw/loss
  - player type
  - player icon
   */
-class Player // move the player that let you choose where to go
+struct Player // move the player that let you choose where to go
 {
-    BoardLogic boardLogic;
     public const string playerIcon = @"\/"; // player character
-
-
-    //only used for drawing the player icon
-    int[] cellsPlayerIconPosX = new int[9];
-    int[] cellsPlayerIconPosY = new int[9];
-
-    public int PlayerPos = 4; //what cell index the player is in. 0-8. starting at 4 (middle cell)
-
-    bool flicker = true; // for flickering the player icon
-
     public PlayerType playerType; // type of player. player 1, player 2, AI
 
-
-
-    public Player(BoardLogic boardLogic, PlayerType playerType, Cursor cursor)
+    public Player(PlayerType playerType)
     {
-        this.boardLogic = boardLogic;
         this.playerType = playerType; // set the player type
-
-        for (int i = 0; i < 9; i++)
-        {
-            cellsPlayerIconPosX[i] = boardLogic.boardCells[i].PlayerIconPosX; // get the X position of the player icon in the cell
-            cellsPlayerIconPosY[i] = boardLogic.boardCells[i].PlayerIconPosY; // get the Y position of the player icon in the cell
-        }
-
-
     }
-
 
 
 }
