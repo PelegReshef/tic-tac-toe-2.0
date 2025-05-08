@@ -2,10 +2,7 @@
 
 
 /* whats left to do:
-
-
-3. finish GameLogic class - check for win/draw/loss - haven't started
-4. finish run() method - Game class - in progress
+4. finish runPVSAI() method - Game class - heaven'ts started
 6. AI class - haven't started
 7. create a start menu - haven't started. should include: havnt started
    - start game
@@ -36,8 +33,7 @@ class Program
      1. create new board V
      2. create new boardLogc for the board created V
      3. create new players. one for first player, one for second player/AI V
-     4. use class GameLogic to check for win/draw/loss
-     5. use class Player to move the player
+     4. use class GameLogic to check for win/draw/loss V
      */
 
 class Game // control the game: draw the board, swithch turns, end the game, etc.
@@ -137,7 +133,7 @@ class Game // control the game: draw the board, swithch turns, end the game, etc
     }
     public void Run()
     {
-        boardVisuals.DrawNewBoard(boardLogic.X, boardLogic.Y); // draw the board
+        boardVisuals.DrawNewBoard(); // draw the board
 
         if (playingAgainstRealPlayer)
         {
@@ -261,23 +257,17 @@ class BoardVisuals // every visual aspect of the board
 
     BoardLogic boardLogic;
 
-    public int X;// X position of the board. top left corner
-    public int Y;// Y position of the board. top left corner
-
     public BoardVisuals(BoardLogic boardLogic)
     {
         this.boardLogic = boardLogic; // match the board to the board logic
     }
 
-    public void DrawNewBoard(int x, int y)
+    public void DrawNewBoard()
     {
-        X = x; // set the X position of the board
-        Y = y; // set the Y position of the board
-
 
         for (int i = 0; i < PixelArt.newBoard.Length; i++)
         {
-            Console.SetCursorPosition(X, Y + i);
+            Console.SetCursorPosition(boardLogic.X, boardLogic.Y + i);
             Console.Write(PixelArt.newBoard[i]);
         }
     }
