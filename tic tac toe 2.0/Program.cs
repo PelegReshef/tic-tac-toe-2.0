@@ -97,19 +97,8 @@ class Game // control the game: draw the board, swithch turns, end the game, etc
                     } while (!validAction); // repeat until a valid action is made
 
                     GameState gameState = GameLogic.CheckGameState(boardLogic); 
-                    if (gameState == GameState.Win) // check if the game is won
-                    {
-                        Console.SetCursorPosition(0, 0); // reset the cursor position
-                        Console.WriteLine("Player 1 wins!"); // print the winner
-                        gameOver = true; // end the game
-                    }
-                    else if (gameState == GameState.Draw) // check if the game is a draw
-                    {
-                        Console.SetCursorPosition(0, 0); // reset the cursor position
-                        Console.WriteLine("Draw!"); // print the draw
-                        gameOver = true; // end the game
-                    }
-                    else
+                    HandleGameState(gameState, "Player 1");
+                    if (!gameOver)
                     {
                         turn = Turns.Player2; // game continues + switch turns
                     }
@@ -127,28 +116,17 @@ class Game // control the game: draw the board, swithch turns, end the game, etc
                     } while (!validAction); // repeat until a valid action is made
                     
                     GameState gameState = GameLogic.CheckGameState(boardLogic);
-                    if (gameState == GameState.Win) // check if the game is won
+                    HandleGameState(gameState, "Player 2");
+                    if (!gameOver)
                     {
-                        Console.SetCursorPosition(0, 0); // reset the cursor position
-                        Console.WriteLine("Player 2 wins!"); // print the winner
-                        gameOver = true; // end the game
-                    }
-                    else if (gameState == GameState.Draw) // check if the game is a draw
-                    {
-                        Console.SetCursorPosition(0, 0); // reset the cursor position
-                        Console.WriteLine("Draw!"); // print the draw
-                        gameOver = true; // end the game
-                    }
-                    else
-                    {
-                        turn = Turns.Player1; // switch turns
+                        turn = Turns.Player1; // game continues + switch turns
                     }
 
                 }
                 else
                 {
-                    Console.SetCursorPosition(0, 0); // reset the cursor position
-                    Console.WriteLine("unexpected error");
+                    Utilities.Error("unexpected error. turn not recognized"); // if the turn is not recognized
+                    gameOver = true; // end the game
 
                 }
             }
@@ -174,7 +152,7 @@ class Game // control the game: draw the board, swithch turns, end the game, etc
 
 
 
-    public bool ExamineActionPVP(Player player, Cursor cursor) // 
+    bool ExamineActionPVP(Player player, Cursor cursor) // 
     {
         switch (player.playerType)
         {
@@ -202,6 +180,25 @@ class Game // control the game: draw the board, swithch turns, end the game, etc
         }
         return false; // return false if the cell is not empty
 
+    }
+    void HandleGameState(GameState gameState, string playerName)
+    {
+        switch (gameState)
+        {
+            case GameState.Win:
+                Console.SetCursorPosition(0, 0); // reset the cursor position
+                Console.WriteLine(playerName + " wins!"); // print the winner
+                gameOver = true; // end the game
+                break;
+            case GameState.Draw:
+                Console.SetCursorPosition(0, 0); // reset the cursor position
+                Console.WriteLine("Draw!"); // print the draw
+                gameOver = true; // end the game
+                break;
+            case GameState.InProgress:
+                gameOver = false; // game is still in progress
+                break;
+        }
     }
 
 
@@ -383,61 +380,36 @@ static class GameLogic // check for win/draw/loss
     public static GameState CheckGameState(BoardLogic boardLogic)
     {
         // check for win
-        CellState[] topLine = new CellState[3] { boardLogic.boardCells[0].state, boardLogic.boardCells[1].state, boardLogic.boardCells[2].state };
-        CellState[] midLine = new CellState[3] { boardLogic.boardCells[3].state, boardLogic.boardCells[4].state, boardLogic.boardCells[5].state };
-        CellState[] bottomLine = new CellState[3] { boardLogic.boardCells[6].state, boardLogic.boardCells[7].state, boardLogic.boardCells[8].state };
 
-        CellState[] leftCollumn = new CellState[3] { boardLogic.boardCells[0].state, boardLogic.boardCells[3].state, boardLogic.boardCells[6].state };
-        CellState[] midCollumn = new CellState[3] { boardLogic.boardCells[1].state, boardLogic.boardCells[4].state, boardLogic.boardCells[7].state };
-        CellState[] rightCollumn = new CellState[3] { boardLogic.boardCells[2].state, boardLogic.boardCells[5].state, boardLogic.boardCells[8].state };
-
-        CellState[] diagonalLeftToRight = new CellState[3] { boardLogic.boardCells[0].state, boardLogic.boardCells[4].state, boardLogic.boardCells[8].state };
-        CellState[] diagonalRightToLeft = new CellState[3] { boardLogic.boardCells[2].state, boardLogic.boardCells[4].state, boardLogic.boardCells[6].state };
-
-        if (topLine[0] == topLine[1] && topLine[1] == topLine[2] && topLine[0] != CellState.Empty) // check for win
+        CellState[][] winConditions = new CellState[][]
         {
-            return GameState.Win; // return win
-        }
-        else if (midLine[0] == midLine[1] && midLine[1] == midLine[2] && midLine[0] != CellState.Empty) // check for win
+            new CellState[3] { boardLogic.boardCells[0].state, boardLogic.boardCells[1].state, boardLogic.boardCells[2].state }, // top line
+            new CellState[3] { boardLogic.boardCells[3].state, boardLogic.boardCells[4].state, boardLogic.boardCells[5].state }, // mid line
+            new CellState[3] { boardLogic.boardCells[6].state, boardLogic.boardCells[7].state, boardLogic.boardCells[8].state }, // bottom line
+            new CellState[3] { boardLogic.boardCells[0].state, boardLogic.boardCells[3].state, boardLogic.boardCells[6].state }, // left column
+            new CellState[3] { boardLogic.boardCells[1].state, boardLogic.boardCells[4].state, boardLogic.boardCells[7].state }, // mid column
+            new CellState[3] { boardLogic.boardCells[2].state, boardLogic.boardCells[5].state, boardLogic.boardCells[8].state }, // right column
+            new CellState[3] { boardLogic.boardCells[0].state, boardLogic.boardCells[4].state, boardLogic.boardCells[8].state }, // diagonal left to right
+            new CellState[3] { boardLogic.boardCells[2].state, boardLogic.boardCells[4].state, boardLogic.boardCells[6].state }  // diagonal right to left
+        };
+        foreach (CellState[] winCondition in winConditions)
         {
-            return GameState.Win; // return win
-        }
-        else if (bottomLine[0] == bottomLine[1] && bottomLine[1] == bottomLine[2] && bottomLine[0] != CellState.Empty) // check for win
-        {
-            return GameState.Win; // return win
-        }
-        else if (leftCollumn[0] == leftCollumn[1] && leftCollumn[1] == leftCollumn[2] && leftCollumn[0] != CellState.Empty) // check for win
-        {
-            return GameState.Win; // return win
-        }
-        else if (midCollumn[0] == midCollumn[1] && midCollumn[1] == midCollumn[2] && midCollumn[0] != CellState.Empty) // check for win
-        {
-            return GameState.Win; // return win
-        }
-        else if (rightCollumn[0] == rightCollumn[1] && rightCollumn[1] == rightCollumn[2] && rightCollumn[0] != CellState.Empty) // check for win
-        {
-            return GameState.Win; // return win
-        }
-        else if (diagonalLeftToRight[0] == diagonalLeftToRight[1] && diagonalLeftToRight[1] == diagonalLeftToRight[2] && diagonalLeftToRight[0] != CellState.Empty) // check for win
-        {
-            return GameState.Win; // return win
-        }
-        else if (diagonalRightToLeft[0] == diagonalRightToLeft[1] && diagonalRightToLeft[1] == diagonalRightToLeft[2] && diagonalRightToLeft[0] != CellState.Empty) // check for win
-        {
-            return GameState.Win; // return win
-        }
-        else
-        {
-            // check for draw
-            foreach (Cell cell in boardLogic.boardCells)
+            if (winCondition[0] ==  winCondition[1] && winCondition[1] == winCondition[2] && winCondition[0] != CellState.Empty) // check if all 3 cells are the same 
             {
-                if (cell.state == CellState.Empty) // check if there is an empty cell
-                {
-                    return GameState.InProgress; // return in progress
-                }
+                return GameState.Win; // return win
             }
-            return GameState.Draw; // return draw
         }
+
+        // check for draw
+        foreach (Cell cell in boardLogic.boardCells)
+        {
+            if (cell.state == CellState.Empty) // check if there is an empty cell
+            {
+                    return GameState.InProgress; // return in progress
+            }
+        }
+        return GameState.Draw; // return draw if there are no empty cells
+        
     }
 }
     /* in charge of:
