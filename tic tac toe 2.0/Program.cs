@@ -22,7 +22,6 @@ class Program
 
         Game game = new Game(true); // true for now. will be changed to player choice later
 
-
         game.Run(); // run the game
 
 
@@ -47,7 +46,7 @@ class Game // control the game: draw the board, swithch turns, end the game, etc
     Player p1; // player 1
     Player p2; // player 2
     Player AI; // AI player
-    BoardVisuals boardVisuals; 
+    BoardVisuals boardVisuals;
     BoardLogic boardLogic;
     Cursor cursor; // cursor for the player to move around the board
 
@@ -92,7 +91,7 @@ class Game // control the game: draw the board, swithch turns, end the game, etc
 
                     } while (!validAction); // repeat until a valid action is made
 
-                    GameState gameState = GameLogic.CheckGameState(boardLogic); 
+                    GameState gameState = GameLogic.CheckGameState(boardLogic);
                     HandleGameState(gameState, "Player 1");
                     if (!gameOver)
                     {
@@ -110,7 +109,7 @@ class Game // control the game: draw the board, swithch turns, end the game, etc
                         validAction = ExamineActionPVP(p2, cursor); // examine the action
 
                     } while (!validAction); // repeat until a valid action is made
-                    
+
                     GameState gameState = GameLogic.CheckGameState(boardLogic);
                     HandleGameState(gameState, "Player 2");
                     if (!gameOver)
@@ -210,8 +209,8 @@ class BoardLogic
 {
     public Cell[] boardCells = new Cell[9]; // array of cells. 3x3 grid
 
-    int boardWidth = PixelArt.newBoard[0].Length; // width of the board
-    int boardHeight = PixelArt.newBoard.Length; // height of the board
+    int boardWidth = PixelArt.NewBoard[0].Length; // width of the board
+    int boardHeight = PixelArt.NewBoard.Length; // height of the board
 
     public int X; // X position of the board. top left corner
     public int Y; // Y position of the board. top left corner
@@ -249,7 +248,7 @@ class BoardLogic
         boardCells[i].state = state; // change the state of the cell
 
     }
-    
+
 }
 
 class BoardVisuals // every visual aspect of the board
@@ -265,10 +264,10 @@ class BoardVisuals // every visual aspect of the board
     public void DrawNewBoard()
     {
 
-        for (int i = 0; i < PixelArt.newBoard.Length; i++)
+        for (int i = 0; i < PixelArt.NewBoard.Length; i++)
         {
             Console.SetCursorPosition(boardLogic.X, boardLogic.Y + i);
-            Console.Write(PixelArt.newBoard[i]);
+            Console.Write(PixelArt.NewBoard[i]);
         }
     }
     public void DrawCell(CellState state, int cellIndex) // draw the cell
@@ -367,7 +366,7 @@ static class GameLogic // check for win/draw/loss
         };
         foreach (CellState[] winCondition in winConditions)
         {
-            if (winCondition[0] ==  winCondition[1] && winCondition[1] == winCondition[2] && winCondition[0] != CellState.Empty) // check if all 3 cells are the same 
+            if (winCondition[0] == winCondition[1] && winCondition[1] == winCondition[2] && winCondition[0] != CellState.Empty) // check if all 3 cells are the same 
             {
                 return GameState.Win; // return win
             }
@@ -378,18 +377,18 @@ static class GameLogic // check for win/draw/loss
         {
             if (cell.state == CellState.Empty) // check if there is an empty cell
             {
-                    return GameState.InProgress; // return in progress
+                return GameState.InProgress; // return in progress
             }
         }
         return GameState.Draw; // return draw if there are no empty cells
-        
+
     }
 }
-    /* in charge of:
-     - player type
-     - player icon
-      */
-    struct Player // move the player that let you choose where to go
+/* in charge of:
+ - player type
+ - player icon
+  */
+struct Player // move the player that let you choose where to go
 {
     public const string playerIcon = @"\/"; // player character
     public PlayerType playerType; // type of player. player 1, player 2, AI
@@ -581,7 +580,7 @@ static class PixelArt
         "██              ██",
         "██████████████████",
     };
-    public static string[] newBoard = new string[]
+    public static string[] NewBoard = new string[]
     {
         "██████████████████████████████████████████████████",
         "██              ██              ██              ██",
@@ -617,4 +616,42 @@ static class PixelArt
 
 
     };
+    public static string[] Play = new string[]
+    {
+        @" _____  _           __     __",
+        @"|  __ \| |        /\\ \   / /",
+        @"| |__) | |       /  \\ \_/ / ",
+        @"|  ___/| |      / /\ \\   /  ",
+        @"| |    | |____ / ____ \| |   ",
+        @"|_|    |______/_/    \_\_|   "
+
+    };
+    public static string[] TicTacToe = new string[]{
+        "TTTTTTTTTTTTTTTTTTTTTTTIIIIIIIIII      CCCCCCCCCCCCC               TTTTTTTTTTTTTTTTTTTTTTT         AAA                  CCCCCCCCCCCCC               TTTTTTTTTTTTTTTTTTTTTTT     OOOOOOOOO     EEEEEEEEEEEEEEEEEEEEEE",
+        "T:::::::::::::::::::::TI::::::::I   CCC::::::::::::C               T:::::::::::::::::::::T        A:::A              CCC::::::::::::C               T:::::::::::::::::::::T   OO:::::::::OO   E::::::::::::::::::::E",
+        "T:::::::::::::::::::::TI::::::::I CC:::::::::::::::C               T:::::::::::::::::::::T       A:::::A           CC:::::::::::::::C               T:::::::::::::::::::::T OO:::::::::::::OO E::::::::::::::::::::E",
+        "T:::::TT:::::::TT:::::TII::::::IIC:::::CCCCCCCC::::C               T:::::TT:::::::TT:::::T      A:::::::A         C:::::CCCCCCCC::::C               T:::::TT:::::::TT:::::TO:::::::OOO:::::::OEE::::::EEEEEEEEE::::E",
+        "TTTTTT  T:::::T  TTTTTT  I::::I C:::::C       CCCCCC               TTTTTT  T:::::T  TTTTTT     A:::::::::A       C:::::C       CCCCCC               TTTTTT  T:::::T  TTTTTTO::::::O   O::::::O  E:::::E       EEEEEE",
+        "        T:::::T          I::::IC:::::C                                     T:::::T            A:::::A:::::A     C:::::C                                     T:::::T        O:::::O     O:::::O  E:::::E             ",
+        "        T:::::T          I::::IC:::::C                                     T:::::T           A:::::A A:::::A    C:::::C                                     T:::::T        O:::::O     O:::::O  E::::::EEEEEEEEEE   ",
+        "        T:::::T          I::::IC:::::C                                     T:::::T          A:::::A   A:::::A   C:::::C                                     T:::::T        O:::::O     O:::::O  E:::::::::::::::E   ",
+        "        T:::::T          I::::IC:::::C                                     T:::::T         A:::::A     A:::::A  C:::::C                                     T:::::T        O:::::O     O:::::O  E:::::::::::::::E   ",
+        "        T:::::T          I::::IC:::::C                                     T:::::T        A:::::AAAAAAAAA:::::A C:::::C                                     T:::::T        O:::::O     O:::::O  E::::::EEEEEEEEEE   ",
+        "        T:::::T          I::::IC:::::C                                     T:::::T       A:::::::::::::::::::::AC:::::C                                     T:::::T        O:::::O     O:::::O  E:::::E             ",
+        "        T:::::T          I::::I C:::::C       CCCCCC                       T:::::T      A:::::AAAAAAAAAAAAA:::::AC:::::C       CCCCCC                       T:::::T        O::::::O   O::::::O  E:::::E       EEEEEE",
+        "      TT:::::::TT      II::::::IIC:::::CCCCCCCC::::C                     TT:::::::TT   A:::::A             A:::::AC:::::CCCCCCCC::::C                     TT:::::::TT      O:::::::OOO:::::::OEE::::::EEEEEEEE:::::E",
+        "      T:::::::::T      I::::::::I CC:::::::::::::::C                     T:::::::::T  A:::::A               A:::::ACC:::::::::::::::C                     T:::::::::T       OO:::::::::::::OO E::::::::::::::::::::E",
+        "      T:::::::::T      I::::::::I   CCC::::::::::::C                     T:::::::::T A:::::A                 A:::::A CCC::::::::::::C                     T:::::::::T         OO:::::::::OO   E::::::::::::::::::::E",
+        "      TTTTTTTTTTT      IIIIIIIIII      CCCCCCCCCCCCC                     TTTTTTTTTTTAAAAAAA                   AAAAAAA   CCCCCCCCCCCCC                     TTTTTTTTTTT           OOOOOOOOO     EEEEEEEEEEEEEEEEEEEEEE"
+    };
+    public static string[] Options = new string[]
+    {
+        @"  ____   _____  _______  _____  ____   _   _   _____ ",
+        @" / __ \ |  __ \|__   __||_   _|/ __ \ | \ | | / ____|",
+        @"| |  | || |__) |  | |     | | | |  | ||  \| || (___  ",
+        @"| |  | ||  ___/   | |     | | | |  | || . ` | \___ \ ",
+        @"| |__| || |       | |    _| |_| |__| || |\  | ____) |",
+        @" \____/ |_|       |_|   |_____|\____/ |_| \_||_____/ "
+    };
+
 }
