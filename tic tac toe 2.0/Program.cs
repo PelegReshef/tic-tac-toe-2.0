@@ -4,7 +4,7 @@
 /* whats left to do:
 4. finish runPVSAI() method - Game class - heaven'ts started
 6. AI class - haven't started
-7. create a start menu - haven't started. should include: havnt started
+7. create a start menu - in progress. should include: 
    - start game
    - choose player vs AI or player vs player
    - how to play
@@ -485,6 +485,107 @@ class Cursor // move the player icon around the board
     }
 
 }
+public enum MenuStages
+{
+    MainMenu, 
+
+    MainMenu_Play, // open enum SecondMenu_Play
+    MainMenu_HowToPlay, // dont need to open another enum. get you to the how to play screen immediately
+    MainMenu_Options, // open enum SecondMenu_Options
+    MainMenu_Exit, // exit the game
+
+    Play_PlayerVsPlayer, // start a new game with 2 players.no enum
+    Play_PlayerVsAI, // open enum ThirdMenu_PlayerVsAI
+    Play_Back, // go back to the first menu
+
+    Options_engine,
+    Options_controls,
+    Options_credits,
+    Options_Back, // go back to the first menu
+
+
+    PlayerVsPlayer_Easy,
+    PlayerVsPlayer_Medium,
+    PlayerVsPlayer_Hard,
+    PlayerVsPlayer_Back, // go back to the play menu
+
+    error, // error screen
+}
+
+
+class StartScreenLogic
+{
+    MenuStages menuStage = MenuStages.MainMenu; // start at the first menu
+    
+    public MenuStages WhatScreenToDraw()
+    {
+        switch (menuStage)
+        {
+            case MenuStages.MainMenu: //main menu
+                return MenuStages.MainMenu;
+
+            // second menu
+            case MenuStages.MainMenu_Play: 
+                return MenuStages.MainMenu_Play;
+            case MenuStages.MainMenu_HowToPlay:
+                return MenuStages.MainMenu_HowToPlay;
+            case MenuStages.MainMenu_Options:
+                return MenuStages.MainMenu_Options;
+            case MenuStages.MainMenu_Exit:
+                return MenuStages.MainMenu_Exit;
+            // third menu. play
+            case MenuStages.Play_PlayerVsPlayer:
+                return MenuStages.Play_PlayerVsPlayer;
+            case MenuStages.Play_PlayerVsAI:
+                return MenuStages.Play_PlayerVsAI;
+            case MenuStages.Play_Back:
+                menuStage = MenuStages.MainMenu; // go back to the first menu
+                return MenuStages.MainMenu;
+            // third menu. options
+            case MenuStages.Options_engine:
+                return MenuStages.Options_engine;
+            case MenuStages.Options_controls:
+                return MenuStages.Options_controls;
+            case MenuStages.Options_credits:
+                return MenuStages.Options_credits;
+            case MenuStages.Options_Back:
+                menuStage = MenuStages.MainMenu; // go back to the first menu
+                return MenuStages.MainMenu;
+            // fourth menu. player vs player
+            case MenuStages.PlayerVsPlayer_Easy:
+                return MenuStages.PlayerVsPlayer_Easy;
+            case MenuStages.PlayerVsPlayer_Medium:
+                return MenuStages.PlayerVsPlayer_Medium;
+            case MenuStages.PlayerVsPlayer_Hard:
+                return MenuStages.PlayerVsPlayer_Hard;
+            case MenuStages.PlayerVsPlayer_Back:
+                menuStage = MenuStages.MainMenu_Play; // go back to the play menu
+                return MenuStages.MainMenu_Play;
+                // error screen
+            default:
+                return MenuStages.error; // return error
+
+
+
+
+
+        }
+    }
+
+}
+class StartScreenVisuals
+{
+    StartScreenLogic startScreenLogic;
+
+    public StartScreenVisuals(StartScreenLogic startScreenLogic)
+    {
+        this.startScreenLogic = startScreenLogic; // set the start screen logic
+    }
+    public void DrawMainMenu()
+    {
+
+    }
+}
 class AI // AI that plays the game
 {
 
@@ -534,6 +635,14 @@ static class Utilities
 }
 static class PixelArt
 {
+    public static void Draw(string[] pixelArt, int x, int y)
+    {
+        for (int i = 0; i < pixelArt.Length; i++)
+        {
+            Console.SetCursorPosition(x, y + i);
+            Console.Write(pixelArt[i]);
+        }
+    }
     public static string[] O = new string[]
     {
 
