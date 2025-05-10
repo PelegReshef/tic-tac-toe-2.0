@@ -17,14 +17,14 @@ class Program
 {
     static void Main(string[] args)
     {
-
+        Utilities.RefreshWindow(); // refresh the window size
         Utilities.Setup();
 
         Game game = new Game(true); // true for now. will be changed to player choice later
 
         game.Run(); // run the game
 
-
+        Console.ReadKey();
     }
 }
 
@@ -38,8 +38,6 @@ class Program
 class Game // control the game: draw the board, swithch turns, end the game, etc.
 {
 
-
-    bool yourTurn = true; //true = player, false = AI/ 2nd player
     bool gameOver = false; //true = game over, false = game not over
 
 
@@ -221,13 +219,13 @@ class BoardLogic
         Y = y; // set the Y position of the board
         if (centered)
         {
-            X = (Console.BufferWidth / 2) - (boardWidth / 2);
-            Y = (Console.BufferHeight / 2) - (boardHeight / 2);
+            X = (Utilities.width / 2) - (boardWidth / 2);
+            Y = (Utilities.height / 2) - (boardHeight / 2);
         }
-        RecalculateCells(); // recalculate the cells
+        CreateCells(); // recalculate the cells
     }
 
-    void RecalculateCells()
+    void CreateCells()
     {
         boardCells = new Cell[9] // create the cells
        {
@@ -592,13 +590,27 @@ class AI // AI that plays the game
 }
 static class Utilities
 {
+    public static int width = Console.WindowWidth; // width of the console window
+    public static int height = Console.WindowHeight; // height of the console window
+
+    public static void RefreshWindow()
+    {
+        string request = ("please set your window size to fullscreen. press enter to continue");
+        Console.SetCursorPosition(width/2 - request.Length/2, height/2); // set the window size
+        Console.WriteLine(request);
+        Console.ReadLine();
+        width = Console.WindowWidth;
+        height = Console.WindowHeight;
+        Console.Clear(); // clear the console window
+        Console.SetCursorPosition(0, 0); // set the cursor position to the top left corner
+
+    }
     public static void Setup()
     {
         Console.Clear();
         Console.SetCursorPosition(0, 0);
-        Console.BufferWidth = 240;
-        Console.BufferHeight = 63;
         Console.CursorVisible = false;
+
 
     }
     public static ConsoleKeyInfo GetValidInput()
