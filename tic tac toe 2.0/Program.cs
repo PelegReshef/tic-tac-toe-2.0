@@ -508,6 +508,7 @@ public enum MenuStages
 
     Play_PlayerVsPlayer, // start a new game with 2 players.no enum
     Play_PlayerVsAI, // open enum ThirdMenu_PlayerVsAI
+    Play_ComingSoon, // will make it Custom Game later
     Play_Back, // go back to the first menu
 
     Options_engine,
@@ -528,7 +529,23 @@ public enum MenuStages
 class StartScreenLogic
 {
     MenuStages menuStage = MenuStages.MainMenu; // start at the first menu
-    
+
+
+    public StartScreenCursorPos[] CursorPositions;
+
+    public StartScreenLogic()
+    {
+        CursorPositions = new StartScreenCursorPos[4]
+        {
+        new StartScreenCursorPos(Utilities.Width / 2 - 20, Utilities.Height / 2 + 1), //first cursor slot
+        new StartScreenCursorPos(Utilities.Width / 2 - 20, Utilities.Height / 2 + 6), //second cursor slot
+        new StartScreenCursorPos(Utilities.Width / 2 - 20, Utilities.Height / 2 + 11), //third cursor slot
+        new StartScreenCursorPos(Utilities.Width / 2 - 20, Utilities.Height / 2 + 16), //fourth cursor slot
+        };
+    }
+
+
+
     public MenuStages WhatScreenToDraw()
     {
         switch (menuStage)
@@ -550,6 +567,8 @@ class StartScreenLogic
                 return MenuStages.Play_PlayerVsPlayer;
             case MenuStages.Play_PlayerVsAI:
                 return MenuStages.Play_PlayerVsAI;
+            case MenuStages.Play_ComingSoon:
+                return MenuStages.Play_ComingSoon;
             case MenuStages.Play_Back:
                 menuStage = MenuStages.MainMenu; // go back to the first menu
                 return MenuStages.MainMenu;
@@ -603,6 +622,7 @@ class StartScreenVisuals
 class StartScreenCursor
 {
     StartScreenLogic startScreenLogic;
+    int cursorPos = 0; // position of the cursor. 0-3
 
 
 
@@ -628,6 +648,12 @@ class StartScreenCursor
             {
                 case ConsoleKey.W:
                 case ConsoleKey.UpArrow:
+                    if (cursorPos != StartScreenLogic.CursorPositions[0])
+                    {
+                        Erase(StartScreenLogic.CursorPositions[cursorPos].X, StartScreenLogic.CursorPositions[cursorPos].Y); // erase the cursor
+                        cursorPos--; // move up
+                        Draw(StartScreenLogic.CursorPositions[cursorPos].X, StartScreenLogic.CursorPositions[cursorPos].Y); // draw the cursor
+                    }
                     break;
                 case ConsoleKey.S:
                 case ConsoleKey.DownArrow:
@@ -644,6 +670,16 @@ class StartScreenCursor
         }
     }
 
+}
+class StartScreenCursorPos
+{
+    public int X; // X position of the cursor
+    public int Y; // Y position of the cursor
+    public StartScreenCursorPos(int x, int y)
+    {
+        this.X = x; // set the X position of the cursor
+        this.Y = y; // set the Y position of the cursor
+    }
 }
 class AI // AI that plays the game
 {
