@@ -21,6 +21,7 @@ class Program
         Utilities.Setup();
 
         GameManager gameManager = new GameManager(); // create the game manager
+        gameManager.StartScreenSetup(); // setup the start screen
         gameManager.StartNewGame(); // start a new game
         Console.ReadKey();
     }
@@ -31,13 +32,13 @@ class GameManager // manage start screen, and creating new games
 {
     StartScreenLogic startScreenLogic; // logic for the start screen
     StartScreenVisuals startScreenVisuals; // visuals for the start screen
+    StartScreenCursor startScreenCursor; // cursor for the start screen
 
     public GameManager()
     {
         startScreenLogic = new StartScreenLogic(); // create the start screen logic
         startScreenVisuals = new StartScreenVisuals(startScreenLogic); // create the start screen visuals
-        startScreenVisuals.DrawMainMenu(); // draw the main menu
-        Console.ReadLine(); // wait for the user to press enter
+        startScreenCursor = new StartScreenCursor(startScreenLogic); // create the start screen cursor
 
     }
     public void StartNewGame()
@@ -46,6 +47,14 @@ class GameManager // manage start screen, and creating new games
         Game game; 
         game = new Game(true); // create a new game
         game.Run(); // run the game
+    }
+    public void StartScreenSetup()
+    {
+        startScreenVisuals.DrawMainMenu(); // draw the main menu
+        startScreenCursor.Reset(); // reset the cursor position
+        startScreenCursor.MoveUntilAction(); // move the cursor until an action is made
+        Console.ReadLine(); // wait for the user to press enter
+
     }
 
 }
@@ -221,8 +230,8 @@ class BoardLogic
 {
     public Cell[] boardCells = new Cell[9]; // array of cells. 3x3 grid
 
-    int boardWidth = PixelArt.NewBoard[0].Length; // OldWidth of the board
-    int boardHeight = PixelArt.NewBoard.Length; // OldHeight of the board
+    int boardWidth = Art.NewBoard[0].Length; // OldWidth of the board
+    int boardHeight = Art.NewBoard.Length; // OldHeight of the board
 
     public int X; // X position of the board. top left corner
     public int Y; // Y position of the board. top left corner
@@ -276,10 +285,10 @@ class BoardVisuals // every visual aspect of the board
     public void DrawNewBoard()
     {
 
-        for (int i = 0; i < PixelArt.NewBoard.Length; i++)
+        for (int i = 0; i < Art.NewBoard.Length; i++)
         {
             Console.SetCursorPosition(boardLogic.X, boardLogic.Y + i);
-            Console.Write(PixelArt.NewBoard[i]);
+            Console.Write(Art.NewBoard[i]);
         }
     }
     public void DrawCell(CellState state, int cellIndex) // draw the cell
@@ -287,24 +296,24 @@ class BoardVisuals // every visual aspect of the board
         switch (state)
         {
             case CellState.Empty:
-                for (int i = 0; i < PixelArt.Empty.Length; i++)
+                for (int i = 0; i < Art.Empty.Length; i++)
                 {
                     Console.SetCursorPosition(boardLogic.boardCells[cellIndex].X, boardLogic.boardCells[cellIndex].Y + i);
-                    Console.Write(PixelArt.Empty[i]);
+                    Console.Write(Art.Empty[i]);
                 }
                 break;
             case CellState.X:
-                for (int i = 0; i < PixelArt.X.Length; i++)
+                for (int i = 0; i < Art.X.Length; i++)
                 {
                     Console.SetCursorPosition(boardLogic.boardCells[cellIndex].X, boardLogic.boardCells[cellIndex].Y + i);
-                    Console.Write(PixelArt.X[i]);
+                    Console.Write(Art.X[i]);
                 }
                 break;
             case CellState.O:
-                for (int i = 0; i < PixelArt.O.Length; i++)
+                for (int i = 0; i < Art.O.Length; i++)
                 {
                     Console.SetCursorPosition(boardLogic.boardCells[cellIndex].X, boardLogic.boardCells[cellIndex].Y + i);
-                    Console.Write(PixelArt.O[i]);
+                    Console.Write(Art.O[i]);
                 }
                 break;
         }
@@ -340,8 +349,8 @@ class Cell
         this.X = x;
         this.Y = y;
 
-        cellHeight = PixelArt.Empty[0].Length / 2;
-        cellWidth = PixelArt.Empty.Length / 2;
+        cellHeight = Art.Empty[0].Length / 2;
+        cellWidth = Art.Empty.Length / 2;
 
         PlayerIconPosX = X + cellWidth / 2 + 6; // position of the player icon in the cell
         PlayerIconPosY = Y + 2; // position of the player icon in the cell
@@ -537,10 +546,10 @@ class StartScreenLogic
     {
         CursorPositions = new StartScreenCursorPos[4]
         {
-        new StartScreenCursorPos(Utilities.Width / 2 - 20, Utilities.Height / 2 + 1), //first cursor slot
-        new StartScreenCursorPos(Utilities.Width / 2 - 20, Utilities.Height / 2 + 6), //second cursor slot
-        new StartScreenCursorPos(Utilities.Width / 2 - 20, Utilities.Height / 2 + 11), //third cursor slot
-        new StartScreenCursorPos(Utilities.Width / 2 - 20, Utilities.Height / 2 + 16), //fourth cursor slot
+        new StartScreenCursorPos(Utilities.Width / 2 - 40, Utilities.Height / 2 - 2), //first cursor slot
+        new StartScreenCursorPos(Utilities.Width / 2 - 40, Utilities.Height / 2 + 5), //second cursor slot
+        new StartScreenCursorPos(Utilities.Width / 2 - 40, Utilities.Height / 2 + 12), //third cursor slot
+        new StartScreenCursorPos(Utilities.Width / 2 - 40, Utilities.Height / 2 + 19), //fourth cursor slot
         };
     }
 
@@ -615,14 +624,14 @@ class StartScreenVisuals
     public void DrawMainMenu()
     {
         Utilities.Setup();
-        PixelArt.Draw(PixelArt.TicTacToe, PixelArt.CenterX(PixelArt.TicTacToe), PixelArt.CenterY(PixelArt.TicTacToe) - PixelArt.TicTacToe.Length); // draw the tictactoe title
+        Art.Draw(Art.TicTacToe, Art.CenterX(Art.TicTacToe), Art.CenterY(Art.TicTacToe) - Art.TicTacToe.Length); // draw the tictactoe title
 
     }
 }
 class StartScreenCursor
 {
     StartScreenLogic startScreenLogic;
-    int cursorPos = 0; // position of the cursor. 0-3
+    public int cursorPos = 0; // position of the cursor. 0-3
 
 
 
@@ -632,14 +641,20 @@ class StartScreenCursor
     }
     public void Draw(int x, int y)
     {
-        PixelArt.Draw(PixelArt.Cursor,x,y); // draw the cursor
+        Art.Draw(Art.Cursor,x,y); // draw the cursor
     }
     public void Erase(int x, int y)
     {
-        PixelArt.Erase(PixelArt.Cursor, x, y); // erase the cursor
+        Art.Erase(Art.Cursor, x, y); // erase the cursor
+    }
+    public void Reset()
+    {
+        Erase(startScreenLogic.CursorPositions[cursorPos].X, startScreenLogic.CursorPositions[cursorPos].Y); // erase the cursor
+        cursorPos = 0; // reset the cursor position
+        Draw(startScreenLogic.CursorPositions[cursorPos].X, startScreenLogic.CursorPositions[cursorPos].Y); // draw the cursor
     }
 
-    public void MoveUntilAction()
+    public int MoveUntilAction()
     {
         while (true)
         {
@@ -648,15 +663,21 @@ class StartScreenCursor
             {
                 case ConsoleKey.W:
                 case ConsoleKey.UpArrow:
-                    if (cursorPos != StartScreenLogic.CursorPositions[0])
+                    if (cursorPos != 0) //not equal to the top position
                     {
-                        Erase(StartScreenLogic.CursorPositions[cursorPos].X, StartScreenLogic.CursorPositions[cursorPos].Y); // erase the cursor
-                        cursorPos--; // move up
-                        Draw(StartScreenLogic.CursorPositions[cursorPos].X, StartScreenLogic.CursorPositions[cursorPos].Y); // draw the cursor
+                        Erase(startScreenLogic.CursorPositions[cursorPos].X, startScreenLogic.CursorPositions[cursorPos].Y); 
+                        cursorPos--; 
+                        Draw(startScreenLogic.CursorPositions[cursorPos].X, startScreenLogic.CursorPositions[cursorPos].Y); 
                     }
-                    break;
+                    break; 
                 case ConsoleKey.S:
                 case ConsoleKey.DownArrow:
+                    if (cursorPos != 3) //not equal to the bottom position
+                    {
+                        Erase(startScreenLogic.CursorPositions[cursorPos].X, startScreenLogic.CursorPositions[cursorPos].Y); 
+                        cursorPos++; 
+                        Draw(startScreenLogic.CursorPositions[cursorPos].X, startScreenLogic.CursorPositions[cursorPos].Y); 
+                    }
                     break;
                 case ConsoleKey.D:
                 case ConsoleKey.RightArrow:
@@ -665,7 +686,7 @@ class StartScreenCursor
                 case ConsoleKey.LeftArrow:
                     break;
                 case ConsoleKey.Spacebar:
-                    return; // return the action
+                    return cursorPos; // return the action position
             }
         }
     }
@@ -759,7 +780,7 @@ static class Utilities
     }
 
 }
-static class PixelArt
+static class Art
 {
     public static void Draw(string[] pixelArt, int x, int y)
     {
@@ -915,9 +936,27 @@ static class PixelArt
          @"__   ",
          @"\ \  ",
          @" \ \ ",
+         @"  > >",
          @" / / ",
          @"/_/  ",
 
     };
-
+    public static string[] HowToPlay = new string[]
+    {
+        @"  _    _  ______          __    _______ ____      _____  _           __     __",
+        @" | |  | |/ __ \ \        / /   |__   __/ __ \    |  __ \| |        /\\ \   / /",
+        @" | |__| | |  | \ \  /\  / /       | | | |  | |   | |__) | |       /  \\ \_/ / ",
+        @" |  __  | |  | |\ \/  \/ /        | | | |  | |   |  ___/| |      / /\ \\   /  ",
+        @" | |  | | |__| | \  /\  /         | | | |__| |   | |    | |____ / ____ \| |   ",
+        @" |_|  |_|\____/   \/  \/          |_|  \____/    |_|    |______/_/    \_\_|   "
+    };
+    public static string[] ExitGame = new string[]
+    {
+        @"  ________   _______ _______      _____          __  __ ______ ",
+        @" |  ____\ \ / /_   _|__   __|    / ____|   /\   |  \/  |  ____|",
+        @" | |__   \ V /  | |    | |      | |  __   /  \  | \  / | |__   ",
+        @" |  __|   > <   | |    | |      | | |_ | / /\ \ | |\/| |  __|  ",
+        @" | |____ / . \ _| |_   | |      | |__| |/ ____ \| |  | | |____ ",
+        @" |______/_/ \_\_____|  |_|       \_____/_/    \_\_|  |_|______|"
+    };
 }
