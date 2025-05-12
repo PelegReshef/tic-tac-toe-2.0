@@ -20,21 +20,34 @@ class Program
         Utilities.RefreshWindow(); // refresh the window size
         Utilities.Setup();
 
-        Game game = new Game(true); // true for now. will be changed to player choice later
-
-        game.Run(); // run the game
-
+        GameManager gameManager = new GameManager(); // create the game manager
+        gameManager.StartNewGame(); // start a new game
         Console.ReadKey();
     }
 }
 
-/* game class would:
-     1. create new board V
-     2. create new boardLogc for the board created V
-     3. create new players. one for first player, one for second player/AI V
-     4. use class GameLogic to check for win/draw/loss V
-     */
 
+class GameManager // manage start screen, and creating new games 
+{
+    StartScreenLogic startScreenLogic; // logic for the start screen
+    StartScreenVisuals startScreenVisuals; // visuals for the start screen
+
+    public GameManager()
+    {
+        startScreenLogic = new StartScreenLogic(); // create the start screen logic
+        startScreenVisuals = new StartScreenVisuals(startScreenLogic); // create the start screen visuals
+        startScreenVisuals.DrawMainMenu(); // draw the main menu
+        Console.ReadLine(); // wait for the user to press enter
+    }
+    public void StartNewGame()
+    {
+        Utilities.Setup(); // setup the console for the game
+        Game game; 
+        game = new Game(true); // create a new game
+        game.Run(); // run the game
+    }
+
+}
 class Game // control the game: draw the board, swithch turns, end the game, etc.
 {
 
@@ -207,8 +220,8 @@ class BoardLogic
 {
     public Cell[] boardCells = new Cell[9]; // array of cells. 3x3 grid
 
-    int boardWidth = PixelArt.NewBoard[0].Length; // width of the board
-    int boardHeight = PixelArt.NewBoard.Length; // height of the board
+    int boardWidth = PixelArt.NewBoard[0].Length; // OldWidth of the board
+    int boardHeight = PixelArt.NewBoard.Length; // OldHeight of the board
 
     public int X; // X position of the board. top left corner
     public int Y; // Y position of the board. top left corner
@@ -219,8 +232,8 @@ class BoardLogic
         Y = y; // set the Y position of the board
         if (centered)
         {
-            X = (Utilities.width / 2) - (boardWidth / 2);
-            Y = (Utilities.height / 2) - (boardHeight / 2);
+            X = (Utilities.Width / 2) - (boardWidth / 2);
+            Y = (Utilities.Height / 2) - (boardHeight / 2);
         }
         CreateCells(); // recalculate the cells
     }
@@ -581,8 +594,14 @@ class StartScreenVisuals
     }
     public void DrawMainMenu()
     {
+        Utilities.Setup();
+        PixelArt.Draw(PixelArt.TicTacToe, PixelArt.CenterX(PixelArt.TicTacToe), PixelArt.CenterY(PixelArt.TicTacToe) - PixelArt.TicTacToe.Length); // draw the tictactoe title
 
     }
+}
+class StartScreenCursor
+{
+
 }
 class AI // AI that plays the game
 {
@@ -590,17 +609,34 @@ class AI // AI that plays the game
 }
 static class Utilities
 {
-    public static int width = Console.WindowWidth; // width of the console window
-    public static int height = Console.WindowHeight; // height of the console window
+    public static int Width = Console.WindowWidth;
+    public static int Height = Console.WindowHeight;
 
     public static void RefreshWindow()
     {
-        string request = ("please set your window size to fullscreen. press enter to continue");
-        Console.SetCursorPosition(width/2 - request.Length/2, height/2); // set the window size
+        string request = ("to avoid visual glitches, please set your window size to fullscreen. press enter to continue");
+        Console.SetCursorPosition(Width/2 - request.Length/2, Height/2); //write the request in the middle of the screen
         Console.WriteLine(request);
         Console.ReadLine();
-        width = Console.WindowWidth;
-        height = Console.WindowHeight;
+        int newWidth = Console.WindowWidth;
+        int newHeight = Console.WindowHeight;
+
+        if (newWidth <= Width || newHeight <= Height)
+        {
+            Console.WriteLine("looks like you havnt changed your window size to fullscreen. if this is a mistake and you are in full screen press enter. otherwise, set your window size to fullscreen and press enter");
+            Console.ReadLine();
+            Console.Clear();
+            Width = Console.WindowWidth;
+            Height = Console.WindowHeight;
+        }
+        else
+        {
+            Width = Console.WindowWidth;
+            Height = Console.WindowHeight;
+
+        }
+
+
         Console.Clear(); // clear the console window
         Console.SetCursorPosition(0, 0); // set the cursor position to the top left corner
 
@@ -654,6 +690,16 @@ static class PixelArt
             Console.SetCursorPosition(x, y + i);
             Console.Write(pixelArt[i]);
         }
+    }
+    public static int CenterX(string[] pixelArt)
+    {
+        return (Utilities.Width / 2) - (pixelArt[0].Length / 2);
+
+    }
+    public static int CenterY(string[] pixelArt)
+    {
+        return (Utilities.Height / 2) - (pixelArt.Length / 2);
+
     }
     public static string[] O = new string[]
     {
@@ -773,6 +819,15 @@ static class PixelArt
         @"| |  | ||  ___/   | |     | | | |  | || . ` | \___ \ ",
         @"| |__| || |       | |    _| |_| |__| || |\  | ____) |",
         @" \____/ |_|       |_|   |_____|\____/ |_| \_||_____/ "
+    };
+    public static string[] Cursor = new string[]
+    {
+         @"__   ",
+         @"\ \  ",
+         @" \ \ ",
+         @" / / ",
+         @"/_/  ",
+
     };
 
 }
