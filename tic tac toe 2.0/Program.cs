@@ -38,6 +38,7 @@ class GameManager // manage start screen, and creating new games
         startScreenVisuals = new StartScreenVisuals(startScreenLogic); // create the start screen visuals
         startScreenVisuals.DrawMainMenu(); // draw the main menu
         Console.ReadLine(); // wait for the user to press enter
+
     }
     public void StartNewGame()
     {
@@ -473,7 +474,7 @@ class Cursor // move the player icon around the board
                     }
                     break;
                 case ConsoleKey.Spacebar:
-                    return CursorPos; // return true to indicate that the player has made a move
+                    return CursorPos; 
 
 
 
@@ -601,6 +602,47 @@ class StartScreenVisuals
 }
 class StartScreenCursor
 {
+    StartScreenLogic startScreenLogic;
+
+
+
+    public StartScreenCursor(StartScreenLogic startScreenLogic)
+    {
+        this.startScreenLogic = startScreenLogic; // set the start screen logic
+    }
+    public void Draw(int x, int y)
+    {
+        PixelArt.Draw(PixelArt.Cursor,x,y); // draw the cursor
+    }
+    public void Erase(int x, int y)
+    {
+        PixelArt.Erase(PixelArt.Cursor, x, y); // erase the cursor
+    }
+
+    public void MoveUntilAction()
+    {
+        while (true)
+        {
+            ConsoleKeyInfo keyPressed = Utilities.GetValidInput(); // get the key pressed
+            switch (keyPressed.Key)
+            {
+                case ConsoleKey.W:
+                case ConsoleKey.UpArrow:
+                    break;
+                case ConsoleKey.S:
+                case ConsoleKey.DownArrow:
+                    break;
+                case ConsoleKey.D:
+                case ConsoleKey.RightArrow:
+                    break;
+                case ConsoleKey.A:
+                case ConsoleKey.LeftArrow:
+                    break;
+                case ConsoleKey.Spacebar:
+                    return; // return the action
+            }
+        }
+    }
 
 }
 class AI // AI that plays the game
@@ -689,6 +731,18 @@ static class PixelArt
         {
             Console.SetCursorPosition(x, y + i);
             Console.Write(pixelArt[i]);
+        }
+    }
+    public static void Erase(string[] pixelArt, int x, int y)
+    {
+        for (int i = 0; i < pixelArt.Length; i++)
+        {
+            Console.SetCursorPosition(x, y + i);
+            for (int j = 0; j < pixelArt[i].Length; j++)
+            {
+                Console.SetCursorPosition(x + j, y + i);
+                Console.Write(' '); // erase the pixel art by writing spaces
+            }
         }
     }
     public static int CenterX(string[] pixelArt)
