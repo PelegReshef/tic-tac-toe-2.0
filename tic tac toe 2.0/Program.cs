@@ -541,15 +541,16 @@ class StartScreenLogic
 
 
     public StartScreenCursorPos[] CursorPositions;
+    public int CursorPosX = Utilities.Width /2 - Art.HowToPlay.Length / 2 -40; // X position of the cursor
 
     public StartScreenLogic()
     {
         CursorPositions = new StartScreenCursorPos[4]
         {
-        new StartScreenCursorPos(Utilities.Width / 2 - 40, Utilities.Height / 2 - 2), //first cursor slot
-        new StartScreenCursorPos(Utilities.Width / 2 - 40, Utilities.Height / 2 + 5), //second cursor slot
-        new StartScreenCursorPos(Utilities.Width / 2 - 40, Utilities.Height / 2 + 12), //third cursor slot
-        new StartScreenCursorPos(Utilities.Width / 2 - 40, Utilities.Height / 2 + 19), //fourth cursor slot
+        new StartScreenCursorPos(CursorPosX, Utilities.Height / 2 - 2), //first cursor slot
+        new StartScreenCursorPos(CursorPosX, Utilities.Height / 2 + 5), //second cursor slot
+        new StartScreenCursorPos(CursorPosX, Utilities.Height / 2 + 12), //third cursor slot
+        new StartScreenCursorPos(CursorPosX, Utilities.Height / 2 + 19), //fourth cursor slot
         };
     }
 
@@ -625,6 +626,10 @@ class StartScreenVisuals
     {
         Utilities.Setup();
         Art.Draw(Art.TicTacToe, Art.CenterX(Art.TicTacToe), Art.CenterY(Art.TicTacToe) - Art.TicTacToe.Length); // draw the tictactoe title
+        Art.Draw(Art.Play, startScreenLogic.CursorPositions[0].X + 10, startScreenLogic.CursorPositions[0].Y); // draw the play title
+        Art.Draw(Art.HowToPlay, startScreenLogic.CursorPositions[1].X + 10, startScreenLogic.CursorPositions[1].Y); // draw the how to play title
+        Art.Draw(Art.Options, startScreenLogic.CursorPositions[2].X + 10, startScreenLogic.CursorPositions[2].Y); // draw the options title
+        Art.Draw(Art.ExitGame, startScreenLogic.CursorPositions[3].X + 10, startScreenLogic.CursorPositions[3].Y); // draw the exit title
 
     }
 }
