@@ -7,114 +7,95 @@ using ticTacToe;
 
 namespace ticTacToe
 {
-    public class StartScreenLogic
+    public class MenuLogic
     {
-        MenuStages menuStage = MenuStages.MainMenu; // start at the first menu
+        public MenuStages CurrentMenuStage = MenuStages.MainMenu; // start at the first menu
+        public int Buttons = 3; // number of Buttons in the menu. with 0 being the first one
 
 
-        public StartScreenCursorPos[] CursorPositions;
+        public MenuCursorPosition[] CursorPositions;
         public int CursorPosX = Utilities.Width / 2 - Art.HowToPlay.Length / 2 - 40; // X position of the cursor
 
-        public StartScreenLogic()
+        public MenuLogic()
         {
-            CursorPositions = new StartScreenCursorPos[4]
+            CursorPositions = new MenuCursorPosition[4]
             {
-        new StartScreenCursorPos(CursorPosX, Utilities.Height / 2 - 2), //first cursor slot
-        new StartScreenCursorPos(CursorPosX, Utilities.Height / 2 + 5), //second cursor slot
-        new StartScreenCursorPos(CursorPosX, Utilities.Height / 2 + 12), //third cursor slot
-        new StartScreenCursorPos(CursorPosX, Utilities.Height / 2 + 19), //fourth cursor slot
+                new MenuCursorPosition(CursorPosX, Utilities.Height / 2 - 2), //first cursor slot
+                new MenuCursorPosition(CursorPosX, Utilities.Height / 2 + 5), //second cursor slot
+                new MenuCursorPosition(CursorPosX, Utilities.Height / 2 + 12), //third cursor slot
+                new MenuCursorPosition(CursorPosX, Utilities.Height / 2 + 19), //fourth cursor slot
+
             };
         }
 
 
 
-        public MenuStages WhatScreenToDraw()
+        public void DetermineMenuStage()
         {
-            switch (menuStage)
+            switch (CurrentMenuStage)
             {
-                case MenuStages.MainMenu: //main menu
-                    return MenuStages.MainMenu;
-
-                // second menu
-                case MenuStages.MainMenu_Play:
-                    return MenuStages.MainMenu_Play;
-                case MenuStages.MainMenu_HowToPlay:
-                    return MenuStages.MainMenu_HowToPlay;
-                case MenuStages.MainMenu_Options:
-                    return MenuStages.MainMenu_Options;
-                case MenuStages.MainMenu_Exit:
-                    return MenuStages.MainMenu_Exit;
-                // third menu. play
-                case MenuStages.Play_PlayerVsPlayer:
-                    return MenuStages.Play_PlayerVsPlayer;
-                case MenuStages.Play_PlayerVsAI:
-                    return MenuStages.Play_PlayerVsAI;
-                case MenuStages.Play_ComingSoon:
-                    return MenuStages.Play_ComingSoon;
                 case MenuStages.Play_Back:
-                    menuStage = MenuStages.MainMenu; // go back to the first menu
-                    return MenuStages.MainMenu;
-                // third menu. options
-                case MenuStages.Options_engine:
-                    return MenuStages.Options_engine;
-                case MenuStages.Options_controls:
-                    return MenuStages.Options_controls;
-                case MenuStages.Options_credits:
-                    return MenuStages.Options_credits;
                 case MenuStages.Options_Back:
-                    menuStage = MenuStages.MainMenu; // go back to the first menu
-                    return MenuStages.MainMenu;
-                // fourth menu. player vs player
-                case MenuStages.PlayerVsPlayer_Easy:
-                    return MenuStages.PlayerVsPlayer_Easy;
-                case MenuStages.PlayerVsPlayer_Medium:
-                    return MenuStages.PlayerVsPlayer_Medium;
-                case MenuStages.PlayerVsPlayer_Hard:
-                    return MenuStages.PlayerVsPlayer_Hard;
-                case MenuStages.PlayerVsPlayer_Back:
-                    menuStage = MenuStages.MainMenu_Play; // go back to the play menu
-                    return MenuStages.MainMenu_Play;
-                // error screen
+                    CurrentMenuStage = MenuStages.MainMenu; 
+                    return;
+                case MenuStages.PlayerVsAI_Back:
+                    CurrentMenuStage = MenuStages.MainMenu_Play; 
+                    return;
                 default:
-                    return MenuStages.error; // return error
-
-
-
-
-
+                    return;
             }
         }
 
     }
-    public class StartScreenVisuals
+    public class MenuVisuals
     {
-        StartScreenLogic startScreenLogic;
+        MenuLogic menuLogic;
 
-        public StartScreenVisuals(StartScreenLogic startScreenLogic)
+        public MenuVisuals(MenuLogic startScreenLogic)
         {
-            this.startScreenLogic = startScreenLogic; // set the start screen logic
+            this.menuLogic = startScreenLogic; // set the start screen logic
         }
         public void DrawMainMenu()
         {
             Utilities.Setup();
-            Art.Draw(Art.TicTacToe, Art.CenterX(Art.TicTacToe), Art.CenterY(Art.TicTacToe) - Art.TicTacToe.Length); // draw the tictactoe title
-            Art.Draw(Art.Play, startScreenLogic.CursorPositions[0].X + 10, startScreenLogic.CursorPositions[0].Y); // draw the play title
-            Art.Draw(Art.HowToPlay, startScreenLogic.CursorPositions[1].X + 10, startScreenLogic.CursorPositions[1].Y); // draw the how to play title
-            Art.Draw(Art.Options, startScreenLogic.CursorPositions[2].X + 10, startScreenLogic.CursorPositions[2].Y); // draw the options title
-            Art.Draw(Art.ExitGame, startScreenLogic.CursorPositions[3].X + 10, startScreenLogic.CursorPositions[3].Y); // draw the exit title
+            Art.Draw(Art.TicTacToe, Art.CenterX(Art.TicTacToe), Art.CenterY(Art.TicTacToe) - Art.TicTacToe.Length - 5); 
+            Art.Draw(Art.Play, menuLogic.CursorPositions[0].X + 10, menuLogic.CursorPositions[0].Y); 
+            Art.Draw(Art.HowToPlay, menuLogic.CursorPositions[1].X + 10, menuLogic.CursorPositions[1].Y); 
+            Art.Draw(Art.Options, menuLogic.CursorPositions[2].X + 10, menuLogic.CursorPositions[2].Y); 
+            Art.Draw(Art.ExitGame, menuLogic.CursorPositions[3].X + 10, menuLogic.CursorPositions[3].Y); 
+
+        }
+        public void DrawPlayMenu()
+        {
+            Utilities.Setup();
+            Art.Draw(Art.TicTacToe, Art.CenterX(Art.TicTacToe), Art.CenterY(Art.TicTacToe) - Art.TicTacToe.Length - 5); 
+            Art.Draw(Art.PVP, menuLogic.CursorPositions[0].X + 10, menuLogic.CursorPositions[0].Y); 
+            Art.Draw(Art.PVsAI, menuLogic.CursorPositions[1].X + 10, menuLogic.CursorPositions[1].Y); 
+            Art.Draw(Art.ComingSoon, menuLogic.CursorPositions[2].X + 10, menuLogic.CursorPositions[2].Y); 
+            Art.Draw(Art.Back, menuLogic.CursorPositions[3].X + 10, menuLogic.CursorPositions[3].Y); 
+
+
+
+        }
+        public void DrawOptionsMenu()
+        {
+
+        }
+        public void DrawPlayVsAIMenu()
+        {
 
         }
     }
-    public class StartScreenCursor
+    public class MenuCursor
     {
-        StartScreenLogic startScreenLogic;
+        MenuLogic menuLogic;
         public int cursorPos = 0; // position of the cursor. 0-3
 
 
 
-        public StartScreenCursor(StartScreenLogic startScreenLogic)
+        public MenuCursor(MenuLogic menuLogic)
         {
-            this.startScreenLogic = startScreenLogic; // set the start screen logic
+            this.menuLogic = menuLogic; // set the start screen logic
         }
         public void Draw(int x, int y)
         {
@@ -126,9 +107,9 @@ namespace ticTacToe
         }
         public void Reset()
         {
-            Erase(startScreenLogic.CursorPositions[cursorPos].X, startScreenLogic.CursorPositions[cursorPos].Y); // erase the cursor
+            Erase(menuLogic.CursorPositions[cursorPos].X, menuLogic.CursorPositions[cursorPos].Y); // erase the cursor
             cursorPos = 0; // reset the cursor position
-            Draw(startScreenLogic.CursorPositions[cursorPos].X, startScreenLogic.CursorPositions[cursorPos].Y); // draw the cursor
+            Draw(menuLogic.CursorPositions[cursorPos].X, menuLogic.CursorPositions[cursorPos].Y); // draw the cursor
         }
 
         public int MoveUntilAction()
@@ -142,18 +123,18 @@ namespace ticTacToe
                     case ConsoleKey.UpArrow:
                         if (cursorPos != 0) //not equal to the top position
                         {
-                            Erase(startScreenLogic.CursorPositions[cursorPos].X, startScreenLogic.CursorPositions[cursorPos].Y);
+                            Erase(menuLogic.CursorPositions[cursorPos].X, menuLogic.CursorPositions[cursorPos].Y);
                             cursorPos--;
-                            Draw(startScreenLogic.CursorPositions[cursorPos].X, startScreenLogic.CursorPositions[cursorPos].Y);
+                            Draw(menuLogic.CursorPositions[cursorPos].X, menuLogic.CursorPositions[cursorPos].Y);
                         }
                         break;
                     case ConsoleKey.S:
                     case ConsoleKey.DownArrow:
-                        if (cursorPos != 3) //not equal to the bottom position
+                        if (cursorPos != menuLogic.Buttons) //not equal to the bottom position
                         {
-                            Erase(startScreenLogic.CursorPositions[cursorPos].X, startScreenLogic.CursorPositions[cursorPos].Y);
+                            Erase(menuLogic.CursorPositions[cursorPos].X, menuLogic.CursorPositions[cursorPos].Y);
                             cursorPos++;
-                            Draw(startScreenLogic.CursorPositions[cursorPos].X, startScreenLogic.CursorPositions[cursorPos].Y);
+                            Draw(menuLogic.CursorPositions[cursorPos].X, menuLogic.CursorPositions[cursorPos].Y);
                         }
                         break;
                     case ConsoleKey.D:
@@ -189,21 +170,21 @@ namespace ticTacToe
         Options_Back, // go back to the first menu
 
 
-        PlayerVsPlayer_Easy,
-        PlayerVsPlayer_Medium,
-        PlayerVsPlayer_Hard,
-        PlayerVsPlayer_Back, // go back to the play menu
+        PlayerVsAI_Easy,
+        PlayerVsAI_Medium,
+        PlayerVsAI_Hard,
+        PlayerVsAI_Back // go back to the play menu
 
-        error, // error screen
+        
     }
 
 
 
-    public class StartScreenCursorPos
+    public class MenuCursorPosition
     {
         public int X; // X position of the cursor
         public int Y; // Y position of the cursor
-        public StartScreenCursorPos(int x, int y)
+        public MenuCursorPosition(int x, int y)
         {
             this.X = x; // set the X position of the cursor
             this.Y = y; // set the Y position of the cursor
