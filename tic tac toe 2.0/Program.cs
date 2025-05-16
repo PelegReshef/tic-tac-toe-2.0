@@ -35,6 +35,39 @@ namespace ticTacToe
         MenuLogic menuLogic; // logic for the start screen
         MenuVisuals menuVisuals; // visuals for the start screen
         MenuCursor menuCursor; // cursor for the start screen
+        static public readonly Dictionary<int, Dictionary<MenuStages, MenuStages>> MenuStageTransitions = new()
+        {
+            [0] = new Dictionary<MenuStages, MenuStages>
+            {
+                [MenuStages.MainMenu] = MenuStages.MainMenu_Play,
+                [MenuStages.MainMenu_Play] = MenuStages.Play_PlayerVsPlayer,
+                [MenuStages.MainMenu_Options] = MenuStages.Options_engine,
+                [MenuStages.Play_PlayerVsAI] = MenuStages.PlayerVsAI_Easy,
+            },
+            [1] = new Dictionary<MenuStages, MenuStages>
+            {
+                [MenuStages.MainMenu] = MenuStages.MainMenu_HowToPlay,
+                [MenuStages.MainMenu_Play] = MenuStages.Play_PlayerVsAI,
+                [MenuStages.MainMenu_Options] = MenuStages.Options_controls,
+                [MenuStages.Play_PlayerVsAI] = MenuStages.PlayerVsAI_Medium,
+            },
+            [2] = new Dictionary<MenuStages, MenuStages>
+            {
+                [MenuStages.MainMenu] = MenuStages.MainMenu_Options,
+                [MenuStages.MainMenu_Play] = MenuStages.Play_ComingSoon,
+                [MenuStages.MainMenu_Options] = MenuStages.Options_credits,
+                [MenuStages.Play_PlayerVsAI] = MenuStages.PlayerVsAI_Hard,
+            },
+            [3] = new Dictionary<MenuStages, MenuStages>
+            {
+                [MenuStages.MainMenu] = MenuStages.MainMenu_Exit,
+                [MenuStages.MainMenu_Play] = MenuStages.Play_Back,
+                [MenuStages.MainMenu_Options] = MenuStages.Options_Back,
+                [MenuStages.Play_PlayerVsAI] = MenuStages.PlayerVsAI_Back,
+            },
+
+
+        };
 
         public GameManager()
         {
@@ -58,85 +91,24 @@ namespace ticTacToe
             Console.ReadLine(); // wait for the user to press enter
 
         }
-        public void ExamineCursorAction() // check what button the player pressed
+        public void ExamineCursorAction() // check what button the player pressed and change the menu stage accordingly
         {
-            switch (menuCursor.cursorPos)
+            int cursorPos = menuCursor.cursorPos; // get the cursor position
+            if (MenuStageTransitions.TryGetValue(cursorPos, out var changesForCertainPosition))
             {
-                case 0: 
-                    switch (menuLogic.CurrentMenuStage)
-                    {
-                        case MenuStages.MainMenu:
-                            menuLogic.CurrentMenuStage = MenuStages.MainMenu_Play;
-                            break;
-                        case MenuStages.MainMenu_Play:
-                            menuLogic.CurrentMenuStage = MenuStages.Play_PlayerVsPlayer;
-                            break;
-                        case MenuStages.MainMenu_Options:
-                            menuLogic.CurrentMenuStage= MenuStages.Options_engine;
-                            break;
-                        case MenuStages.Play_PlayerVsAI:
-                            menuLogic.CurrentMenuStage = MenuStages.PlayerVsAI_Easy;
-                            break;
-                            
-                    }
-                    break;
-                case 1: 
-                    switch (menuLogic.CurrentMenuStage)
-                    {
-                        case MenuStages.MainMenu:
-                            menuLogic.CurrentMenuStage = MenuStages.MainMenu_HowToPlay;
-                            break;
-                        case MenuStages.MainMenu_Play:
-                            menuLogic.CurrentMenuStage = MenuStages.Play_PlayerVsAI;
-                            break;
-                        case MenuStages.MainMenu_Options:
-                            menuLogic.CurrentMenuStage= MenuStages.Options_controls;
-                            break;
-                        case MenuStages.PlayerVsAI_Easy:
-                            menuLogic.CurrentMenuStage = MenuStages.PlayerVsAI_Medium;
-                            break;
-                            
-                    }
-                    break;
-                case 2: 
-                    switch (menuLogic.CurrentMenuStage)
-                    {
-                        case MenuStages.MainMenu:
-                            menuLogic.CurrentMenuStage = MenuStages.MainMenu_Options;
-                            break;
-                        case MenuStages.MainMenu_Play:
-                            menuLogic.CurrentMenuStage = MenuStages.Play_ComingSoon;
-                            break;
-                        case MenuStages.MainMenu_Options:
-                            menuLogic.CurrentMenuStage= MenuStages.Options_credits;
-                            break;
-                        case MenuStages.PlayerVsAI_Easy:
-                            menuLogic.CurrentMenuStage = MenuStages.PlayerVsAI_Hard;
-                            break;
-                            
-                    }
-                    break;
-                case 3: 
-                    switch (menuLogic.CurrentMenuStage)
-                    {
-                        case MenuStages.MainMenu:
-                            menuLogic.CurrentMenuStage = MenuStages.MainMenu_Exit;
-                            break;
-                        case MenuStages.MainMenu_Play:
-                            menuLogic.CurrentMenuStage = MenuStages.Play_Back;
-                            break;
-                        case MenuStages.MainMenu_Options:
-                            menuLogic.CurrentMenuStage= MenuStages.Options_Back;
-                            break;
-                        case MenuStages.PlayerVsAI_Easy:
-                            menuLogic.CurrentMenuStage = MenuStages.PlayerVsAI_Back;
-                            break;
-                            
-                    }
-                    break;
-                
+                if (changesForCertainPosition.TryGetValue(menuLogic.CurrentMenuStage, out var newMenuStage))
+                {
+                    menuLogic.CurrentMenuStage = newMenuStage; // change the menu stage
+                }
+                else
+                {
+                    Utilities.Error("no menu stage found for the current menu stage and cursor position"); 
+                }
             }
-
+            else
+            {
+                Utilities.Error("invalid cursor position"); 
+            }
         }
         public void MenuAction() //draw menu stage according to the current menu stage
         {
