@@ -7,6 +7,107 @@ using ticTacToe;
 
 namespace ticTacToe
 {
+    public class MenuManager
+    {
+        MenuLogic menuLogic; // logic for the start screen
+        MenuVisuals menuVisuals; // visuals for the start screen
+        public MenuCursor menuCursor; // cursor for the start screen
+        static public readonly Dictionary<int, Dictionary<MenuStages, MenuStages>> MenuStageTransitions = new()
+        {
+            [0] = new Dictionary<MenuStages, MenuStages>
+            {
+                [MenuStages.MainMenu] = MenuStages.MainMenu_Play,
+                [MenuStages.MainMenu_Play] = MenuStages.Play_PlayerVsPlayer,
+                [MenuStages.MainMenu_Options] = MenuStages.Options_engine,
+                [MenuStages.Play_PlayerVsAI] = MenuStages.PlayerVsAI_Easy,
+            },
+            [1] = new Dictionary<MenuStages, MenuStages>
+            {
+                [MenuStages.MainMenu] = MenuStages.MainMenu_HowToPlay,
+                [MenuStages.MainMenu_Play] = MenuStages.Play_PlayerVsAI,
+                [MenuStages.MainMenu_Options] = MenuStages.Options_controls,
+                [MenuStages.Play_PlayerVsAI] = MenuStages.PlayerVsAI_Medium,
+            },
+            [2] = new Dictionary<MenuStages, MenuStages>
+            {
+                [MenuStages.MainMenu] = MenuStages.MainMenu_Options,
+                [MenuStages.MainMenu_Play] = MenuStages.Play_ComingSoon,
+                [MenuStages.MainMenu_Options] = MenuStages.Options_credits,
+                [MenuStages.Play_PlayerVsAI] = MenuStages.PlayerVsAI_Hard,
+            },
+            [3] = new Dictionary<MenuStages, MenuStages>
+            {
+                [MenuStages.MainMenu] = MenuStages.MainMenu_Exit,
+                [MenuStages.MainMenu_Play] = MenuStages.Play_Back,
+                [MenuStages.MainMenu_Options] = MenuStages.Options_Back,
+                [MenuStages.Play_PlayerVsAI] = MenuStages.PlayerVsAI_Back,
+            },
+
+
+        };
+        public MenuManager()
+        {
+            menuLogic = new MenuLogic(); // create the start screen logic
+            menuVisuals = new MenuVisuals(menuLogic); // create the start screen visuals
+            menuCursor = new MenuCursor(menuLogic); // create the start screen cursor
+        }
+        public void MenuSetup()
+        {
+            menuVisuals.DrawMainMenu(); // draw the main menu
+            menuCursor.Reset(); // reset the cursor position
+            menuCursor.MoveUntilAction(); // move the cursor until an action is made
+
+        }
+        public void ExamineCursorAction(int cursorPos) // check what button the player pressed and change the menu stage accordingly
+        {
+            
+            if (MenuStageTransitions.TryGetValue(cursorPos, out var changesForCertainPosition))
+            {
+                if (changesForCertainPosition.TryGetValue(menuLogic.CurrentMenuStage, out var newMenuStage))
+                {
+                    menuLogic.CurrentMenuStage = newMenuStage; // change the menu stage
+                }
+                else
+                {
+                    Utilities.Error("no menu stage found for the current menu stage and cursor position");
+                    menuLogic.CurrentMenuStage = MenuStages.MainMenu; 
+                    Console.ReadLine();
+                }
+            }
+            else
+            {
+                Utilities.Error("invalid cursor position");
+                menuCursor.cursorPos = 0; 
+                Console.ReadLine();
+            }
+        }
+        public void MenuAction() //draw menu stage according to the current menu stage
+        {
+            menuLogic.HandleBackButtons();
+            switch (menuLogic.CurrentMenuStage)
+            {
+                case MenuStages.MainMenu:
+                    menuVisuals.DrawMainMenu();
+                    menuCursor.Reset();
+                    break;
+                case MenuStages.MainMenu_Play:
+                    menuVisuals.DrawPlayMenu();
+                    menuCursor.Reset();
+                    break;
+                case MenuStages.MainMenu_Options:
+                    menuVisuals.DrawOptionsMenu();
+                    break;
+                case MenuStages.Play_PlayerVsAI:
+                    menuVisuals.DrawPlayVsAIMenu();
+                    break;
+
+            }
+        }
+
+
+
+
+    }
     public class MenuLogic
     {
         public MenuStages CurrentMenuStage = MenuStages.MainMenu; // start at the first menu
@@ -30,7 +131,7 @@ namespace ticTacToe
 
 
 
-        public void DetermineMenuStage()
+        public void HandleBackButtons()
         {
             switch (CurrentMenuStage)
             {

@@ -19,6 +19,8 @@ namespace ticTacToe
             Console.ReadLine();
             int newWidth = Console.WindowWidth;
             int newHeight = Console.WindowHeight;
+            Console.BufferHeight = newHeight; // set the buffer height to the new height
+            Console.BufferWidth = newWidth; // set the buffer width to the new width
 
             if (newWidth <= Width || newHeight <= Height)
             {
