@@ -88,11 +88,9 @@ namespace ticTacToe
             {
                 case MenuStages.MainMenu:
                     menuVisuals.DrawMainMenu();
-                    menuCursor.Reset();
                     break;
                 case MenuStages.MainMenu_Play:
                     menuVisuals.DrawPlayMenu();
-                    menuCursor.Reset();
                     break;
                 case MenuStages.MainMenu_Options:
                     menuVisuals.DrawOptionsMenu();
@@ -102,6 +100,15 @@ namespace ticTacToe
                     break;
 
             }
+        }
+        public void MenuLoop() // main menu loop
+        {
+            
+            int cursorPos = menuCursor.MoveUntilAction(); // move the cursor until an action is made
+            ExamineCursorAction(cursorPos); // check what button the player pressed and change the menu stage accordinglyג
+            MenuAction(); // draw the menu stage according to the current menu stage
+            menuCursor.Reset(); // reset the cursor position
+
         }
 
 
@@ -151,41 +158,39 @@ namespace ticTacToe
     public class MenuVisuals
     {
         MenuLogic menuLogic;
+        public const int SpaceBetwwenButtonAndCursor = 10; // space between the button and the cursor
 
         public MenuVisuals(MenuLogic startScreenLogic)
         {
             this.menuLogic = startScreenLogic; // set the start screen logic
         }
-        public void DrawMainMenu()
+        void DrawMenu(string[] art1, string[] art2, string[] art3, string[] art4)
         {
             Utilities.Setup();
-            Art.Draw(Art.TicTacToe, Art.CenterX(Art.TicTacToe), Art.CenterY(Art.TicTacToe) - Art.TicTacToe.Length - 5); 
-            Art.Draw(Art.Play, menuLogic.CursorPositions[0].X + 10, menuLogic.CursorPositions[0].Y); 
-            Art.Draw(Art.HowToPlay, menuLogic.CursorPositions[1].X + 10, menuLogic.CursorPositions[1].Y); 
-            Art.Draw(Art.Options, menuLogic.CursorPositions[2].X + 10, menuLogic.CursorPositions[2].Y); 
-            Art.Draw(Art.ExitGame, menuLogic.CursorPositions[3].X + 10, menuLogic.CursorPositions[3].Y); 
+            Art.Draw(Art.TicTacToe, Art.CenterX(Art.TicTacToe), Art.CenterY(Art.TicTacToe) - Art.TicTacToe.Length);
+            Art.Draw(art1, menuLogic.CursorPositions[0].X + SpaceBetwwenButtonAndCursor, menuLogic.CursorPositions[0].Y); // draw the first button
+            Art.Draw(art2, menuLogic.CursorPositions[1].X + SpaceBetwwenButtonAndCursor, menuLogic.CursorPositions[1].Y); // draw the second button
+            Art.Draw(art3, menuLogic.CursorPositions[2].X + SpaceBetwwenButtonAndCursor, menuLogic.CursorPositions[2].Y); // draw the third button
+            Art.Draw(art4, menuLogic.CursorPositions[3].X + SpaceBetwwenButtonAndCursor, menuLogic.CursorPositions[3].Y); // draw the fourth button
 
+        }
+        public void DrawMainMenu()
+        {
+            DrawMenu(Art.Play, Art.HowToPlay, Art.Options, Art.ExitGame); // draw the main menu
         }
         public void DrawPlayMenu()
         {
-            Utilities.Setup();
-            Art.Draw(Art.TicTacToe, Art.CenterX(Art.TicTacToe), Art.CenterY(Art.TicTacToe) - Art.TicTacToe.Length - 5); 
-            Art.Draw(Art.PVP, menuLogic.CursorPositions[0].X + 10, menuLogic.CursorPositions[0].Y); 
-            Art.Draw(Art.PVsAI, menuLogic.CursorPositions[1].X + 10, menuLogic.CursorPositions[1].Y); 
-            Art.Draw(Art.ComingSoon, menuLogic.CursorPositions[2].X + 10, menuLogic.CursorPositions[2].Y); 
-            Art.Draw(Art.Back, menuLogic.CursorPositions[3].X + 10, menuLogic.CursorPositions[3].Y); 
-
-
-
+            DrawMenu(Art.PVP, Art.PVsAI, Art.ComingSoon, Art.Back); // draw the play menu
         }
         public void DrawOptionsMenu()
         {
-
+            DrawMenu(Art.Engine, Art.Controls, Art.Credits, Art.Back); // draw the options menu
         }
         public void DrawPlayVsAIMenu()
         {
-
+            DrawMenu(Art.Easy, Art.Medium, Art.Hard, Art.Back); // draw the play vs AI menu
         }
+
     }
     public class MenuCursor
     {

@@ -33,6 +33,7 @@ namespace ticTacToe
     class GameManager // manage menu, and creating new games 
     {
         MenuManager menuManager;
+        bool gameStarted = false; // flag to check if the game has started
 
         public GameManager()
         {
@@ -50,12 +51,14 @@ namespace ticTacToe
         }
         public void MenuLoop()
         {
-            menuManager.MenuSetup(); 
+            menuManager.MenuSetup(); // go to the main menu
             while (true)
             {
-                int button = menuManager.menuCursor.MoveUntilAction(); // get the button pressed
-                 menuManager.ExamineCursorAction(button); 
-                menuManager.MenuAction(); // perform the action
+                menuManager.MenuLoop(); // loop through the menu
+                if (gameStarted) // if the game is started
+                {
+                    break; // exit the loop
+                }
             }
         }
 
