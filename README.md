@@ -1,5 +1,5 @@
 # tic tac toe.
-Hi everyone (probably no one 😊),
+Hi everyone (probably no one),
 
 This is a Tic Tac Toe game I’m creating as a learning project in C#.  
 As of May 2025, I’ve been learning C# for about 2 months.
