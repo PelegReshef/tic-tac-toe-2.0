@@ -114,6 +114,10 @@ namespace ticTacToe
             return (Utilities.Height / 2) - (pixelArt.Length / 2);
 
         }
+        public static void DrawTextFrame() 
+        {
+            Console.SetCursorPosition(0, 0);
+        }
         public static string[] O = new string[]
         {
 

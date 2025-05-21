@@ -81,33 +81,87 @@ namespace ticTacToe
                 Console.ReadLine();
             }
         }
-        public void MenuAction() //draw menu stage according to the current menu stage
+        public ButtonTypes SortToButtonTypes() // sort the button to the correct type
         {
             menuLogic.HandleBackButtons();
             switch (menuLogic.CurrentMenuStage)
             {
+                // menu buttons
                 case MenuStages.MainMenu:
-                    menuVisuals.DrawMainMenu();
-                    break;
                 case MenuStages.MainMenu_Play:
-                    menuVisuals.DrawPlayMenu();
-                    break;
                 case MenuStages.MainMenu_Options:
-                    menuVisuals.DrawOptionsMenu();
-                    break;
                 case MenuStages.Play_PlayerVsAI:
-                    menuVisuals.DrawPlayVsAIMenu();
-                    break;
+                    return ButtonTypes.MenuButton;
+
+                // action menu buttons
+                case MenuStages.MainMenu_HowToPlay:
+                case MenuStages.MainMenu_Exit:
+                case MenuStages.Options_engine:
+                case MenuStages.Options_credits:
+                    return ButtonTypes.Action_MenuButton;
+
+                // action game buttons
+                case MenuStages.Play_PlayerVsPlayer:
+                case MenuStages.PlayerVsAI_Easy:
+                case MenuStages.PlayerVsAI_Medium:
+                case MenuStages.PlayerVsAI_Hard:
+                    return ButtonTypes.Action_GameButton;
+
+                // useless buttons
+                case MenuStages.Play_ComingSoon: 
+                case MenuStages.Options_controls:
+                    return ButtonTypes.UselessButton;
+                default:
+                    Utilities.Error("invalid menu stage (SortToButtonTypes)");
+                    menuLogic.CurrentMenuStage = MenuStages.MainMenu; 
+                    Console.ReadLine();
+                    return ButtonTypes.UselessButton; 
+
 
             }
         }
-        public void MenuLoop() // main menu loop
+        public void HandleMenuButtons() // draw according to the menu stage
+        {
+            switch (menuLogic.CurrentMenuStage)
+            {
+                case MenuStages.MainMenu:
+                    menuVisuals.DrawMainMenu(); // draw the main menu
+                    break;
+                case MenuStages.MainMenu_Play:
+                    menuVisuals.DrawPlayMenu(); // draw the play menu
+                    break;
+                case MenuStages.MainMenu_Options:
+                    menuVisuals.DrawOptionsMenu(); // draw the options menu
+                    break;
+                case MenuStages.Play_PlayerVsAI:
+                    menuVisuals.DrawPlayVsAIMenu(); // draw the play vs AI menu
+                    break;
+                // action menu buttons will be added later
+                default:
+                    Utilities.Error("invalid menu stage (HandleMenuButtons)");
+                    Console.ReadLine();
+                    break;
+            }
+        }
+
+        public bool MenuLoop() // main menu loop
         {
             
             int cursorPos = menuCursor.MoveUntilAction(); // move the cursor until an action is made
-            ExamineCursorAction(cursorPos); // check what button the player pressed and change the menu stage accordinglyג
-            MenuAction(); // draw the menu stage according to the current menu stage
-            menuCursor.Reset(); // reset the cursor position
+            ExamineCursorAction(cursorPos); // check what button the player pressed and change the menu stage accordingly
+            ButtonTypes buttonType = SortToButtonTypes(); // sort the button to the correct type
+            if (buttonType == ButtonTypes.Action_GameButton) // if the button is an action game button (which means a game need to be started)
+            {
+                return true; // return true to start the game
+            }
+            else // change the menu and continue
+            {
+                HandleMenuButtons(); 
+                menuCursor.Reset(); 
+                return false; 
+
+            }
+
 
         }
 
@@ -117,7 +171,8 @@ namespace ticTacToe
     }
     public class MenuLogic
     {
-        public MenuStages CurrentMenuStage = MenuStages.MainMenu; // start at the first menu
+        public MenuStages CurrentMenuStage = MenuStages.MainMenu; 
+        public ButtonTypes CurrentButtonType = ButtonTypes.MenuButton;
         public int Buttons = 3; // number of Buttons in the menu. with 0 being the first one
 
 
@@ -257,31 +312,43 @@ namespace ticTacToe
 
     }
     public enum MenuStages
+    /*
+     * menu buttons: butons that change the menu. dont start any action (play, back, etc)
+     * action buttons: buttons that start an action (how to play, PvP, exit gmae, etc)
+     * useless buttons: buttons that dont do anything (coming soon)
+     */
     {
         MainMenu,
 
-        MainMenu_Play, // open enum SecondMenu_Play
-        MainMenu_HowToPlay, // dont need to open another enum. get you to the how to play screen immediately
-        MainMenu_Options, // open enum SecondMenu_Options
-        MainMenu_Exit, // exit the game
+        MainMenu_Play, // menu button
+        MainMenu_HowToPlay, // action menu button
+        MainMenu_Options, // menu button
+        MainMenu_Exit, // action menu button
 
-        Play_PlayerVsPlayer, // start a new game with 2 players.no enum
-        Play_PlayerVsAI, // open enum ThirdMenu_PlayerVsAI
-        Play_ComingSoon, // will make it Custom Game later
-        Play_Back, // go back to the first menu
+        Play_PlayerVsPlayer, // game action button
+        Play_PlayerVsAI, // menu button
+        Play_ComingSoon, // useless button (for now)
+        Play_Back, // menu button
 
-        Options_engine,
-        Options_controls,
-        Options_credits,
-        Options_Back, // go back to the first menu
+        Options_engine, // action menu button
+        Options_controls, // useless button (for now)
+        Options_credits, // action menu button
+        Options_Back, // menu button
 
 
-        PlayerVsAI_Easy,
-        PlayerVsAI_Medium,
-        PlayerVsAI_Hard,
-        PlayerVsAI_Back // go back to the play menu
+        PlayerVsAI_Easy, // action game button
+        PlayerVsAI_Medium, // action gaem button
+        PlayerVsAI_Hard, // action game button
+        PlayerVsAI_Back // menu button
 
-        
+
+    }
+    public enum ButtonTypes
+    {
+        MenuButton, // button that changes the menu
+        Action_MenuButton, // button that starts an action in the menu (how to play, credits, etc)
+        Action_GameButton, // button that starts an action in the game  that reqires starting a new game (PvP, PvAI_Easy, etc)
+        UselessButton // button that does nothing (coming soon, controls)
     }
 
 

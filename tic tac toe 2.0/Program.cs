@@ -21,10 +21,8 @@ namespace ticTacToe
         {
             Utilities.RefreshWindow(); // refresh the window size
             Utilities.Setup();
-
             GameManager gameManager = new GameManager(); // create the game manager
-            gameManager.MenuLoop(); 
-            gameManager.StartNewGame(); // start a new game
+            gameManager.Run(); 
             Console.ReadKey();
         }
     }
@@ -33,17 +31,26 @@ namespace ticTacToe
     class GameManager // manage menu, and creating new games 
     {
         MenuManager menuManager;
-        bool gameStarted = false; // flag to check if the game has started
 
         public GameManager()
         {
             menuManager = new MenuManager(); 
         }
+        public void Run()
+        {
+            while (true)
+            {
+                MenuLoop();
+                StartNewGame();
+                Console.ReadLine();
+            }
+
+        }
         public void StartNewGame()
         {
-            Utilities.Setup(); // setup the console for the game
-            Game game = new Game(true); // create a new game
-            game.Run(); // run the game
+            Utilities.Setup(); 
+            Game game = new Game(true); 
+            game.Run(); 
         }
         public void MenuSetup()
         {
@@ -54,10 +61,10 @@ namespace ticTacToe
             menuManager.MenuSetup(); // go to the main menu
             while (true)
             {
-                menuManager.MenuLoop(); // loop through the menu
+                bool gameStarted = menuManager.MenuLoop(); // loop through the menu
                 if (gameStarted) // if the game is started
                 {
-                    break; // exit the loop
+                    return; // exit the loop
                 }
             }
         }
