@@ -20,6 +20,7 @@ namespace ticTacToe
         static void Main(string[] args)
         {
             Utilities.RefreshWindow(); // refresh the window size
+            Utilities.UpdateFrameVariables(); // update the frame variables
             Utilities.Setup();
             GameManager gameManager = new GameManager(); // create the game manager
             gameManager.Run(); 

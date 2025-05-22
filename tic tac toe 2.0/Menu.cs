@@ -137,6 +137,11 @@ namespace ticTacToe
                     menuVisuals.DrawPlayVsAIMenu(); // draw the play vs AI menu
                     break;
                 // action menu buttons will be added later
+                case MenuStages.MainMenu_HowToPlay:
+                    menuVisuals.DrawHowToPlayMenu(); // draw the how to play menu
+                    Console.ReadLine();
+                    menuLogic.CurrentMenuStage = MenuStages.MainMenu; 
+                    break;
                 default:
                     Utilities.Error("invalid menu stage (HandleMenuButtons)");
                     Console.ReadLine();
@@ -244,6 +249,12 @@ namespace ticTacToe
         public void DrawPlayVsAIMenu()
         {
             DrawMenu(Art.Easy, Art.Medium, Art.Hard, Art.Back); // draw the play vs AI menu
+        }
+        public void DrawHowToPlayMenu()
+        {
+            Art.DrawTextFrame();
+            Art.Draw(Art.HowToPlayContent, Art.FrameText_Left, Art.FrameText_Top); // draw the how to play menu in the top of the frame
+
         }
 
     }

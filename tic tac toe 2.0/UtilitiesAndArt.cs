@@ -53,6 +53,17 @@ namespace ticTacToe
 
 
         }
+        public static void UpdateFrameVariables()
+        {
+            Art.Frame_Top = Height / 2 - Height / 4;
+            Art.Frame_Left = Width / 2 - Width / 4;
+            Art.Frame_Bottom = Height / 2 + Height / 4;
+            Art.Frame_Right = Width / 2 + Width / 4;
+            Art.FrameText_Top = Height / 2 - Height / 4 + Height /15;
+            Art.FrameText_Left = Width / 2 - Width / 4 + Width/15;
+            Art.FrameLenth_X = Width / 2;
+            Art.FrameLength_Y = Height / 2;
+        }
         public static ConsoleKeyInfo GetValidInput()
         {
             while (true)
@@ -87,6 +98,15 @@ namespace ticTacToe
     }
     public static class Art
     {
+        public static int Frame_Left;
+        public static int Frame_Right;
+        public static int Frame_Top;
+        public static int Frame_Bottom;
+        public static int FrameText_Top;
+        public static int FrameText_Left;
+        public static int FrameLenth_X;
+        public static int FrameLength_Y;
+
         public static void Draw(string[] pixelArt, int x, int y)
         {
             for (int i = 0; i < pixelArt.Length; i++)
@@ -119,7 +139,38 @@ namespace ticTacToe
         }
         public static void DrawTextFrame() 
         {
-            Console.SetCursorPosition(0, 0);
+            // draw the frame
+            Console.SetCursorPosition(Frame_Left, Frame_Top); // set the cursor position to the top left corner of the frame
+            for (int i = 0; i < FrameLenth_X; i++)
+            {
+                Console.Write("#");
+            }
+            for (int i = 0; i < FrameLength_Y; i++)
+            {
+                Console.SetCursorPosition(Frame_Left, Frame_Top + i);
+                Console.Write("#");
+            }
+            Console.SetCursorPosition(Frame_Left, Frame_Bottom); // set the cursor position to the bottom left corner of the frame
+            for (int i = 0; i < FrameLenth_X; i++)
+            {
+                Console.Write("#");
+            }
+            Console.SetCursorPosition(Frame_Right, Frame_Top); // set the cursor position to the bottom left corner of the frame
+            for (int i = 0; i < FrameLength_Y; i++)
+            {
+                Console.SetCursorPosition(Frame_Right, Frame_Top + i);
+                Console.Write("#");
+            }
+            // erase the inside of the frame
+            for (int i = 1; i < FrameLength_Y -1; i++)
+            {
+                Console.SetCursorPosition(Frame_Left + 1, Frame_Top + i);
+                for (int j = 1; j < FrameLenth_X ; j++)
+                {
+                    Console.Write(" ");
+                }
+            }
+
         }
         public static string[] O = new string[]
         {
@@ -358,6 +409,15 @@ namespace ticTacToe
             @" |  __  | / /\ \ |  _  /| |  | |",
             @" | |  | |/ ____ \| | \ \| |__| |",
             @" |_|  |_/_/    \_\_|  \_\_____/ "
+        };
+        public static string[] HowToPlayContent = new string[]
+        {
+            "Tic Tac Toe is a two-player game played on a 3×3 grid.",
+            "Player X  goes first, and players take turns marking a square with either X or O.",
+            "The first player to get three of their marks in a row—horizontally, ",
+            "vertically, or diagonally—wins the game.",
+            "If all squares are filled and no one wins, the game ends in a draw.",
+            ""
         };
 
     }
