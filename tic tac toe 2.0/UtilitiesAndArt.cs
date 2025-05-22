@@ -19,8 +19,6 @@ namespace ticTacToe
             Console.ReadLine();
             int newWidth = Console.WindowWidth;
             int newHeight = Console.WindowHeight;
-            Console.BufferHeight = newHeight; // set the buffer height to the new height
-            Console.BufferWidth = newWidth; // set the buffer width to the new width
 
             if (newWidth <= Width || newHeight <= Height)
             {
@@ -30,12 +28,17 @@ namespace ticTacToe
                 Width = Console.WindowWidth;
                 Height = Console.WindowHeight;
             }
-            else
+            if (newWidth <= Art.TicTacToe[0].Length || newHeight <= Art.TicTacToe.Length *2)
             {
-                Width = Console.WindowWidth;
-                Height = Console.WindowHeight;
-
+                Console.WriteLine("looks like your window size is too small. you have to switch to smaller graphics mode. this mode have not been made yet, so the game is unavallibe for you right now :(");
+                Console.ReadLine();
+                Environment.Exit(0); // exit the game if the window size is too small
             }
+            Width = Console.WindowWidth;
+            Height = Console.WindowHeight;
+            Console.BufferHeight = newHeight; // set the buffer height to the new height
+            Console.BufferWidth = newWidth; // set the buffer width to the new width
+
 
 
             Console.Clear(); // clear the console window
