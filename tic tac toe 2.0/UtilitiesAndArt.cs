@@ -59,8 +59,8 @@ namespace ticTacToe
             Art.Frame_Left = Width / 2 - Width / 4;
             Art.Frame_Bottom = Height / 2 + Height / 4;
             Art.Frame_Right = Width / 2 + Width / 4;
-            Art.FrameText_Top = Height / 2 - Height / 4 + Height /15;
-            Art.FrameText_Left = Width / 2 - Width / 4 + Width/15;
+            Art.Frame_CenterY = Height / 2;
+            Art.Frame_CenterX = Width / 2;
             Art.FrameLenth_X = Width / 2;
             Art.FrameLength_Y = Height / 2;
         }
@@ -102,8 +102,8 @@ namespace ticTacToe
         public static int Frame_Right;
         public static int Frame_Top;
         public static int Frame_Bottom;
-        public static int FrameText_Top;
-        public static int FrameText_Left;
+        public static int Frame_CenterY;
+        public static int Frame_CenterX;
         public static int FrameLenth_X;
         public static int FrameLength_Y;
 
@@ -412,12 +412,32 @@ namespace ticTacToe
         };
         public static string[] HowToPlayContent = new string[]
         {
-            "Tic Tac Toe is a two-player game played on a 3×3 grid.",
-            "Player X  goes first, and players take turns marking a square with either X or O.",
-            "The first player to get three of their marks in a row—horizontally, ",
-            "vertically, or diagonally—wins the game.",
-            "If all squares are filled and no one wins, the game ends in a draw.",
-            ""
+            "Tic Tac Toe is a two-player game played on a 3×3 grid. Player X        ",
+            "",
+            "goes first, and players take turns marking a square with either X or O.",
+            "",
+            "The first player to get three of their marks in a ,                    ",
+            "",
+            "row — horizontally, vertically, or diagonally — wins the game.         ",
+            "",
+            "If all squares are filled and no one wins, the game ends in a draw.    "
+            
+        };
+        public static string[] CreditsContent = new string[]
+        {
+            "Cretaed by: Peleg Reshef                                  ",
+            "",
+            "Thanks to:",
+            "",
+            "* patorjk.com — for the ASCII Art used in the game",
+            "",
+            "* GitHub - for backups and sharing my code        ",
+            "",
+            "* ChatGPT — for help with new concepts. (All code",
+            " is written by me)",
+            "",
+            "",
+            "Project repository: github.com/PelegReshef/tic-tac-toe-2.0",
         };
 
     }

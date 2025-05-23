@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ticTacToe;
 
-namespace ticTacToe
+namespace tic_tac_toe_2._0
 {
     public class MenuManager
     {
@@ -136,11 +136,18 @@ namespace ticTacToe
                 case MenuStages.Play_PlayerVsAI:
                     menuVisuals.DrawPlayVsAIMenu(); // draw the play vs AI menu
                     break;
-                // action menu buttons will be added later
+                // action menu buttons
                 case MenuStages.MainMenu_HowToPlay:
-                    menuVisuals.DrawHowToPlayMenu(); // draw the how to play menu
-                    Console.ReadLine();
+                    menuVisuals.DrawHowToPlayMenu(); 
+                    Utilities.GetValidInput();
                     menuLogic.CurrentMenuStage = MenuStages.MainMenu; 
+                    menuVisuals.DrawMainMenu(); 
+                    break;
+                case MenuStages.Options_credits:
+                    menuVisuals.DrawCreditsMenu(); 
+                    Utilities.GetValidInput();
+                    menuLogic.CurrentMenuStage = MenuStages.MainMenu_Options; 
+                    menuVisuals.DrawOptionsMenu(); 
                     break;
                 default:
                     Utilities.Error("invalid menu stage (HandleMenuButtons)");
@@ -157,6 +164,7 @@ namespace ticTacToe
             ButtonTypes buttonType = SortToButtonTypes(); // sort the button to the correct type
             if (buttonType == ButtonTypes.Action_GameButton) // if the button is an action game button (which means a game need to be started)
             {
+                menuLogic.CurrentMenuStage = MenuStages.MainMenu; // reset the menu stage to the main menu
                 return true; // return true to start the game
             }
             else // change the menu and continue
@@ -222,7 +230,7 @@ namespace ticTacToe
 
         public MenuVisuals(MenuLogic startScreenLogic)
         {
-            this.menuLogic = startScreenLogic; // set the start screen logic
+            menuLogic = startScreenLogic; // set the start screen logic
         }
         void DrawMenu(string[] art1, string[] art2, string[] art3, string[] art4)
         {
@@ -253,8 +261,13 @@ namespace ticTacToe
         public void DrawHowToPlayMenu()
         {
             Art.DrawTextFrame();
-            Art.Draw(Art.HowToPlayContent, Art.FrameText_Left, Art.FrameText_Top); // draw the how to play menu in the top of the frame
+            Art.Draw(Art.HowToPlayContent, Art.Frame_CenterX - Art.HowToPlayContent[0].Length/2, Art.Frame_CenterY - Art.HowToPlayContent.Length/2); // draw the how to play menu in the top of the frame
 
+        }
+        public void DrawCreditsMenu()
+        {
+            Art.DrawTextFrame();
+            Art.Draw(Art.CreditsContent, Art.Frame_CenterX - Art.CreditsContent[0].Length / 2, Art.Frame_CenterY - Art.CreditsContent.Length / 2); // draw the credits menu in the top of the frame
         }
 
     }
@@ -370,8 +383,8 @@ namespace ticTacToe
         public int Y; // Y position of the cursor
         public MenuCursorPosition(int x, int y)
         {
-            this.X = x; // set the X position of the cursor
-            this.Y = y; // set the Y position of the cursor
+            X = x; // set the X position of the cursor
+            Y = y; // set the Y position of the cursor
         }
     }
 }

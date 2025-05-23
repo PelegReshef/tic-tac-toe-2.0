@@ -13,6 +13,8 @@
 
 */
 
+using tic_tac_toe_2._0;
+
 namespace ticTacToe
 {
     class Program
@@ -51,6 +53,7 @@ namespace ticTacToe
         {
             Utilities.Setup(); 
             Game game = new Game(true); 
+            
             game.Run(); 
         }
         public void MenuSetup()
