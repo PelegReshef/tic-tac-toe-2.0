@@ -156,8 +156,9 @@ namespace tic_tac_toe_2._0
             }
         }
 
-        public bool MenuLoop() // main menu loop
+        public ReturnTypes MenuLoop() // main menu loop
         {
+            
             
             int cursorPos = menuCursor.MoveUntilAction(); // move the cursor until an action is made
             ExamineCursorAction(cursorPos); // check what button the player pressed and change the menu stage accordingly
@@ -165,13 +166,32 @@ namespace tic_tac_toe_2._0
             if (buttonType == ButtonTypes.Action_GameButton) // if the button is an action game button (which means a game need to be started)
             {
                 menuLogic.CurrentMenuStage = MenuStages.MainMenu; // reset the menu stage to the main menu
-                return true; // return true to start the game
+                switch (menuLogic.CurrentMenuStage) // check what button was pressed
+                {
+                    case MenuStages.Play_PlayerVsPlayer:
+                        return ReturnTypes.PlayerVsPlayer; // return player vs player
+                    case MenuStages.PlayerVsAI_Easy:
+                        return ReturnTypes.PlayerVsAI_Easy; // return player vs AI easy
+                    case MenuStages.PlayerVsAI_Medium:
+                        return ReturnTypes.PlayerVsAI_Medium; // return player vs AI medium
+                    case MenuStages.PlayerVsAI_Hard:
+                        return ReturnTypes.PlayerVsAI_Hard; // return player vs AI hard
+                    default:
+                        Utilities.Error("invalid menu stage (MenuManager.MenuLoop)");
+                        Console.ReadLine();
+                        menuLogic.CurrentMenuStage = MenuStages.MainMenu;
+                        return ReturnTypes.MenuButton; // return menu button if no action was made
+                }
             }
             else // change the menu and continue
             {
                 HandleMenuButtons(); 
-                menuCursor.Reset(); 
-                return false; 
+                if (buttonType == ButtonTypes.MenuButton)
+                    menuCursor.Reset();
+                else
+                    menuCursor.Draw(menuLogic.CursorPositions[cursorPos].X, menuLogic.CursorPositions[cursorPos].Y);
+
+                return ReturnTypes.MenuButton; 
 
             }
 
@@ -373,6 +393,14 @@ namespace tic_tac_toe_2._0
         Action_MenuButton, // button that starts an action in the menu (how to play, credits, etc)
         Action_GameButton, // button that starts an action in the game  that reqires starting a new game (PvP, PvAI_Easy, etc)
         UselessButton // button that does nothing (coming soon, controls)
+    }
+    public enum ReturnTypes //what Action_GameButton button was pressed
+    {
+        MenuButton, // no game action was made, just a menu button
+        PlayerVsPlayer, 
+        PlayerVsAI_Easy, 
+        PlayerVsAI_Medium, 
+        PlayerVsAI_Hard, 
     }
 
 

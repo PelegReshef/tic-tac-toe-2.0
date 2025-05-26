@@ -44,9 +44,34 @@ namespace tic_tac_toe_2._0
 
         }
     }
-    public class AI // AI that plays the game
+    public static class AI // AI that plays the game
     {
+        private static Random random;
+        static AI() 
+        {
+            random = new Random(); 
+        }
+        static bool IsValidMove(BoardLogic boardLogic, int move) // check if the move is valid
+        {
+            if (boardLogic.boardCells[move].state == CellState.Empty) // check if the cell is empty
+            {
+                return true; 
+            }
+            return false; 
+        }
+        public static int Easy(BoardLogic boardLogic) //returnes cursor pos of the selected move. 
+        {
+            while (true)
+            {
+                int move = random.Next(0, 9);
+                if (IsValidMove(boardLogic, move))
+                {
+                    return move; // return the move
+                }
 
+            }
+
+        }
     }
 
 }

@@ -12,30 +12,39 @@ namespace tic_tac_toe_2._0
         bool gameOver = false; //true = game over, false = game not over
 
 
-        Player p1; // player 1
-        Player p2; // player 2
-        Player AI; // AI player
+        Player p1; 
+        Player p2; 
+        AIBot AI; 
         BoardVisuals boardVisuals;
         BoardLogic boardLogic;
         Cursor cursor; // cursor for the player to move around the board
 
-        bool playingAgainstRealPlayer; // true = playing against real player, false = playing against AI
+        ReturnTypes gameType;
 
-        public Game(bool realPlayer)
+        public Game(ReturnTypes gameType)
         {
             boardLogic = new BoardLogic(); // create the board logic
             boardLogic.NewBoard(0, 0, true); // centered for now. will be changed to player choice later
             boardVisuals = new BoardVisuals(boardLogic); // create the board visuals
+            cursor = new Cursor(boardLogic); // create the cursor
 
-
+            switch (gameType) // set the game type
+            {
+                case ReturnTypes.PlayerVsPlayer:
+                    break;
+                case ReturnTypes.VSAI:
+                    playingAgainstRealPlayer = false; // player vs AI
+                    break;
+                default:
+                    Utilities.Error("unexpected error. game type not recognized"); // if the game type is not recognized
+                    gameOver = true; // end the game
+                    return;
+            }
             // create the players and cursor
 
-            cursor = new Cursor(boardLogic); // create the cursor
             p1 = new Player(PlayerType.Player1); // player 1
-
-            playingAgainstRealPlayer = realPlayer;
             p2 = new Player(PlayerType.Player2); // player 2
-            AI = new Player(PlayerType.AI); // AI
+            AI = new AIBot(); // AI
 
 
         }
@@ -45,55 +54,55 @@ namespace tic_tac_toe_2._0
             cursor.Draw(); // draw the cursor
 
             // game loop for pvp
-            if (playingAgainstRealPlayer)
-                while (!gameOver)
+            
+            while (!gameOver)
+            {
+                if (turn == Turns.Player1)
                 {
-                    if (turn == Turns.Player1)
+
+                    bool validAction = false; // check if the action is valid
+
+                    do
                     {
+                        int actionPos = cursor.MoveUntilAction(); // move the player icon
+                        validAction = ExamineActionPVP(p1, cursor); // examine the action
 
-                        bool validAction = false; // check if the action is valid
+                    } while (!validAction); // repeat until a valid action is made
 
-                        do
-                        {
-                            int actionPos = cursor.MoveUntilAction(); // move the player icon
-                            validAction = ExamineActionPVP(p1, cursor); // examine the action
-
-                        } while (!validAction); // repeat until a valid action is made
-
-                        GameState gameState = GameLogic.CheckGameState(boardLogic);
-                        HandleGameState(gameState, "Player 1");
-                        if (!gameOver)
-                        {
-                            turn = Turns.Player2; // game continues + switch turns
-                        }
-                    }
-                    else if (turn == Turns.Player2)
+                    GameState gameState = GameLogic.CheckGameState(boardLogic);
+                    HandleGameState(gameState, "Player 1");
+                    if (!gameOver)
                     {
-
-                        bool validAction = false; // check if the action is valid
-
-                        do
-                        {
-                            int actionPos = cursor.MoveUntilAction(); // move the player icon
-                            validAction = ExamineActionPVP(p2, cursor); // examine the action
-
-                        } while (!validAction); // repeat until a valid action is made
-
-                        GameState gameState = GameLogic.CheckGameState(boardLogic);
-                        HandleGameState(gameState, "Player 2");
-                        if (!gameOver)
-                        {
-                            turn = Turns.Player1; // game continues + switch turns
-                        }
-
-                    }
-                    else
-                    {
-                        Utilities.Error("unexpected error. turn not recognized"); // if the turn is not recognized
-                        gameOver = true; // end the game
-
+                        turn = Turns.Player2; // game continues + switch turns
                     }
                 }
+                else if (turn == Turns.Player2)
+                {
+
+                    bool validAction = false; // check if the action is valid
+
+                    do
+                    {
+                        int actionPos = cursor.MoveUntilAction(); // move the player icon
+                        validAction = ExamineActionPVP(p2, cursor); // examine the action
+
+                    } while (!validAction); // repeat until a valid action is made
+
+                    GameState gameState = GameLogic.CheckGameState(boardLogic);
+                    HandleGameState(gameState, "Player 2");
+                    if (!gameOver)
+                    {
+                        turn = Turns.Player1; // game continues + switch turns
+                    }
+
+                }
+                else
+                {
+                    Utilities.Error("unexpected error. turn not recognized"); // if the turn is not recognized
+                    gameOver = true; // end the game
+
+                }
+            }
         }
         public void RunVSAI()
         {
@@ -267,6 +276,14 @@ namespace tic_tac_toe_2._0
             }
         }
     }
+    public class AIBot
+    {
+        public BotDifficulty difficulty; // difficulty of the bot. easy, medium, hard
+        public AIBot(BotDifficulty difficulty)
+        {
+            this.difficulty = difficulty; 
+        }
+    }
 
     public enum CellState
     {
@@ -279,6 +296,12 @@ namespace tic_tac_toe_2._0
         Player1,
         Player2,
         AI
+    }
+    public enum BotDifficulty
+    {
+        Easy,
+        Medium,
+        Hard
     }
     public class Cell
     {
