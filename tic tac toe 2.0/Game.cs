@@ -12,44 +12,35 @@ namespace tic_tac_toe_2._0
         bool gameOver = false; //true = game over, false = game not over
 
 
-        Player p1; 
-        Player p2; 
-        AIBot AI; 
         BoardVisuals boardVisuals;
         BoardLogic boardLogic;
         Cursor cursor; // cursor for the player to move around the board
 
         ReturnTypes gameType;
-
-        public Game(ReturnTypes gameType)
+        /*
+         * make a method for proccesing the return type to a new enum
+         * check the new enum in Run() method
+         * create players and bots in Run() method instead of constructor
+         */
+        public Game(ReturnTypes returnType)
         {
             boardLogic = new BoardLogic(); // create the board logic
             boardLogic.NewBoard(0, 0, true); // centered for now. will be changed to player choice later
             boardVisuals = new BoardVisuals(boardLogic); // create the board visuals
             cursor = new Cursor(boardLogic); // create the cursor
+            gameType = returnType;
 
-            switch (gameType) // set the game type
-            {
-                case ReturnTypes.PlayerVsPlayer:
-                    break;
-                case ReturnTypes.VSAI:
-                    playingAgainstRealPlayer = false; // player vs AI
-                    break;
-                default:
-                    Utilities.Error("unexpected error. game type not recognized"); // if the game type is not recognized
-                    gameOver = true; // end the game
-                    return;
-            }
             // create the players and cursor
 
-            p1 = new Player(PlayerType.Player1); // player 1
-            p2 = new Player(PlayerType.Player2); // player 2
-            AI = new AIBot(); // AI
 
 
         }
         public void RunPVP()
         {
+            Player xPlayer = new Player(PlayerType.X_player); // player 1
+            Player playerO = new Player(PlayerType.O_Player); // player 2
+
+
             Turns turn = Turns.Player1; // start with player 1
             cursor.Draw(); // draw the cursor
 
@@ -65,7 +56,7 @@ namespace tic_tac_toe_2._0
                     do
                     {
                         int actionPos = cursor.MoveUntilAction(); // move the player icon
-                        validAction = ExamineActionPVP(p1, cursor); // examine the action
+                        validAction = ExamineActionPVP(xPlayer, cursor); // examine the action
 
                     } while (!validAction); // repeat until a valid action is made
 
@@ -84,7 +75,7 @@ namespace tic_tac_toe_2._0
                     do
                     {
                         int actionPos = cursor.MoveUntilAction(); // move the player icon
-                        validAction = ExamineActionPVP(p2, cursor); // examine the action
+                        validAction = ExamineActionPVP(playerO, cursor); // examine the action
 
                     } while (!validAction); // repeat until a valid action is made
 
@@ -98,29 +89,39 @@ namespace tic_tac_toe_2._0
                 }
                 else
                 {
-                    Utilities.Error("unexpected error. turn not recognized"); // if the turn is not recognized
+                    Utilities.Error("unexpected error. turn not recognized(RunPVP())"); // if the turn is not recognized
                     gameOver = true; // end the game
 
                 }
             }
         }
-        public void RunVSAI()
+        public void RunVSAI(BotDifficulty difficulty)
         {
-            // AI logic here
+            AIBot bot = new AIBot(difficulty); 
         }
         public void Run()
         {
             boardVisuals.DrawNewBoard(); // draw the board
 
-            if (playingAgainstRealPlayer)
+            switch (gameType) // set the game type
             {
-                RunPVP(); // run the player vs player game
+                case ReturnTypes.PlayerVsPlayer:
+                    RunPVP();
+                    break;
+                case ReturnTypes.PlayerVsAI_Easy:
+                    RunVSAI(BotDifficulty.Easy); 
+                    break;
+                case ReturnTypes.PlayerVsAI_Medium:
+                    RunVSAI(BotDifficulty.Medium); 
+                    break;
+                case ReturnTypes.PlayerVsAI_Hard:
+                    RunVSAI(BotDifficulty.Hard); 
+                    break;
+                default:
+                    Utilities.Error("unexpected error. game type is not recognized (Run())"); // if the game type is not recognized
+                    gameOver = true; // end the game
+                    return;
             }
-            else
-            {
-                RunVSAI(); // run the player vs AI game
-            }
-
         }
 
 
@@ -129,7 +130,7 @@ namespace tic_tac_toe_2._0
         {
             switch (player.playerType)
             {
-                case PlayerType.Player1:
+                case PlayerType.X_player:
                     if (boardLogic.boardCells[cursor.CursorPos].state == CellState.Empty) // check if the cell is empty
                     {
                         boardLogic.ChangeCellstate(CellState.X, cursor.CursorPos); // change the cell state to X
@@ -138,7 +139,7 @@ namespace tic_tac_toe_2._0
                         return true;
                     }
                     break;
-                case PlayerType.Player2:
+                case PlayerType.O_Player:
                     if (boardLogic.boardCells[cursor.CursorPos].state == CellState.Empty) // check if the cell is empty
                     {
                         boardLogic.ChangeCellstate(CellState.O, cursor.CursorPos); // change the cell state to O
@@ -293,9 +294,9 @@ namespace tic_tac_toe_2._0
     }
     public enum PlayerType
     {
-        Player1,
-        Player2,
-        AI
+        X_player,
+        O_Player
+        
     }
     public enum BotDifficulty
     {
@@ -347,7 +348,7 @@ namespace tic_tac_toe_2._0
     public struct Player // move the player that let you choose where to go
     {
         public const string playerIcon = @"\/"; // player character
-        public PlayerType playerType; // type of player. player 1, player 2, AI
+        public PlayerType playerType; // type of player. player 1, player 2, O_AI
 
         public Player(PlayerType playerType)
         {

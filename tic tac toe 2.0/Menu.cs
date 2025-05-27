@@ -55,7 +55,6 @@ namespace tic_tac_toe_2._0
         {
             menuVisuals.DrawMainMenu(); // draw the main menu
             menuCursor.Reset(); // reset the cursor position
-            menuCursor.MoveUntilAction(); // move the cursor until an action is made
 
         }
         public void ExamineCursorAction(int cursorPos) // check what button the player pressed and change the menu stage accordingly
@@ -71,14 +70,13 @@ namespace tic_tac_toe_2._0
                 {
                     Utilities.Error("no menu stage found for the current menu stage and cursor position");
                     menuLogic.CurrentMenuStage = MenuStages.MainMenu; 
-                    Console.ReadLine();
+                    
                 }
             }
             else
             {
                 Utilities.Error("invalid cursor position");
                 menuCursor.cursorPos = 0; 
-                Console.ReadLine();
             }
         }
         public ButtonTypes SortToButtonTypes() // sort the button to the correct type
@@ -114,7 +112,6 @@ namespace tic_tac_toe_2._0
                 default:
                     Utilities.Error("invalid menu stage (SortToButtonTypes)");
                     menuLogic.CurrentMenuStage = MenuStages.MainMenu; 
-                    Console.ReadLine();
                     return ButtonTypes.UselessButton; 
 
 
@@ -134,7 +131,7 @@ namespace tic_tac_toe_2._0
                     menuVisuals.DrawOptionsMenu(); // draw the options menu
                     break;
                 case MenuStages.Play_PlayerVsAI:
-                    menuVisuals.DrawPlayVsAIMenu(); // draw the play vs AI menu
+                    menuVisuals.DrawPlayVsAIMenu(); // draw the play vs O_AI menu
                     break;
                 // action menu buttons
                 case MenuStages.MainMenu_HowToPlay:
@@ -151,12 +148,11 @@ namespace tic_tac_toe_2._0
                     break;
                 default:
                     Utilities.Error("invalid menu stage (HandleMenuButtons)");
-                    Console.ReadLine();
                     break;
             }
         }
 
-        public ReturnTypes MenuLoop() // main menu loop
+        public ReturnTypes MenuLoop() // main menu loop. this method is looped in GameManager until a Action_GameButton is pressed
         {
             
             
@@ -165,20 +161,22 @@ namespace tic_tac_toe_2._0
             ButtonTypes buttonType = SortToButtonTypes(); // sort the button to the correct type
             if (buttonType == ButtonTypes.Action_GameButton) // if the button is an action game button (which means a game need to be started)
             {
-                menuLogic.CurrentMenuStage = MenuStages.MainMenu; // reset the menu stage to the main menu
-                switch (menuLogic.CurrentMenuStage) // check what button was pressed
+                switch (menuLogic.CurrentMenuStage) // check what play button was pressed and return the correct type to game manager
                 {
                     case MenuStages.Play_PlayerVsPlayer:
-                        return ReturnTypes.PlayerVsPlayer; // return player vs player
+                        menuLogic.CurrentMenuStage = MenuStages.MainMenu; 
+                        return ReturnTypes.PlayerVsPlayer; 
                     case MenuStages.PlayerVsAI_Easy:
-                        return ReturnTypes.PlayerVsAI_Easy; // return player vs AI easy
+                        menuLogic.CurrentMenuStage = MenuStages.MainMenu;
+                        return ReturnTypes.PlayerVsAI_Easy; 
                     case MenuStages.PlayerVsAI_Medium:
-                        return ReturnTypes.PlayerVsAI_Medium; // return player vs AI medium
+                        menuLogic.CurrentMenuStage = MenuStages.MainMenu;
+                        return ReturnTypes.PlayerVsAI_Medium; 
                     case MenuStages.PlayerVsAI_Hard:
-                        return ReturnTypes.PlayerVsAI_Hard; // return player vs AI hard
+                        menuLogic.CurrentMenuStage = MenuStages.MainMenu;
+                        return ReturnTypes.PlayerVsAI_Hard; 
                     default:
                         Utilities.Error("invalid menu stage (MenuManager.MenuLoop)");
-                        Console.ReadLine();
                         menuLogic.CurrentMenuStage = MenuStages.MainMenu;
                         return ReturnTypes.MenuButton; // return menu button if no action was made
                 }
@@ -276,7 +274,7 @@ namespace tic_tac_toe_2._0
         }
         public void DrawPlayVsAIMenu()
         {
-            DrawMenu(Art.Easy, Art.Medium, Art.Hard, Art.Back); // draw the play vs AI menu
+            DrawMenu(Art.Easy, Art.Medium, Art.Hard, Art.Back); // draw the play vs O_AI menu
         }
         public void DrawHowToPlayMenu()
         {

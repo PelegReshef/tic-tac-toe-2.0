@@ -93,6 +93,7 @@ namespace tic_tac_toe_2._0
         {
             Console.SetCursorPosition(0, 0);
             Console.WriteLine(message);
+            Console.ReadLine(); 
         }
 
     }
@@ -265,22 +266,22 @@ namespace tic_tac_toe_2._0
 
         };
         public static string[] TicTacToe = new string[]{
-            "TTTTTTTTTTTTTTTTTTTTTTTIIIIIIIIII      CCCCCCCCCCCCC               TTTTTTTTTTTTTTTTTTTTTTT         AAA                  CCCCCCCCCCCCC               TTTTTTTTTTTTTTTTTTTTTTT     OOOOOOOOO     EEEEEEEEEEEEEEEEEEEEEE",
-            "T:::::::::::::::::::::TI::::::::I   CCC::::::::::::C               T:::::::::::::::::::::T        A:::A              CCC::::::::::::C               T:::::::::::::::::::::T   OO:::::::::OO   E::::::::::::::::::::E",
-            "T:::::::::::::::::::::TI::::::::I CC:::::::::::::::C               T:::::::::::::::::::::T       A:::::A           CC:::::::::::::::C               T:::::::::::::::::::::T OO:::::::::::::OO E::::::::::::::::::::E",
-            "T:::::TT:::::::TT:::::TII::::::IIC:::::CCCCCCCC::::C               T:::::TT:::::::TT:::::T      A:::::::A         C:::::CCCCCCCC::::C               T:::::TT:::::::TT:::::TO:::::::OOO:::::::OEE::::::EEEEEEEEE::::E",
-            "TTTTTT  T:::::T  TTTTTT  I::::I C:::::C       CCCCCC               TTTTTT  T:::::T  TTTTTT     A:::::::::A       C:::::C       CCCCCC               TTTTTT  T:::::T  TTTTTTO::::::O   O::::::O  E:::::E       EEEEEE",
-            "        T:::::T          I::::IC:::::C                                     T:::::T            A:::::A:::::A     C:::::C                                     T:::::T        O:::::O     O:::::O  E:::::E             ",
-            "        T:::::T          I::::IC:::::C                                     T:::::T           A:::::A A:::::A    C:::::C                                     T:::::T        O:::::O     O:::::O  E::::::EEEEEEEEEE   ",
-            "        T:::::T          I::::IC:::::C                                     T:::::T          A:::::A   A:::::A   C:::::C                                     T:::::T        O:::::O     O:::::O  E:::::::::::::::E   ",
-            "        T:::::T          I::::IC:::::C                                     T:::::T         A:::::A     A:::::A  C:::::C                                     T:::::T        O:::::O     O:::::O  E:::::::::::::::E   ",
-            "        T:::::T          I::::IC:::::C                                     T:::::T        A:::::AAAAAAAAA:::::A C:::::C                                     T:::::T        O:::::O     O:::::O  E::::::EEEEEEEEEE   ",
-            "        T:::::T          I::::IC:::::C                                     T:::::T       A:::::::::::::::::::::AC:::::C                                     T:::::T        O:::::O     O:::::O  E:::::E             ",
-            "        T:::::T          I::::I C:::::C       CCCCCC                       T:::::T      A:::::AAAAAAAAAAAAA:::::AC:::::C       CCCCCC                       T:::::T        O::::::O   O::::::O  E:::::E       EEEEEE",
-            "      TT:::::::TT      II::::::IIC:::::CCCCCCCC::::C                     TT:::::::TT   A:::::A             A:::::AC:::::CCCCCCCC::::C                     TT:::::::TT      O:::::::OOO:::::::OEE::::::EEEEEEEE:::::E",
-            "      T:::::::::T      I::::::::I CC:::::::::::::::C                     T:::::::::T  A:::::A               A:::::ACC:::::::::::::::C                     T:::::::::T       OO:::::::::::::OO E::::::::::::::::::::E",
-            "      T:::::::::T      I::::::::I   CCC::::::::::::C                     T:::::::::T A:::::A                 A:::::A CCC::::::::::::C                     T:::::::::T         OO:::::::::OO   E::::::::::::::::::::E",
-            "      TTTTTTTTTTT      IIIIIIIIII      CCCCCCCCCCCCC                     TTTTTTTTTTTAAAAAAA                   AAAAAAA   CCCCCCCCCCCCC                     TTTTTTTTTTT           OOOOOOOOO     EEEEEEEEEEEEEEEEEEEEEE"
+            "TTTTTTTTTTTTTTTTTTTTTTTIIIIIIIIII      CCCCCCCCCCCCC         TTTTTTTTTTTTTTTTTTTTTTT         AAA                  CCCCCCCCCCCCC         TTTTTTTTTTTTTTTTTTTTTTT     OOOOOOOOO     EEEEEEEEEEEEEEEEEEEEEE",
+            "T:::::::::::::::::::::TI::::::::I   CCC::::::::::::C         T:::::::::::::::::::::T        A:::A              CCC::::::::::::C         T:::::::::::::::::::::T   OO:::::::::OO   E::::::::::::::::::::E",
+            "T:::::::::::::::::::::TI::::::::I CC:::::::::::::::C         T:::::::::::::::::::::T       A:::::A           CC:::::::::::::::C         T:::::::::::::::::::::T OO:::::::::::::OO E::::::::::::::::::::E",
+            "T:::::TT:::::::TT:::::TII::::::IIC:::::CCCCCCCC::::C         T:::::TT:::::::TT:::::T      A:::::::A         C:::::CCCCCCCC::::C         T:::::TT:::::::TT:::::TO:::::::OOO:::::::OEE::::::EEEEEEEEE::::E",
+            "TTTTTT  T:::::T  TTTTTT  I::::I C:::::C       CCCCCC         TTTTTT  T:::::T  TTTTTT     A:::::::::A       C:::::C       CCCCCC         TTTTTT  T:::::T  TTTTTTO::::::O   O::::::O  E:::::E       EEEEEE",
+            "        T:::::T          I::::IC:::::C                               T:::::T            A:::::A:::::A     C:::::C                               T:::::T        O:::::O     O:::::O  E:::::E             ",
+            "        T:::::T          I::::IC:::::C                               T:::::T           A:::::A A:::::A    C:::::C                               T:::::T        O:::::O     O:::::O  E::::::EEEEEEEEEE   ",
+            "        T:::::T          I::::IC:::::C                               T:::::T          A:::::A   A:::::A   C:::::C                               T:::::T        O:::::O     O:::::O  E:::::::::::::::E   ",
+            "        T:::::T          I::::IC:::::C                               T:::::T         A:::::A     A:::::A  C:::::C                               T:::::T        O:::::O     O:::::O  E:::::::::::::::E   ",
+            "        T:::::T          I::::IC:::::C                               T:::::T        A:::::AAAAAAAAA:::::A C:::::C                               T:::::T        O:::::O     O:::::O  E::::::EEEEEEEEEE   ",
+            "        T:::::T          I::::IC:::::C                               T:::::T       A:::::::::::::::::::::AC:::::C                               T:::::T        O:::::O     O:::::O  E:::::E             ",
+            "        T:::::T          I::::I C:::::C       CCCCCC                 T:::::T      A:::::AAAAAAAAAAAAA:::::AC:::::C       CCCCCC                 T:::::T        O::::::O   O::::::O  E:::::E       EEEEEE",
+            "      TT:::::::TT      II::::::IIC:::::CCCCCCCC::::C               TT:::::::TT   A:::::A             A:::::AC:::::CCCCCCCC::::C               TT:::::::TT      O:::::::OOO:::::::OEE::::::EEEEEEEE:::::E",
+            "      T:::::::::T      I::::::::I CC:::::::::::::::C               T:::::::::T  A:::::A               A:::::ACC:::::::::::::::C               T:::::::::T       OO:::::::::::::OO E::::::::::::::::::::E",
+            "      T:::::::::T      I::::::::I   CCC::::::::::::C               T:::::::::T A:::::A                 A:::::A CCC::::::::::::C               T:::::::::T         OO:::::::::OO   E::::::::::::::::::::E",
+            "      TTTTTTTTTTT      IIIIIIIIII      CCCCCCCCCCCCC               TTTTTTTTTTTAAAAAAA                   AAAAAAA   CCCCCCCCCCCCC               TTTTTTTTTTT           OOOOOOOOO     EEEEEEEEEEEEEEEEEEEEEE"
     };
         public static string[] Options = new string[]
         {

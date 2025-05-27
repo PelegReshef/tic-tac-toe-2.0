@@ -44,7 +44,7 @@ namespace tic_tac_toe_2._0
 
         }
     }
-    public static class AI // AI that plays the game
+    public static class AI // O_AI that plays the game
     {
         private static Random random;
         static AI() 
@@ -59,6 +59,21 @@ namespace tic_tac_toe_2._0
             }
             return false; 
         }
+        public static int AIMove(BoardLogic boardLogic, BotDifficulty difficulty)
+        {
+            switch (difficulty)
+            {
+                case BotDifficulty.Easy:
+                    return Easy(boardLogic);
+                case BotDifficulty.Medium:
+                    return Medium(boardLogic);
+                case BotDifficulty.Hard:
+                    return Hard(boardLogic);
+                default:
+                    Utilities.Error("Invalid difficulty level(AIMove())");
+                    return -1;
+            }
+        }
         public static int Easy(BoardLogic boardLogic) //returnes cursor pos of the selected move. 
         {
             while (true)
@@ -71,6 +86,15 @@ namespace tic_tac_toe_2._0
 
             }
 
+        }
+        public static int Medium(BoardLogic boardLogic)
+        {
+            return -1; // not implemented yet, but should block the player if they are about to win, and win if possible
+
+        }
+        public static int Hard(BoardLogic boardLogic)
+        {
+            return -1; // not implemented yet, but should use a minimax algorithm to choose the best move
         }
     }
 
