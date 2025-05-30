@@ -17,14 +17,14 @@ namespace tic_tac_toe_2._0
             string request = ("to avoid visual glitches, please set your window size to fullscreen. press enter to continue");
             Console.SetCursorPosition(Width / 2 - request.Length / 2, Height / 2); //write the request in the middle of the screen
             Console.WriteLine(request);
-            Console.ReadLine();
+            GetValidInput();
             int newWidth = Console.WindowWidth;
             int newHeight = Console.WindowHeight;
 
             if (newWidth <= Width || newHeight <= Height)
             {
                 Console.WriteLine("looks like you havnt changed your window size to fullscreen. if this is a mistake and you are in full screen press enter. otherwise, set your window size to fullscreen and press enter");
-                Console.ReadLine();
+                GetValidInput();
                 Console.Clear();
                 Width = Console.WindowWidth;
                 Height = Console.WindowHeight;
@@ -32,7 +32,7 @@ namespace tic_tac_toe_2._0
             if (newWidth <= Art.TicTacToe[0].Length || newHeight <= Art.TicTacToe.Length * 1.5 + MenuLogic.SpaceBetweenButtons * 3 + Art.Play.Length)
             {
                 Console.WriteLine("looks like your window size is too small. switching to smaller graphics mode");
-                Console.ReadLine();
+                GetValidInput();
                 graphicsMode = GraphicsMode.Small; 
             }
             Width = Console.WindowWidth;
