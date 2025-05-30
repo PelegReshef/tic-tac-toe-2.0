@@ -10,6 +10,7 @@ namespace tic_tac_toe_2._0
     {
         public static int Width = Console.WindowWidth;
         public static int Height = Console.WindowHeight;
+        public static GraphicsMode graphicsMode = GraphicsMode.Normal; 
 
         public static void RefreshWindow()
         {
@@ -28,11 +29,11 @@ namespace tic_tac_toe_2._0
                 Width = Console.WindowWidth;
                 Height = Console.WindowHeight;
             }
-            if (newWidth <= Art.TicTacToe[0].Length || newHeight <= Art.TicTacToe.Length *2)
+            if (newWidth <= Art.TicTacToe[0].Length || newHeight <= Art.TicTacToe.Length * 1.5 + MenuLogic.SpaceBetweenButtons * 3 + Art.Play.Length)
             {
-                Console.WriteLine("looks like your window size is too small. you have to switch to smaller graphics mode. this mode have not been made yet, so the game is unavallibe for you right now :(");
+                Console.WriteLine("looks like your window size is too small. switching to smaller graphics mode");
                 Console.ReadLine();
-                Environment.Exit(0); // exit the game if the window size is too small
+                graphicsMode = GraphicsMode.Small; 
             }
             Width = Console.WindowWidth;
             Height = Console.WindowHeight;
@@ -96,6 +97,11 @@ namespace tic_tac_toe_2._0
             Console.ReadLine(); 
         }
 
+    }
+    public enum GraphicsMode
+    {
+        Normal,
+        Small
     }
     public static class Art
     {

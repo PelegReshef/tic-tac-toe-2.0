@@ -205,6 +205,7 @@ namespace tic_tac_toe_2._0
         public MenuStages CurrentMenuStage = MenuStages.MainMenu; 
         public ButtonTypes CurrentButtonType = ButtonTypes.MenuButton;
         public int Buttons = 3; // number of Buttons in the menu. with 0 being the first one
+        public const int SpaceBetweenButtons = 7; // space between the buttons in the menu
 
 
         public MenuCursorPosition[] CursorPositions;
@@ -212,14 +213,28 @@ namespace tic_tac_toe_2._0
 
         public MenuLogic()
         {
-            CursorPositions = new MenuCursorPosition[4]
+            if (Utilities.graphicsMode == GraphicsMode.Normal)
             {
-                new MenuCursorPosition(CursorPosX, Utilities.Height / 2 - 2), //first cursor slot
-                new MenuCursorPosition(CursorPosX, Utilities.Height / 2 + 5), //second cursor slot
-                new MenuCursorPosition(CursorPosX, Utilities.Height / 2 + 12), //third cursor slot
-                new MenuCursorPosition(CursorPosX, Utilities.Height / 2 + 19), //fourth cursor slot
+                CursorPositions = new MenuCursorPosition[4]
+                {
+                    new MenuCursorPosition(CursorPosX, Utilities.Height / 2 - 2), //first cursor slot
+                    new MenuCursorPosition(CursorPosX, Utilities.Height / 2 - 2 + SpaceBetweenButtons), //second cursor slot
+                    new MenuCursorPosition(CursorPosX, Utilities.Height / 2 - 2 + SpaceBetweenButtons * 2), //third cursor slot
+                    new MenuCursorPosition(CursorPosX, Utilities.Height / 2 - 2 + SpaceBetweenButtons * 3), //fourth cursor slot
 
-            };
+                };
+            }
+            else
+            {
+                CursorPositions = new MenuCursorPosition[4]
+                {
+                    new MenuCursorPosition(CursorPosX, Utilities.Height / 2 - ((SpaceBetweenButtons * 3) / 2 + Art.Play.Length/2)), //first cursor slot
+                    new MenuCursorPosition(CursorPosX, Utilities.Height / 2 - ((SpaceBetweenButtons * 3) / 2 + Art.Play.Length/2) + SpaceBetweenButtons), //second cursor slot
+                    new MenuCursorPosition(CursorPosX, Utilities.Height / 2 - ((SpaceBetweenButtons * 3) / 2 + Art.Play.Length/2) + SpaceBetweenButtons * 2), //third cursor slot
+                    new MenuCursorPosition(CursorPosX, Utilities.Height / 2 - ((SpaceBetweenButtons * 3) / 2 + Art.Play.Length/2) + SpaceBetweenButtons * 3), //fourth cursor slot
+
+                };
+            }
         }
 
 
@@ -253,7 +268,10 @@ namespace tic_tac_toe_2._0
         void DrawMenu(string[] art1, string[] art2, string[] art3, string[] art4)
         {
             Utilities.Setup();
-            Art.Draw(Art.TicTacToe, Art.CenterX(Art.TicTacToe), Art.CenterY(Art.TicTacToe) - Art.TicTacToe.Length);
+            if (Utilities.graphicsMode == GraphicsMode.Normal)
+            {
+                Art.Draw(Art.TicTacToe, Art.CenterX(Art.TicTacToe), Art.CenterY(Art.TicTacToe) - Art.TicTacToe.Length);
+            }
             Art.Draw(art1, menuLogic.CursorPositions[0].X + SpaceBetwwenButtonAndCursor, menuLogic.CursorPositions[0].Y); // draw the first button
             Art.Draw(art2, menuLogic.CursorPositions[1].X + SpaceBetwwenButtonAndCursor, menuLogic.CursorPositions[1].Y); // draw the second button
             Art.Draw(art3, menuLogic.CursorPositions[2].X + SpaceBetwwenButtonAndCursor, menuLogic.CursorPositions[2].Y); // draw the third button
