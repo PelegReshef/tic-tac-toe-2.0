@@ -9,141 +9,125 @@ namespace tic_tac_toe_2._0
     public class Game // control the game: draw the board, swithch turns, end the game, etc.
     {
 
-        bool gameOver = false; //true = game over, false = game not over
+        bool gameOver = false; 
 
 
         BoardVisuals boardVisuals;
         BoardLogic boardLogic;
-        Cursor cursor; // cursor for the player to move around the board
+        Cursor cursor;
 
         ReturnTypes gameType;
-        /*
-         * make a method for proccesing the return type to a new enum
-         * check the new enum in Run() method
-         * create players and bots in Run() method instead of constructor
-         */
         public Game(ReturnTypes returnType)
         {
-            boardLogic = new BoardLogic(); // create the board logic
-            boardLogic.NewBoard(0, 0, true); // centered for now. will be changed to player choice later
-            boardVisuals = new BoardVisuals(boardLogic); // create the board visuals
-            cursor = new Cursor(boardLogic); // create the cursor
+            boardLogic = new BoardLogic(); 
+            boardLogic.NewBoard(0, 0, true); // centered for now. will be changed to player choice later. edit: probably will not be changed, because I dont want to make 2 games simultaneously.
+            boardVisuals = new BoardVisuals(boardLogic);
+            cursor = new Cursor(boardLogic);
             gameType = returnType;
-
-            // create the players and cursor
-
-
 
         }
         public void RunPVP()
         {
-            Player xPlayer = new Player(PlayerType.X_player); // player 1
-            Player playerO = new Player(PlayerType.O_Player); // player 2
-
-
-            Turns turn = Turns.Player1; // start with player 1
-            cursor.Draw(); // draw the cursor
+            Player xPlayer = new Player(PlayerType.X_player, Difficulty.RealPlayer); 
+            Player Oplayer = new Player(PlayerType.O_Player, Difficulty.RealPlayer); 
+            cursor.Draw(); 
 
             // game loop for pvp
             
             while (!gameOver)
             {
-                if (turn == Turns.Player1)
+                RealPlayerMove(xPlayer, "Player 1");
+
+                if (!gameOver) // check if the game is over after player 1's turn
                 {
-
-                    bool validAction = false; // check if the action is valid
-
-                    do
-                    {
-                        int actionPos = cursor.MoveUntilAction(); // move the player icon
-                        validAction = ExamineActionPVP(xPlayer, cursor); // examine the action
-
-                    } while (!validAction); // repeat until a valid action is made
-
-                    GameState gameState = GameLogic.CheckGameState(boardLogic);
-                    HandleGameState(gameState, "Player 1");
-                    if (!gameOver)
-                    {
-                        turn = Turns.Player2; // game continues + switch turns
-                    }
+                    RealPlayerMove(Oplayer, "Player 2");
                 }
-                else if (turn == Turns.Player2)
+            }
+        }
+        public void RunVSAI(Difficulty difficulty)
+        {
+            Player player = new Player(PlayerType.X_player, Difficulty.RealPlayer);
+            Player bot = new Player(PlayerType.O_Player, difficulty);
+            cursor.Draw();
+
+            while (!gameOver)
+            {
+                RealPlayerMove(player, "player 1");
+
+                if (!gameOver) // check if the game is over after player 1's turn
                 {
-
-                    bool validAction = false; // check if the action is valid
-
-                    do
-                    {
-                        int actionPos = cursor.MoveUntilAction(); // move the player icon
-                        validAction = ExamineActionPVP(playerO, cursor); // examine the action
-
-                    } while (!validAction); // repeat until a valid action is made
-
+                    System.Threading.Thread.Sleep(1000); // wait for a second before the bot's turn
+                    int botActionPos = AI.AIMove(boardLogic, bot.difficulty); 
+                    ExamineAction(bot, botActionPos);
                     GameState gameState = GameLogic.CheckGameState(boardLogic);
-                    HandleGameState(gameState, "Player 2");
-                    if (!gameOver)
-                    {
-                        turn = Turns.Player1; // game continues + switch turns
-                    }
+                    HandleGameState(gameState, "bot");
 
-                }
-                else
-                {
-                    Utilities.Error("unexpected error. turn not recognized(RunPVP())"); // if the turn is not recognized
-                    gameOver = true; // end the game
 
                 }
             }
         }
-        public void RunVSAI(BotDifficulty difficulty)
-        {
-            AIBot bot = new AIBot(difficulty); 
-        }
         public void Run()
         {
-            boardVisuals.DrawNewBoard(); // draw the board
+            boardVisuals.DrawNewBoard(); 
 
-            switch (gameType) // set the game type
+            switch (gameType) 
             {
                 case ReturnTypes.PlayerVsPlayer:
                     RunPVP();
                     break;
                 case ReturnTypes.PlayerVsAI_Easy:
-                    RunVSAI(BotDifficulty.Easy); 
+                    RunVSAI(Difficulty.Easy); 
                     break;
                 case ReturnTypes.PlayerVsAI_Medium:
-                    RunVSAI(BotDifficulty.Medium); 
+                    RunVSAI(Difficulty.Medium); 
                     break;
                 case ReturnTypes.PlayerVsAI_Hard:
-                    RunVSAI(BotDifficulty.Hard); 
+                    RunVSAI(Difficulty.Hard); 
                     break;
                 default:
-                    Utilities.Error("unexpected error. game type is not recognized (Run())"); // if the game type is not recognized
-                    gameOver = true; // end the game
+                    Utilities.Error("unexpected error. game type is not recognized (Run())");
+                    gameOver = true; 
                     return;
             }
         }
 
-
-
-        bool ExamineActionPVP(Player player, Cursor cursor) // 
+        public void RealPlayerMove(Player player, string playerWinMessage)
         {
+            bool validAction = false; // check if the action is valid
+
+            do
+            {
+                int actionPos = cursor.MoveUntilAction(); // move the player icon
+                validAction = ExamineAction(player, actionPos); // examine the action
+
+            } while (!validAction); // repeat until a valid action is made
+
+            GameState gameState = GameLogic.CheckGameState(boardLogic);
+            HandleGameState(gameState, playerWinMessage);
+
+        }
+
+
+        bool ExamineAction(Player player, int cursorPos) // cursorPos is to support AI moves too
+        {
+            cursor.Erase(); 
+            cursor.CursorPos = cursorPos;
             switch (player.playerType)
             {
                 case PlayerType.X_player:
-                    if (boardLogic.boardCells[cursor.CursorPos].state == CellState.Empty) // check if the cell is empty
+                    if (boardLogic.boardCells[cursorPos].state == CellState.Empty) // check if the cell is empty
                     {
-                        boardLogic.ChangeCellstate(CellState.X, cursor.CursorPos); // change the cell state to X
-                        boardVisuals.DrawCell(CellState.X, cursor.CursorPos); // draw the cell on screen
+                        boardLogic.ChangeCellstate(CellState.X, cursorPos); // change the cell state to X
+                        boardVisuals.DrawCell(CellState.X, cursorPos); // draw the cell on screen
                         cursor.Draw(); // draw the cursor again because DrawCell erases it
                         return true;
                     }
                     break;
                 case PlayerType.O_Player:
-                    if (boardLogic.boardCells[cursor.CursorPos].state == CellState.Empty) // check if the cell is empty
+                    if (boardLogic.boardCells[cursorPos].state == CellState.Empty) // check if the cell is empty
                     {
-                        boardLogic.ChangeCellstate(CellState.O, cursor.CursorPos); // change the cell state to O
-                        boardVisuals.DrawCell(CellState.O, cursor.CursorPos); // draw the cell on screen
+                        boardLogic.ChangeCellstate(CellState.O, cursorPos); // change the cell state to O
+                        boardVisuals.DrawCell(CellState.O, cursorPos); // draw the cell on screen
                         cursor.Draw(); // draw the cursor again because DrawCell erases it
                         return true;
                     }
@@ -180,8 +164,8 @@ namespace tic_tac_toe_2._0
     public enum Turns
     {
         Player1,
-        Player2,
-        AI,
+        Player2
+
     }
 
     public class BoardLogic
@@ -277,15 +261,6 @@ namespace tic_tac_toe_2._0
             }
         }
     }
-    public class AIBot
-    {
-        public BotDifficulty difficulty; // difficulty of the bot. easy, medium, hard
-        public AIBot(BotDifficulty difficulty)
-        {
-            this.difficulty = difficulty; 
-        }
-    }
-
     public enum CellState
     {
         Empty,
@@ -298,11 +273,12 @@ namespace tic_tac_toe_2._0
         O_Player
         
     }
-    public enum BotDifficulty
+    public enum Difficulty
     {
         Easy,
         Medium,
-        Hard
+        Hard,
+        RealPlayer
     }
     public class Cell
     {
@@ -339,20 +315,17 @@ namespace tic_tac_toe_2._0
         Loss,
         InProgress
     }
-
     
-    /* in charge of:
-     - player type
-     - player icon
-      */
     public struct Player // move the player that let you choose where to go
     {
-        public const string playerIcon = @"\/"; // player character
-        public PlayerType playerType; // type of player. player 1, player 2, O_AI
+        public const string playerIcon = @"\/"; 
+        public PlayerType playerType; // type of player. player 1, player 2
+        public Difficulty difficulty;
 
-        public Player(PlayerType playerType)
+        public Player(PlayerType playerType, Difficulty difficulty)
         {
-            this.playerType = playerType; // set the player type
+            this.playerType = playerType; 
+            this.difficulty = difficulty; 
         }
 
 

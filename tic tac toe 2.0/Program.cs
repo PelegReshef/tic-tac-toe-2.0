@@ -48,7 +48,7 @@ namespace ticTacToe
             {
                 ReturnTypes type = MenuLoop();
                 StartNewGame(type);
-                Console.ReadLine();
+                Utilities.GetValidInput();
             }
 
         }

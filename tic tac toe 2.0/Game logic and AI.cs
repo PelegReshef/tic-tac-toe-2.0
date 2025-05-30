@@ -59,15 +59,15 @@ namespace tic_tac_toe_2._0
             }
             return false; 
         }
-        public static int AIMove(BoardLogic boardLogic, BotDifficulty difficulty)
+        public static int AIMove(BoardLogic boardLogic, Difficulty difficulty)
         {
             switch (difficulty)
             {
-                case BotDifficulty.Easy:
+                case Difficulty.Easy:
                     return Easy(boardLogic);
-                case BotDifficulty.Medium:
+                case Difficulty.Medium:
                     return Medium(boardLogic);
-                case BotDifficulty.Hard:
+                case Difficulty.Hard:
                     return Hard(boardLogic);
                 default:
                     Utilities.Error("Invalid difficulty level(AIMove())");
