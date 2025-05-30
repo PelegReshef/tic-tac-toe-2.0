@@ -9,3 +9,5 @@ it might give errors or have messed-up visuals if the console window is too smal
 Hopefully, I’ll fix this soon!
 
 Thanks for checking it out! :)
+
+Edit (31/5/25): The program should work now for anyone whose monitor size is low-medium to large.
