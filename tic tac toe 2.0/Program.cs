@@ -2,21 +2,15 @@
 
 
 /* whats left to do:
-4. finish runPVSAI() method - Game class - heaven'ts started
-6. O_AI class - haven't started:
-    - easy - random move
-    - medium - block and win if possible
-    - hard - create a minimax algorithm that chooses the best move
+6. AI class - in progress:
+    - medium - block and win if possible - **haven't started**
+    - hard - create a minimax algorithm that chooses the best move - **haven't started**
 7. create a start menu - in progress. should include: 
-   - start game - **complete**
-   - choose player vs O_AI or player vs player - **complete**
-   - how to play - **complete**
    - exit game - **haven't started**
-   - maybe add an option for multiple games simultaneously - **haven't started**
+   - maybe add an option for multiple games simultaneously - **haven't started** - probably not needed
 
 */
 
-using tic_tac_toe_2._0;
 
 namespace ticTacToe
 {
@@ -24,10 +18,10 @@ namespace ticTacToe
     {
         static void Main(string[] args)
         {
-            Utilities.RefreshWindow(); // refresh the window size
-            Utilities.UpdateFrameVariables(); // update the frame variables
+            Utilities.RefreshWindow(); 
+            Utilities.UpdateFrameVariables(); 
             Utilities.Setup();
-            GameManager gameManager = new GameManager(); // create the game manager
+            GameManager gameManager = new GameManager(); 
             gameManager.Run(); 
             Console.ReadKey();
         }
@@ -58,10 +52,6 @@ namespace ticTacToe
             Game game = new Game(type); 
             
             game.Run(); 
-        }
-        public void MenuSetup()
-        {
-            menuManager.MenuSetup(); // setup the menu
         }
         public ReturnTypes MenuLoop()
         {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace tic_tac_toe_2._0
+namespace ticTacToe
 {
     public class Game // control the game: draw the board, swithch turns, end the game, etc.
     {
@@ -161,67 +161,62 @@ namespace tic_tac_toe_2._0
 
 
     }
-    public enum Turns
-    {
-        Player1,
-        Player2
-
-    }
 
     public class BoardLogic
     {
         public Cell[] boardCells = new Cell[9]; // array of cells. 3x3 grid
 
-        int boardWidth = Art.NewBoard[0].Length; // OldWidth of the board
-        int boardHeight = Art.NewBoard.Length; // OldHeight of the board
+        int boardWidth = Art.NewBoard[0].Length; 
+        int boardHeight = Art.NewBoard.Length; 
 
-        public int X; // X position of the board. top left corner
-        public int Y; // Y position of the board. top left corner
+        // top left corner
+        public int X; 
+        public int Y; 
 
-        public void NewBoard(int x, int y, bool centered) // create a new board
+        public void NewBoard(int x, int y, bool centered) 
         {
-            X = x; // set the X position of the board
-            Y = y; // set the Y position of the board
+            X = x; 
+            Y = y; 
             if (centered)
             {
                 X = (Utilities.Width / 2) - (boardWidth / 2);
                 Y = (Utilities.Height / 2) - (boardHeight / 2);
             }
-            CreateCells(); // recalculate the cells
+            CreateCells(); 
         }
 
         void CreateCells()
         {
-            boardCells = new Cell[9] // create the cells
+            boardCells = new Cell[9] 
            {
-            new (X , Y), // cell 1
-            new (X + ((boardWidth - 2) / 3), Y), // cell 2
-            new (X + 2*((boardWidth - 2) / 3), Y), // cell 3
-            new (X , Y + ((boardHeight - 1) / 3)), // cell 4
-            new (X + ((boardWidth - 2) / 3), Y + ((boardHeight - 1) / 3)), // cell 5
-            new (X + 2*((boardWidth - 2) / 3), Y + ((boardHeight - 1) / 3)), // cell 6
-            new (X , Y + 2*((boardHeight - 1) / 3)), // cell 7
-            new (X + ((boardWidth - 2) / 3), Y + 2*((boardHeight - 1) / 3)), // cell 8
-            new (X + 2*((boardWidth - 2) / 3), Y + 2 *((boardHeight - 1) / 3)), // cell 9
+            new (X , Y), 
+            new (X + ((boardWidth - 2) / 3), Y), 
+            new (X + 2*((boardWidth - 2) / 3), Y), 
+            new (X , Y + ((boardHeight - 1) / 3)), 
+            new (X + ((boardWidth - 2) / 3), Y + ((boardHeight - 1) / 3)), 
+            new (X + 2*((boardWidth - 2) / 3), Y + ((boardHeight - 1) / 3)), 
+            new (X , Y + 2*((boardHeight - 1) / 3)), 
+            new (X + ((boardWidth - 2) / 3), Y + 2*((boardHeight - 1) / 3)), 
+            new (X + 2*((boardWidth - 2) / 3), Y + 2 *((boardHeight - 1) / 3)), 
            };
         }
 
-        public void ChangeCellstate(CellState state, int i) // i = index of the cell, state = state of the cell
+        public void ChangeCellstate(CellState state, int cellPosition) 
         {
-            boardCells[i].state = state; // change the state of the cell
+            boardCells[cellPosition].state = state; 
 
         }
 
     }
 
-    public class BoardVisuals // every visual aspect of the board
+    public class BoardVisuals // every visual aspect of the board. based on the BoardLogic class
     {
 
         BoardLogic boardLogic;
 
         public BoardVisuals(BoardLogic boardLogic)
         {
-            this.boardLogic = boardLogic; // match the board to the board logic
+            this.boardLogic = boardLogic; 
         }
 
         public void DrawNewBoard()
@@ -233,7 +228,7 @@ namespace tic_tac_toe_2._0
                 Console.Write(Art.NewBoard[i]);
             }
         }
-        public void DrawCell(CellState state, int cellIndex) // draw the cell
+        public void DrawCell(CellState state, int cellIndex) 
         {
             switch (state)
             {
@@ -282,26 +277,27 @@ namespace tic_tac_toe_2._0
     }
     public class Cell
     {
-        public int X; // X position of the cell. top left corner
-        public int Y; // Y position of the cell. top left corner
+        // top left corner of the cell
+        public int X; 
+        public int Y;
 
-        int cellHeight;
         int cellWidth;
+
+        // position of the player icon in the cell
         public int PlayerIconPosX;
         public int PlayerIconPosY;
 
-        public CellState state = CellState.Empty; // state of the cell. empty, X, O
+        public CellState state = CellState.Empty; 
 
         public Cell(int x, int y)
         {
             this.X = x;
             this.Y = y;
 
-            cellHeight = Art.Empty[0].Length / 2;
-            cellWidth = Art.Empty.Length / 2;
+            cellWidth = Art.Empty[0].Length / 2;
 
-            PlayerIconPosX = X + cellWidth / 2 + 6; // position of the player icon in the cell
-            PlayerIconPosY = Y + 2; // position of the player icon in the cell
+            PlayerIconPosX = X + cellWidth / 2 + 4;
+            PlayerIconPosY = Y + 2; 
 
 
         }
@@ -318,7 +314,6 @@ namespace tic_tac_toe_2._0
     
     public struct Player // move the player that let you choose where to go
     {
-        public const string playerIcon = @"\/"; 
         public PlayerType playerType; // type of player. player 1, player 2
         public Difficulty difficulty;
 
@@ -338,6 +333,7 @@ namespace tic_tac_toe_2._0
         int[] cellsPlayerIconPosY = new int[9];
 
         public int CursorPos = 4; // position of the cursor. cell index. 0-8
+        const string Icon = @"\/";
 
 
         public Cursor(BoardLogic boardLogic)
@@ -404,7 +400,7 @@ namespace tic_tac_toe_2._0
         public void Draw()
         {
             Console.SetCursorPosition(boardLogic.boardCells[CursorPos].PlayerIconPosX, boardLogic.boardCells[CursorPos].PlayerIconPosY);
-            Console.Write(Player.playerIcon);
+            Console.Write(Icon);
         }
         public void Erase()
         {

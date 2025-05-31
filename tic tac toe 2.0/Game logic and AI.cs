@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ticTacToe;
 
-namespace tic_tac_toe_2._0
+
+namespace ticTacToe
 {
     public static class GameLogic // check for win/draw/loss
     {

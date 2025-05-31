@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace tic_tac_toe_2._0
+namespace ticTacToe
 {
     public static class Utilities
     {
