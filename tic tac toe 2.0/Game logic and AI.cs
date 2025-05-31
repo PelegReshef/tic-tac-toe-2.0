@@ -28,7 +28,7 @@ namespace ticTacToe
             {
                 if (winCondition[0] == winCondition[1] && winCondition[1] == winCondition[2] && winCondition[0] != CellState.Empty) // check if all 3 cells are the same 
                 {
-                    return GameState.Win; // return win
+                    return GameState.Win; 
                 }
             }
 
@@ -89,12 +89,49 @@ namespace ticTacToe
         }
         public static int Medium(BoardLogic boardLogic)
         {
-            return -1; // not implemented yet, but should block the player if they are about to win, and win if possible
+            BoardLogic boardLogicCopy = boardLogic;
+            List<MoveWithValue> availableMoves = new List<MoveWithValue>();
+            for (int i = 0; i < boardLogicCopy.boardCells.Length; i++)
+            {
+                MoveWithValue move = new MoveWithValue(i);
+                if (IsValidMove(boardLogicCopy, move.Position)) 
+                {
+                    availableMoves.Add(move);
+                }
+            }
+            List<MoveWithValue> notWinningMoves = new List<MoveWithValue>();
+            foreach (MoveWithValue move in availableMoves)
+            {
+                boardLogicCopy.ChangeCellstate(CellState.O, move.Position);
+                GameState state = GameLogic.CheckGameState(boardLogicCopy);
+                if (state == GameState.Win || state == GameState.Draw) // if draw there's only one pos avalible so you have to return it.
+                {
+                    return move.Position;
+                }
+                else
+                {
+                    notWinningMoves.Add(move);
+                }
+                
+                
+            }
+            throw new ArgumentOutOfRangeException("this error should not be possible. (AI.Medium() method)");
 
         }
         public static int Hard(BoardLogic boardLogic)
         {
             return -1; // not implemented yet, but should use a minimax algorithm to choose the best move
+        }
+        public struct MoveWithValue
+        {
+            public int Position;
+            public int Value;
+
+            public MoveWithValue(int position)
+            {
+                Position = position;
+            }
+
         }
     }
 
