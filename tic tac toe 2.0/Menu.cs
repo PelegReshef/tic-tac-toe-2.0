@@ -68,7 +68,7 @@ namespace ticTacToe
                 }
                 else
                 {
-                    Utilities.Error("no menu stage found for the current menu stage and cursor position");
+                    Utilities.Error("this buttons was not implemented yet. press enter to go back to home screen");
                     menuLogic.CurrentMenuStage = MenuStages.MainMenu; 
                     
                 }
@@ -146,8 +146,13 @@ namespace ticTacToe
                     menuLogic.CurrentMenuStage = MenuStages.MainMenu_Options; 
                     menuVisuals.DrawOptionsMenu(); 
                     break;
+                case MenuStages.MainMenu_Exit:
+                    menuVisuals.DrawExitGameMenu(); 
+                    System.Threading.Thread.Sleep(3500);
+                    Environment.Exit(0);
+                    break;
                 default:
-                    Utilities.Error("invalid menu stage (HandleMenuButtons)");
+                    Utilities.Error("this buttons was not implemented yet. press enter then space then enter to go back to home screen (dont ask why).   ( method: HandleMenuButtons)");
                     break;
             }
         }
@@ -304,6 +309,11 @@ namespace ticTacToe
         {
             Art.DrawTextFrame();
             Art.Draw(Art.CreditsContent, Art.Frame_CenterX - Art.CreditsContent[0].Length / 2, Art.Frame_CenterY - Art.CreditsContent.Length / 2); // draw the credits menu in the top of the frame
+        }
+        public void DrawExitGameMenu()
+        {
+            Art.DrawTextFrame();
+            Art.Draw(Art.ExitGameContent, Art.Frame_CenterX - Art.ExitGameContent[0].Length / 2, Art.Frame_CenterY - Art.ExitGameContent.Length / 2); // draw the exit game menu in the top of the frame
         }
 
     }

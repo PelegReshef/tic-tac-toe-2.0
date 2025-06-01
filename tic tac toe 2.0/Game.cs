@@ -56,9 +56,17 @@ namespace ticTacToe
 
                 if (!gameOver) // check if the game is over after player 1's turn
                 {
-                    System.Threading.Thread.Sleep(1000); // wait for a second before the bot's turn
+                    System.Threading.Thread.Sleep(750); // wait for a bit before the bot's turn
                     int botActionPos = AI.AIMove(boardLogic, bot.difficulty); 
+
+                    int previousCursorPos = cursor.CursorPos; 
                     ExamineAction(bot, botActionPos);
+
+                    // return the cursor to the previous position cuz apperently it feels annoying to have the cursor in the bot's position after the bot's turn
+                    cursor.Erase();
+                    cursor.CursorPos = previousCursorPos; 
+                    cursor.Draw();
+
                     GameState gameState = GameLogic.CheckGameState(boardLogic);
                     HandleGameState(gameState, "bot");
 
@@ -205,6 +213,19 @@ namespace ticTacToe
         {
             boardCells[cellPosition].state = state; 
 
+        }
+        public BoardLogic Clone() // for AI moves in GameLogic
+        {
+            BoardLogic clone = new BoardLogic();
+            clone.X = this.X;
+            clone.Y = this.Y;
+            clone.boardCells = new Cell[9];
+            for (int i = 0; i < 9; i++)
+            {
+                clone.boardCells[i] = new Cell(this.boardCells[i].X, this.boardCells[i].Y);
+                clone.boardCells[i].state = this.boardCells[i].state; 
+            }
+            return clone;
         }
 
     }

@@ -51,9 +51,9 @@ namespace ticTacToe
         {
             random = new Random(); 
         }
-        static bool IsValidMove(BoardLogic boardLogic, int move) // check if the move is valid
+        static bool IsValidMove(BoardLogic boardLogic, int cellPosition) // check if the cellPosition is valid
         {
-            if (boardLogic.boardCells[move].state == CellState.Empty) // check if the cell is empty
+            if (boardLogic.boardCells[cellPosition].state == CellState.Empty) // check if the cell is empty
             {
                 return true; 
             }
@@ -74,14 +74,14 @@ namespace ticTacToe
                     return -1;
             }
         }
-        public static int Easy(BoardLogic boardLogic) //returnes cursor pos of the selected move. 
+        public static int Easy(BoardLogic boardLogic) //returnes cursor pos of the selected cellPosition. 
         {
             while (true)
             {
                 int move = random.Next(0, 9);
                 if (IsValidMove(boardLogic, move))
                 {
-                    return move; // return the move
+                    return move; // return the cellPosition
                 }
 
             }
@@ -89,48 +89,56 @@ namespace ticTacToe
         }
         public static int Medium(BoardLogic boardLogic)
         {
-            BoardLogic boardLogicCopy = boardLogic;
-            List<MoveWithValue> availableMoves = new List<MoveWithValue>();
-            for (int i = 0; i < boardLogicCopy.boardCells.Length; i++)
+            // create a list of possible moves 
+            List<int> availableMoves = new List<int>();
+            for (int i = 0; i < boardLogic.boardCells.Length; i++)
             {
-                MoveWithValue move = new MoveWithValue(i);
-                if (IsValidMove(boardLogicCopy, move.Position)) 
+                if (IsValidMove(boardLogic, i)) 
                 {
-                    availableMoves.Add(move);
+                    availableMoves.Add(i);
                 }
             }
-            List<MoveWithValue> notWinningMoves = new List<MoveWithValue>();
-            foreach (MoveWithValue move in availableMoves)
+
+            // check for winning moves
+            foreach (int move in availableMoves)
             {
-                boardLogicCopy.ChangeCellstate(CellState.O, move.Position);
-                GameState state = GameLogic.CheckGameState(boardLogicCopy);
-                if (state == GameState.Win || state == GameState.Draw) // if draw there's only one pos avalible so you have to return it.
-                {
-                    return move.Position;
-                }
-                else
-                {
-                    notWinningMoves.Add(move);
-                }
-                
-                
+                if (IsWinningMove(boardLogic, move, CellState.O)) return move;
             }
-            throw new ArgumentOutOfRangeException("this error should not be possible. (AI.Medium() method)");
+
+            //check for moves that block the opponent
+            foreach(int move in availableMoves)
+            {
+                if (IsWinningMove(boardLogic, move, CellState.X)) return move;
+            }
+
+            // else choose random move
+             return ChooseRandomMove(availableMoves);
+
+            throw new Exception("this error should not be possible. (AI.Medium() method)");
 
         }
         public static int Hard(BoardLogic boardLogic)
         {
-            return -1; // not implemented yet, but should use a minimax algorithm to choose the best move
+            return -1; // not implemented yet, but should use a minimax algorithm to choose the best cellPosition
         }
-        public struct MoveWithValue
-        {
-            public int Position;
-            public int Value;
 
-            public MoveWithValue(int position)
+
+        public static bool IsWinningMove(BoardLogic boardLogic, int position, CellState moveCellState) 
+        {
+            BoardLogic boardCopy = boardLogic.Clone(); // create a copy of the board logic to not change the original board
+            boardCopy.ChangeCellstate(moveCellState, position);
+            GameState state = GameLogic.CheckGameState(boardCopy);
+            if (state == GameState.Win || state == GameState.Draw) // if draw there's only one pos avalible so you have to return it.
             {
-                Position = position;
+                return true;
             }
+            return false;
+        }
+
+        public static int ChooseRandomMove(List<int> avalibleMoves)
+        {
+            int chosenMove = random.Next(0, avalibleMoves.Count); 
+            return avalibleMoves[chosenMove];
 
         }
     }

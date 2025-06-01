@@ -446,6 +446,12 @@ namespace ticTacToe
             "",
             "Project repository: github.com/PelegReshef/tic-tac-toe-2.0",
         };
-
+        public static string[] ExitGameContent = new string[]
+        {
+            "Exiting game...   ",
+            "",
+            "Hope you liked it!",
+            ""
+        };
     }
 }
