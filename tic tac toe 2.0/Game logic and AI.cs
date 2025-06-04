@@ -74,7 +74,7 @@ namespace ticTacToe
                     return -1;
             }
         }
-        public static int Easy(BoardLogic boardLogic) //returnes cursor pos of the selected cellPosition. 
+        static int Easy(BoardLogic boardLogic) //returnes cursor pos of the selected cellPosition. 
         {
             while (true)
             {
@@ -87,7 +87,7 @@ namespace ticTacToe
             }
 
         }
-        public static int Medium(BoardLogic boardLogic)
+        static int Medium(BoardLogic boardLogic)
         {
             // create a list of possible moves 
             List<int> availableMoves = new List<int>();
@@ -117,13 +117,64 @@ namespace ticTacToe
             throw new Exception("this error should not be possible. (AI.Medium() method)");
 
         }
-        public static int Hard(BoardLogic boardLogic)
+        static int Hard(BoardLogic boardLogic) // uses the minimax algorithm to find the best move
         {
-            return -1; // not implemented yet, but should use a minimax algorithm to choose the best cellPosition
+            int bestMove = Minimax(boardLogic, true);
+            return bestMove;
+        }
+
+        static int Minimax(BoardLogic boardLogic, bool isMaximizing)
+        {
+            // create a list of possible moves 
+            List<int> availableMoves = new List<int>();
+            for (int i = 0; i < boardLogic.boardCells.Length; i++)
+            {
+                if (IsValidMove(boardLogic, i))
+                {
+                    availableMoves.Add(i);
+                }
+            }
+
+
+            int bestMovePos;
+            int bestMove = -1;
+            List<int> winningMoves = new List<int>();
+            List<int> inProgression = new List<int>();
+
+            foreach (var move in availableMoves)
+            {
+                BoardLogic boardLogicClone = boardLogic.Clone();
+                boardLogicClone.ChangeCellstate(CellState.O, move);
+                int score = EvaluateBoard(boardLogicClone);
+                if (isMaximizing)
+                {
+                    if (score > bestMove)
+                    {
+                        bestMove = score;
+                        bestMovePos = move;
+                    }
+                }
+                else
+                {
+                    if (score < bestMove)
+                    {
+                        bestMove = score;
+                        bestMovePos = move;
+                    }
+
+                }
+            }
+
+            if (isMaximizing)
+            {
+
+            }
         }
 
 
-        public static bool IsWinningMove(BoardLogic boardLogic, int position, CellState moveCellState) 
+
+
+        static bool IsWinningMove(BoardLogic boardLogic, int position, CellState moveCellState) 
         {
             BoardLogic boardCopy = boardLogic.Clone(); // create a copy of the board logic to not change the original board
             boardCopy.ChangeCellstate(moveCellState, position);
@@ -134,8 +185,23 @@ namespace ticTacToe
             }
             return false;
         }
+        static int EvaluateBoard(BoardLogic boardLogic)
+        {
+            if (GameLogic.CheckGameState(boardLogic) == GameState.Win) 
+            {
+                return 1;
+            }
+            else if (GameLogic.CheckGameState(boardLogic) == GameState.Draw) 
+            {
+                return 0;
+            }
+            else 
+            {
+                return -1; 
+            }
+        }
 
-        public static int ChooseRandomMove(List<int> avalibleMoves)
+        static int ChooseRandomMove(List<int> avalibleMoves)
         {
             int chosenMove = random.Next(0, avalibleMoves.Count); 
             return avalibleMoves[chosenMove];
