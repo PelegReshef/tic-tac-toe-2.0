@@ -151,7 +151,8 @@ namespace ticTacToe
         {
             switch (gameState)
             {
-                case GameState.Win:
+                case GameState.WinX:
+                case GameState.WinO:
                     Console.SetCursorPosition(0, 0); // reset the cursor position
                     Console.WriteLine(playerName + " wins!"); // print the winner
                     gameOver = true; // end the game
@@ -327,9 +328,9 @@ namespace ticTacToe
     }
     public enum GameState
     {
-        Win,
+        WinX,
+        WinO,
         Draw,
-        Loss,
         InProgress
     }
     
