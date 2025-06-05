@@ -21,22 +21,14 @@ namespace ticTacToe
             int newWidth = Console.WindowWidth;
             int newHeight = Console.WindowHeight;
 
-            if (newWidth <= Width && newHeight <= Height)
-            {
-                Console.WriteLine("looks like you havnt changed your window size to fullscreen. if this is a mistake and you are in full screen press spacebar. otherwise, set your window size to fullscreen and press spacebar");
-                GetValidInput();
-                Console.Clear();
-                Width = Console.WindowWidth;
-                Height = Console.WindowHeight;
-            }
             if (newWidth <= Art.TicTacToe[0].Length || newHeight <= Art.TicTacToe.Length * 1.5 + MenuLogic.SpaceBetweenButtons * 3 + Art.Play.Length)
             {
                 Console.WriteLine("looks like your window size is too small. switching to smaller graphics mode. press spacebar to continue");
                 GetValidInput();
                 graphicsMode = GraphicsMode.Small; 
             }
-            Width = Console.WindowWidth;
-            Height = Console.WindowHeight;
+            Width = newWidth;
+            Height = newHeight;
             Console.BufferHeight = newHeight; // set the buffer height to the new height
             Console.BufferWidth = newWidth; // set the buffer width to the new width
 
@@ -338,12 +330,12 @@ namespace ticTacToe
         };
         public static string[] PVsAI = new string[]
         {
-            @"  _____  _           __     ________ _____     __      _______              _____ ",
-            @" |  __ \| |        /\\ \   / /  ____|  __ \    \ \    / / ____|       /\   |_   _|",
-            @" | |__) | |       /  \\ \_/ /| |__  | |__) |    \ \  / / (___        /  \    | |  ",
-            @" |  ___/| |      / /\ \\   / |  __| |  _  /      \ \/ / \___ \      / /\ \   | |  ",
-            @" | |    | |____ / ____ \| |  | |____| | \ \       \  /  ____) |    / ____ \ _| |_ ",
-            @" |_|    |______/_/    \_\_|  |______|_|  \_\       \/  |_____/    /_/    \_\_____|"
+            @"  _____  _           __     ________ _____     __      _______      ____   ____ _______ ",
+            @" |  __ \| |        /\\ \   / /  ____|  __ \    \ \    / / ____|    |  _ \ / __ \__   __|",
+            @" | |__) | |       /  \\ \_/ /| |__  | |__) |    \ \  / / (___      | |_) | |  | | | |   ",
+            @" |  ___/| |      / /\ \\   / |  __| |  _  /      \ \/ / \___ \     |  _ <| |  | | | |   ",
+            @" | |    | |____ / ____ \| |  | |____| | \ \       \  /  ____) |    | |_) | |__| | | |   ",
+            @" |_|    |______/_/    \_\_|  |______|_|  \_\       \/  |_____/     |____/ \____/  |_|   "
         };
         public static string[] ComingSoon = new string[]
         {
