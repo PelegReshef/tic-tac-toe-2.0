@@ -105,26 +105,52 @@ namespace ticTacToe
             }
 
             // check for winning moves
+            List<int> winningMoves = new List<int>(); // list of winning moves for the bot to chooae randomly from
             foreach (int move in availableMoves)
             {
-                if (IsWinningMove(boardLogic, move, CellState.O)) return move;
+                if (IsWinningMove(boardLogic, move, CellState.O))
+                {
+                    winningMoves.Add(move); 
+                }
+            }
+            if (winningMoves.Count > 0)
+            {
+                return winningMoves[random.Next(0, winningMoves.Count)];
             }
 
             //check for moves that block the opponent
-            foreach(int move in availableMoves)
+            List<int> blockingMoves = new List<int>(); 
+            foreach (int move in availableMoves)
             {
-                if (IsWinningMove(boardLogic, move, CellState.X)) return move;
+                if (IsWinningMove(boardLogic, move, CellState.X))
+                {
+                    blockingMoves.Add(move); 
+                }
+            }
+            if (blockingMoves.Count > 0)
+            {
+                return blockingMoves[random.Next(0, blockingMoves.Count)];
             }
 
             // else choose random move
-             return ChooseRandomMove(availableMoves);
+            return ChooseRandomMove(availableMoves);
 
             throw new Exception("this error should not be possible. (AI.Medium() method)");
 
         }
-        static int Hard(BoardLogic boardLogic) // uses the minimax algorithm to find the best move
+        static int Hard(BoardLogic boardLogic) 
         {
-            return GetBestMove(boardLogic);
+            const int chanceForBestMove = 70;
+            int randomChance = random.Next(0, 100);
+            if (randomChance < chanceForBestMove) // 70% chance to use the best move
+            {
+                return GetBestMove(boardLogic);
+            }
+            else // 30% chance to use the medium move
+            {
+                return Medium(boardLogic);
+            }
+
         }
 
 
@@ -211,7 +237,27 @@ namespace ticTacToe
             if (bestMovePos < 0)
                 throw new Exception(" unexpected error in GetBestMove()");
             else
+            {
+                if (bestScore == -1)
+                {
+                    List<int> blockingMoves = new List<int>();
+                    foreach (int move in bestMoves)
+                    {
+                        if (IsWinningMove(boardLogic, move, CellState.X))
+                        {
+                            blockingMoves.Add(move);
+                        }
+                    }
+                    if (blockingMoves.Count > 0)
+                    {
+                        return blockingMoves[random.Next(0, blockingMoves.Count)];
+                    }
+
+                }
+
                 return bestMoves[random.Next(0, bestMoves.Count)];
+
+            }
         }
 
 

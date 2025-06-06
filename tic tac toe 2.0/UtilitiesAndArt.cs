@@ -411,20 +411,20 @@ namespace ticTacToe
         };
         public static string[] HowToPlayContent = new string[]
         {
-            "Tic Tac Toe is a two-player game played on a 3×3 grid. Player X        ",
+            "Tic Tac Toe is a two-player game played on a 3×3 grid.        ",
             "",
-            "goes first, and players take turns marking a square with either X or O.",
+            "The players take turns marking a square with either X or O.   ",
             "",
-            "The first player to get three of their marks in a ,                    ",
+            "The first player to get three of their marks in a             ",
             "",
-            "row — horizontally, vertically, or diagonally — wins the game.         ",
+            "row - horizontally, vertically, or diagonally wins the game.  ",
             "",
-            "If all squares are filled and no one wins, the game ends in a draw.    "
+            "If all squares are filled and no one wins, its a draw.        "
             
         };
         public static string[] CreditsContent = new string[]
         {
-            "Cretaed by: Peleg Reshef                                  ",
+            "Cretaed by: Peleg Reshef                           ",
             "",
             "Thanks to:",
             "",
@@ -432,8 +432,8 @@ namespace ticTacToe
             "",
             "* GitHub - for backups and sharing my code        ",
             "",
-            "* ChatGPT — for help with new concepts. (All code",
-            " is written by me)",
+            "* My mom - for design reccomendations and ",
+            " emotional support",
             "",
             "",
             "Project repository: github.com/PelegReshef/tic-tac-toe-2.0",

@@ -151,22 +151,31 @@ namespace ticTacToe
                     System.Threading.Thread.Sleep(3500);
                     Environment.Exit(0);
                     break;
+
                 default:
                     Utilities.Error("this buttons was not implemented yet. press enter then space then enter to go back to home screen (dont ask why).   ( method: HandleMenuButtons)");
                     break;
             }
         }
 
-        public ReturnTypes MenuLoop() // main menu loop. this method is looped in GameManager until a Action_GameButton is pressed
+        public ReturnTypes MenuLoop() // main menu loop. 
         {
-            
-            
-            int cursorPos = menuCursor.MoveUntilAction(); // move the cursor until an action is made
-            ExamineCursorAction(cursorPos); // check what button the player pressed and change the menu stage accordingly
-            ButtonTypes buttonType = SortToButtonTypes(); // sort the button to the correct type
-            if (buttonType == ButtonTypes.Action_GameButton) // if the button is an action game button (which means a game need to be started)
+            /*
+             * this method is looped in GameManager until a Action_GameButton is pressed and works like this: 
+             * move the cursor until an action is made
+             * check what button the player pressed and change the menu stage accordingly
+             * sort the button to the correct type
+             *  if the button is an action game button (which means a game need to be started) check what play button was pressed and return the correct type to GameManager
+             *  else determine what to do in HandleMenuButtons() and act accordingly
+             */
+
+
+            int cursorPos = menuCursor.MoveUntilAction(); 
+            ExamineCursorAction(cursorPos);
+            ButtonTypes buttonType = SortToButtonTypes();
+            if (buttonType == ButtonTypes.Action_GameButton)
             {
-                switch (menuLogic.CurrentMenuStage) // check what play button was pressed and return the correct type to game manager
+                switch (menuLogic.CurrentMenuStage)
                 {
                     case MenuStages.Play_PlayerVsPlayer:
                         menuLogic.CurrentMenuStage = MenuStages.MainMenu; 
@@ -183,10 +192,10 @@ namespace ticTacToe
                     default:
                         Utilities.Error("invalid menu stage (MenuManager.MenuLoop)");
                         menuLogic.CurrentMenuStage = MenuStages.MainMenu;
-                        return ReturnTypes.MenuButton; // return menu button if no action was made
+                        return ReturnTypes.MenuButton;
                 }
             }
-            else // change the menu and continue
+            else
             {
                 HandleMenuButtons(); 
                 if (buttonType == ButtonTypes.MenuButton)
@@ -214,7 +223,7 @@ namespace ticTacToe
 
 
         public MenuCursorPosition[] CursorPositions;
-        public int CursorPosX = Utilities.Width / 2 - Art.HowToPlay.Length / 2 - 40; // X position of the cursor
+        public int CursorPosX = Utilities.Width / 2 - Art.PVsAI[0].Length / 2 -10; // X position of the cursor
 
         public MenuLogic()
         {
