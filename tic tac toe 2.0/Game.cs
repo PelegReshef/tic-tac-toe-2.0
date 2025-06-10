@@ -68,7 +68,7 @@ namespace ticTacToe
                     cursor.Draw();
 
                     GameState gameState = GameLogic.CheckGameState(boardLogic);
-                    HandleGameState(gameState, "bot");
+                    HandleEndOfTHeGame(gameState, bot);
 
 
                 }
@@ -111,7 +111,7 @@ namespace ticTacToe
             } while (!validAction); // repeat until a valid action is made
 
             GameState gameState = GameLogic.CheckGameState(boardLogic);
-            HandleGameState(gameState, playerWinMessage);
+            HandleEndOfTHeGame(gameState, player);
 
         }
 
@@ -144,26 +144,24 @@ namespace ticTacToe
                     Utilities.Error("unexpected error. player not recognized"); // if the player type is not recognized
                     return false;
             }
-            return false; // return false if the cell is not empty
+            return false;
 
         }
-        void HandleGameState(GameState gameState, string playerName)
+        void HandleEndOfTHeGame(GameState gameState, Player player)
         {
             switch (gameState)
             {
                 case GameState.WinX:
                 case GameState.WinO:
-                    Console.SetCursorPosition(0, 0); // reset the cursor position
-                    Console.WriteLine(playerName + " wins!"); // print the winner
-                    gameOver = true; // end the game
+                    boardVisuals.DrawWinMessage(player);
+                    gameOver = true; 
                     break;
                 case GameState.Draw:
-                    Console.SetCursorPosition(0, 0); // reset the cursor position
-                    Console.WriteLine("Draw!"); // print the draw
-                    gameOver = true; // end the game
+                    boardVisuals.DrawDrawMessage(); 
+                    gameOver = true; 
                     break;
                 case GameState.InProgress:
-                    gameOver = false; // game is still in progress
+                    gameOver = false; 
                     break;
             }
         }
@@ -180,7 +178,8 @@ namespace ticTacToe
 
         // top left corner
         public int X; 
-        public int Y; 
+        public int Y;
+
 
         public void NewBoard(int x, int y, bool centered) 
         {
@@ -191,25 +190,20 @@ namespace ticTacToe
                 X = (Utilities.Width / 2) - (boardWidth / 2);
                 Y = (Utilities.Height / 2) - (boardHeight / 2);
             }
-            CreateCells(); 
-        }
+            boardCells = new Cell[9];
+            {
+                boardCells[0] = new Cell(X, Y);
+                boardCells[1] = new Cell(X + ((boardWidth - 2) / 3), Y);
+                boardCells[2] = new Cell(X + 2 * ((boardWidth - 2) / 3), Y);
+                boardCells[3] = new Cell(X, Y + ((boardHeight - 1) / 3));
+                boardCells[4] = new Cell(X + ((boardWidth - 2) / 3), Y + ((boardHeight - 1) / 3));
+                boardCells[5] = new Cell(X + 2 * ((boardWidth - 2) / 3), Y + ((boardHeight - 1) / 3));
+                boardCells[6] = new Cell(X, Y + 2 * ((boardHeight - 1) / 3));
+                boardCells[7] = new Cell(X + ((boardWidth - 2) / 3), Y + 2 * ((boardHeight - 1) / 3));
+                boardCells[8] = new Cell(X + 2 * ((boardWidth - 2) / 3), Y + 2 * ((boardHeight - 1) / 3));
+            }
 
-        void CreateCells()
-        {
-            boardCells = new Cell[9] 
-           {
-            new (X , Y), 
-            new (X + ((boardWidth - 2) / 3), Y), 
-            new (X + 2*((boardWidth - 2) / 3), Y), 
-            new (X , Y + ((boardHeight - 1) / 3)), 
-            new (X + ((boardWidth - 2) / 3), Y + ((boardHeight - 1) / 3)), 
-            new (X + 2*((boardWidth - 2) / 3), Y + ((boardHeight - 1) / 3)), 
-            new (X , Y + 2*((boardHeight - 1) / 3)), 
-            new (X + ((boardWidth - 2) / 3), Y + 2*((boardHeight - 1) / 3)), 
-            new (X + 2*((boardWidth - 2) / 3), Y + 2 *((boardHeight - 1) / 3)), 
-           };
         }
-
         public void ChangeCellstate(CellState state, int cellPosition) 
         {
             boardCells[cellPosition].state = state; 
@@ -276,6 +270,32 @@ namespace ticTacToe
                     }
                     break;
             }
+        }
+        public void DrawWinMessage(Player player) // draw the win message on the screen
+        {
+            switch (player.difficulty)
+            {
+                case Difficulty.RealPlayer:
+
+                    switch (player.playerType)
+                    {
+                        case PlayerType.X_player:
+                            Art.Draw(Art.WinMessageX, boardLogic.X + ((Art.NewBoard[0].Length - Art.WinMessageX[0].Length) / 2), boardLogic.Y - Art.WinMessageX.Length - 2);
+                            break;
+                        case PlayerType.O_Player:
+                            Art.Draw(Art.WinMessageO, boardLogic.X + ((Art.NewBoard[0].Length - Art.WinMessageO[0].Length) / 2), boardLogic.Y - Art.WinMessageO.Length - 2);
+                            break;
+                    }
+                    break;
+                default:
+                    Art.Draw(Art.WinMessageBot, boardLogic.X + ((Art.NewBoard[0].Length - Art.WinMessageBot[0].Length) / 2), boardLogic.Y - Art.WinMessageBot.Length - 2);
+                    break;
+            }
+        }
+
+        public void DrawDrawMessage()
+        {
+            Art.Draw(Art.WinMessageDraw, boardLogic.X + ((Art.NewBoard[0].Length - Art.WinMessageDraw[0].Length) / 2), boardLogic.Y - Art.WinMessageDraw.Length - 2);
         }
     }
     public enum CellState

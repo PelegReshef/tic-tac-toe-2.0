@@ -171,7 +171,7 @@ namespace ticTacToe
             }
 
         }
-        public static string[] O = new string[]
+        public static string[] O =
         {
 
             "██████████████████",
@@ -187,7 +187,7 @@ namespace ticTacToe
             "██████████████████",
 
         };
-        public static string[] X = new string[]
+        public static string[] X =
         {
 
             "██████████████████",
@@ -203,7 +203,7 @@ namespace ticTacToe
             "██████████████████",
         };
 
-        public static string[] Empty = new string[]
+        public static string[] Empty =
         {
             "██████████████████",
             "██              ██",
@@ -217,7 +217,7 @@ namespace ticTacToe
             "██              ██",
             "██████████████████",
         };
-        public static string[] NewBoard = new string[]
+        public static string[] NewBoard =
         {
             "██████████████████████████████████████████████████",
             "██              ██              ██              ██",
@@ -253,7 +253,7 @@ namespace ticTacToe
 
 
         };
-        public static string[] Play = new string[]
+        public static string[] Play =
         {
             @" _____  _           __     __",
             @"|  __ \| |        /\\ \   / /",
@@ -263,7 +263,8 @@ namespace ticTacToe
             @"|_|    |______/_/    \_\_|   "
 
         };
-        public static string[] TicTacToe = new string[]{
+        public static string[] TicTacToe =
+        {
             "TTTTTTTTTTTTTTTTTTTTTTTIIIIIIIIII      CCCCCCCCCCCCC         TTTTTTTTTTTTTTTTTTTTTTT         AAA                  CCCCCCCCCCCCC         TTTTTTTTTTTTTTTTTTTTTTT     OOOOOOOOO     EEEEEEEEEEEEEEEEEEEEEE",
             "T:::::::::::::::::::::TI::::::::I   CCC::::::::::::C         T:::::::::::::::::::::T        A:::A              CCC::::::::::::C         T:::::::::::::::::::::T   OO:::::::::OO   E::::::::::::::::::::E",
             "T:::::::::::::::::::::TI::::::::I CC:::::::::::::::C         T:::::::::::::::::::::T       A:::::A           CC:::::::::::::::C         T:::::::::::::::::::::T OO:::::::::::::OO E::::::::::::::::::::E",
@@ -280,8 +281,8 @@ namespace ticTacToe
             "      T:::::::::T      I::::::::I CC:::::::::::::::C               T:::::::::T  A:::::A               A:::::ACC:::::::::::::::C               T:::::::::T       OO:::::::::::::OO E::::::::::::::::::::E",
             "      T:::::::::T      I::::::::I   CCC::::::::::::C               T:::::::::T A:::::A                 A:::::A CCC::::::::::::C               T:::::::::T         OO:::::::::OO   E::::::::::::::::::::E",
             "      TTTTTTTTTTT      IIIIIIIIII      CCCCCCCCCCCCC               TTTTTTTTTTTAAAAAAA                   AAAAAAA   CCCCCCCCCCCCC               TTTTTTTTTTT           OOOOOOOOO     EEEEEEEEEEEEEEEEEEEEEE"
-    };
-        public static string[] Options = new string[]
+        };
+        public static string[] Options =
         {
             @"  ____   _____  _______  _____  ____   _   _   _____ ",
             @" / __ \ |  __ \|__   __||_   _|/ __ \ | \ | | / ____|",
@@ -290,7 +291,7 @@ namespace ticTacToe
             @"| |__| || |       | |    _| |_| |__| || |\  | ____) |",
             @" \____/ |_|       |_|   |_____|\____/ |_| \_||_____/ "
         };
-        public static string[] Cursor = new string[]
+        public static string[] Cursor =
         {
             @"__   ",
             @"\ \  ",
@@ -300,7 +301,7 @@ namespace ticTacToe
             @"/_/  ",
 
         };
-        public static string[] HowToPlay = new string[]
+        public static string[] HowToPlay =
         {
             @"  _    _  ______          __    _______ ____      _____  _           __     __",
             @" | |  | |/ __ \ \        / /   |__   __/ __ \    |  __ \| |        /\\ \   / /",
@@ -309,7 +310,7 @@ namespace ticTacToe
             @" | |  | | |__| | \  /\  /         | | | |__| |   | |    | |____ / ____ \| |   ",
             @" |_|  |_|\____/   \/  \/          |_|  \____/    |_|    |______/_/    \_\_|   "
         };
-        public static string[] ExitGame = new string[]
+        public static string[] ExitGame =
         {
             @"  ________   _______ _______      _____          __  __ ______ ",
             @" |  ____\ \ / /_   _|__   __|    / ____|   /\   |  \/  |  ____|",
@@ -318,7 +319,7 @@ namespace ticTacToe
             @" | |____ / . \ _| |_   | |      | |__| |/ ____ \| |  | | |____ ",
             @" |______/_/ \_\_____|  |_|       \_____/_/    \_\_|  |_|______|"
         };
-        public static string[] PVP = new string[]
+        public static string[] PVP =
         {
             @"  _____  _           __     ________ _____     __      _______     _____  _           __     ________ _____  ",
             @" |  __ \| |        /\\ \   / /  ____|  __ \    \ \    / / ____|   |  __ \| |        /\\ \   / /  ____|  __ \ ",
@@ -328,7 +329,7 @@ namespace ticTacToe
             @" |_|    |______/_/    \_\_|  |______|_|  \_\       \/  |_____/    |_|    |______/_/    \_\_|  |______|_|  \_\"
 
         };
-        public static string[] PVsAI = new string[]
+        public static string[] PVsAI =
         {
             @"  _____  _           __     ________ _____     __      _______      ____   ____ _______ ",
             @" |  __ \| |        /\\ \   / /  ____|  __ \    \ \    / / ____|    |  _ \ / __ \__   __|",
@@ -337,7 +338,7 @@ namespace ticTacToe
             @" | |    | |____ / ____ \| |  | |____| | \ \       \  /  ____) |    | |_) | |__| | | |   ",
             @" |_|    |______/_/    \_\_|  |______|_|  \_\       \/  |_____/     |____/ \____/  |_|   "
         };
-        public static string[] ComingSoon = new string[]
+        public static string[] ComingSoon =
         {
             @"   _____ ____  __  __ _____ _   _  _____      _____  ____   ____  _   _ ",
             @"  / ____/ __ \|  \/  |_   _| \ | |/ ____|    / ____|/ __ \ / __ \| \ | |",
@@ -346,7 +347,7 @@ namespace ticTacToe
             @" | |___| |__| | |  | |_| |_| |\  | |__| |    ____) | |__| | |__| | |\  |",
             @"  \_____\____/|_|  |_|_____|_| \_|\_____|   |_____/ \____/ \____/|_| \_|"
         };
-        public static string[] Back = new string[]
+        public static string[] Back =
         {
             @"  ____          _____ _  __",
             @" |  _ \   /\   / ____| |/ /",
@@ -355,7 +356,7 @@ namespace ticTacToe
             @" | |_) / ____ \ |____| . \ ",
             @" |____/_/    \_\_____|_|\_\"
         };
-        public static string[] Engine = new string[]
+        public static string[] Engine =
         {
             @"  ______ _   _  _____ _____ _   _ ______ ",
             @" |  ____| \ | |/ ____|_   _| \ | |  ____|",
@@ -364,7 +365,7 @@ namespace ticTacToe
             @" | |____| |\  | |__| |_| |_| |\  | |____ ",
             @" |______|_| \_|\_____|_____|_| \_|______|"
         };
-        public static string[] Controls = new string[]
+        public static string[] Controls =
         {
             @"   _____ ____  _   _ _______ _____   ____  _       _____ ",
             @"  / ____/ __ \| \ | |__   __|  __ \ / __ \| |     / ____|",
@@ -373,7 +374,7 @@ namespace ticTacToe
             @" | |___| |__| | |\  |  | |  | | \ \| |__| | |____ ____) |",
             @"  \_____\____/|_| \_|  |_|  |_|  \_\\____/|______|_____/ "
         };
-        public static string[] Credits = new string[]
+        public static string[] Credits =
         {
             @"   _____ _____  ______ _____ _____ _______ _____ ",
             @"  / ____|  __ \|  ____|  __ \_   _|__   __/ ____|",
@@ -382,7 +383,7 @@ namespace ticTacToe
             @" | |____| | \ \| |____| |__| || |_   | |  ____) |",
             @"  \_____|_|  \_\______|_____/_____|  |_| |_____/ "
         };
-        public static string[] Easy = new string[]
+        public static string[] Easy =
         {
             @"  ______           _______     __",
             @" |  ____|   /\    / ____\ \   / /",
@@ -391,7 +392,7 @@ namespace ticTacToe
             @" | |____ / ____ \ ____) |  | |   ",
             @" |______/_/    \_\_____/   |_|   "
         };
-        public static string[] Medium = new string[]
+        public static string[] Medium =
         {
             @"  __  __ ______ _____ _____ _    _ __  __ ",
             @" |  \/  |  ____|  __ \_   _| |  | |  \/  |",
@@ -400,7 +401,7 @@ namespace ticTacToe
             @" | |  | | |____| |__| || |_| |__| | |  | |",
             @" |_|  |_|______|_____/_____|\____/|_|  |_|",
         };
-        public static string[] Hard = new string[]
+        public static string[] Hard =
         {
             @"  _    _          _____  _____  ",
             @" | |  | |   /\   |  __ \|  __ \ ",
@@ -409,7 +410,43 @@ namespace ticTacToe
             @" | |  | |/ ____ \| | \ \| |__| |",
             @" |_|  |_/_/    \_\_|  \_\_____/ "
         };
-        public static string[] HowToPlayContent = new string[]
+        public static string[] WinMessageX = 
+        {
+            @"  __   __   __          _______ _   _  _____ _ ",
+            @"  \ \ / /   \ \        / /_   _| \ | |/ ____| |",
+            @"   \ V /     \ \  /\  / /  | | |  \| | (___ | |",
+            @"    > <       \ \/  \/ /   | | | . ` |\___ \| |",
+            @"   / . \       \  /\  /   _| |_| |\  |____) |_|",
+            @"  /_/ \_\       \/  \/   |_____|_| \_|_____/(_)"
+        };
+        public static string[] WinMessageO =
+        {
+            @"    ____     __          _______ _   _  _____ _ ",
+            @"   / __ \    \ \        / /_   _| \ | |/ ____| |",
+            @"  | |  | |    \ \  /\  / /  | | |  \| | (___ | |",
+            @"  | |  | |     \ \/  \/ /   | | | . ` |\___ \| |",
+            @"  | |__| |      \  /\  /   _| |_| |\  |____) |_|",
+            @"   \____/        \/  \/   |_____|_| \_|_____/(_)"
+        };
+        public static string[] WinMessageBot =
+        {
+            @"   ____   ____ _______    __          _______ _   _  _____ _ ",
+            @"  |  _ \ / __ \__   __|   \ \        / /_   _| \ | |/ ____| |",
+            @"  | |_) | |  | | | |       \ \  /\  / /  | | |  \| | (___ | |",
+            @"  |  _ <| |  | | | |        \ \/  \/ /   | | | . ` |\___ \| |",
+            @"  | |_) | |__| | | |         \  /\  /   _| |_| |\  |____) |_|",
+            @"  |____/ \____/  |_|          \/  \/   |_____|_| \_|_____/(_)"
+        };
+        public static string[] WinMessageDraw =
+        {
+            @"  _____  _____       __          ___ ",
+            @" |  __ \|  __ \     /\ \        / / |",
+            @" | |  | | |__) |   /  \ \  /\  / /| |",
+            @" | |  | |  _  /   / /\ \ \/  \/ / | |",
+            @" | |__| | | \ \  / ____ \  /\  /  |_|",
+            @" |_____/|_|  \_\/_/    \_\/  \/   (_)"
+        };
+        public static string[] HowToPlayContent =
         {
             "Tic Tac Toe is a two-player game played on a 3×3 grid.        ",
             "",
