@@ -482,5 +482,27 @@ namespace ticTacToe
             "Hope you liked it!",
             ""
         };
+        public static string[] EngineOnContent = new string[]
+        {
+            "Game engine is now active                                   ",
+            "",
+            "Game engine shows all possible moves from the current board,",
+            "",
+            "sorted to winning, drawing, and losing moves                ",
+            "",
+            "to help you analyze your games.",
+            ""
+        };
+        public static string[] EngineOffContent = new string[]
+        {
+            "Game engine is now inactive                                 ",
+            "",
+            "Game engine shows all possible moves from the current board,",
+            "",
+            "sorted to winning, drawing, and losing moves                ",
+            "",
+            "to help you analyze your games.                             ",
+            ""
+        };
     }
 }

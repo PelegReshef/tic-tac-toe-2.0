@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Formats.Asn1.AsnWriter;
@@ -79,30 +80,14 @@ namespace ticTacToe
 
 
 
-        static int Easy(BoardLogic boardLogic) //returnes cursor pos of the selected cellPosition. 
+        static int Easy(BoardLogic boardLogic) 
         {
-            while (true)
-            {
-                int move = random.Next(0, 9);
-                if (IsValidMove(boardLogic, move))
-                {
-                    return move; // return the cellPosition
-                }
-
-            }
-
+            List<int> availableMoves = GetAvailableMoves(boardLogic); 
+            return ChooseRandomMove(availableMoves); 
         }
         static int Medium(BoardLogic boardLogic)
         {
-            // create a list of possible moves 
-            List<int> availableMoves = new List<int>();
-            for (int i = 0; i < boardLogic.boardCells.Length; i++)
-            {
-                if (IsValidMove(boardLogic, i)) 
-                {
-                    availableMoves.Add(i);
-                }
-            }
+            List<int> availableMoves = GetAvailableMoves(boardLogic); 
 
             // check for winning moves
             List<int> winningMoves = new List<int>(); // list of winning moves for the bot to chooae randomly from
@@ -118,11 +103,10 @@ namespace ticTacToe
                 return winningMoves[random.Next(0, winningMoves.Count)];
             }
 
-            //check for moves that block the opponent
             List<int> blockingMoves = new List<int>(); 
             foreach (int move in availableMoves)
             {
-                if (IsWinningMove(boardLogic, move, CellState.X))
+                if (IsWinningMove(boardLogic, move, CellState.X)) // if the opponent has a winning move, block it
                 {
                     blockingMoves.Add(move); 
                 }
@@ -134,9 +118,6 @@ namespace ticTacToe
 
             // else choose random move
             return ChooseRandomMove(availableMoves);
-
-            throw new Exception("this error should not be possible. (AI.Medium() method)");
-
         }
         static int Hard(BoardLogic boardLogic) 
         {
@@ -156,15 +137,7 @@ namespace ticTacToe
 
         static int Minimax(BoardLogic boardLogic, bool isMaximizing)
         {
-            // create a list of possible moves 
-            List<int> availableMoves = new List<int>();
-            for (int i = 0; i < boardLogic.boardCells.Length; i++)
-            {
-                if (IsValidMove(boardLogic, i))
-                {
-                    availableMoves.Add(i);
-                }
-            }
+            List<int> availableMoves = GetAvailableMoves(boardLogic); 
 
             // check if someone has won to stop recursion
             int score = EvaluateBoard(boardLogic);
@@ -202,17 +175,8 @@ namespace ticTacToe
 
         static int GetBestMove(BoardLogic boardLogic)
         {
-            // create a list of possible moves 
-            List<int> availableMoves = new List<int>();
-            for (int i = 0; i < boardLogic.boardCells.Length; i++)
-            {
-                if (IsValidMove(boardLogic, i))
-                {
-                    availableMoves.Add(i);
-                }
-            }
+            List<int> availableMoves = GetAvailableMoves(boardLogic);
 
-            
             int bestMovePos = -1;
             int bestScore = int.MinValue;
             List<int> bestMoves = new List<int>();
@@ -234,6 +198,7 @@ namespace ticTacToe
                 }
             }
 
+            // if all moves are losing make the minimax to block the opponent instead of a rundom move cuz it looks less stupid
             if (bestMovePos < 0)
                 throw new Exception(" unexpected error in GetBestMove()");
             else
@@ -258,9 +223,45 @@ namespace ticTacToe
                 return bestMoves[random.Next(0, bestMoves.Count)];
 
             }
+            
         }
+        
+        public static List<int>[] Engine(BoardLogic boardLogic, bool calculatesForX) // gives an array of lists of winning, drawing and losing moves.
+        {
+            List<int>[] moves = new List<int>[3]; // 0 - winning moves, 1 - drawing moves, 2 - losing moves
+            moves[0] = new List<int>(); 
+            moves[1] = new List<int>(); 
+            moves[2] = new List<int>();
 
+            List<int> availableMoves = GetAvailableMoves(boardLogic); 
 
+            foreach (int move in availableMoves)
+            {
+                var boardLogicClone = boardLogic.Clone();
+                boardLogicClone.ChangeCellstate(CellState.O, move); 
+                int score = Minimax(boardLogicClone, calculatesForX);
+                // if calculatesForX is true, then the AI is playing as X and we need to invert the score
+                if (calculatesForX) // if the AI is playing as X, invert the score
+                {
+                    score = score * (-1);
+                }
+                switch (score)
+                {
+                    case 1: // win
+                        moves[0].Add(move);
+                        break;
+                    case 0: // draw
+                        moves[1].Add(move);
+                        break;
+                    case -1: // loss
+                        moves[2].Add(move);
+                        break;
+                }
+            }
+
+            return moves;
+
+        }
 
         static bool IsWinningMove(BoardLogic boardLogic, int position, CellState moveCellState) 
         {
@@ -287,6 +288,18 @@ namespace ticTacToe
                 default:
                     return 99; // game in progress
             }
+        }
+        static List<int> GetAvailableMoves(BoardLogic boardLogic)
+        {
+            List<int> availableMoves = new List<int>();
+            for (int i = 0; i < boardLogic.boardCells.Length; i++)
+            {
+                if (IsValidMove(boardLogic, i))
+                {
+                    availableMoves.Add(i);
+                }
+            }
+            return availableMoves;
         }
 
         static int ChooseRandomMove(List<int> avalibleMoves)

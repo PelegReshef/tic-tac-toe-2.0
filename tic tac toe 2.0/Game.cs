@@ -17,7 +17,7 @@ namespace ticTacToe
         Cursor cursor;
 
         ReturnTypes gameType;
-        public Game(ReturnTypes returnType)
+        public Game(ReturnTypes returnType, bool engine)
         {
             boardLogic = new BoardLogic(); 
             boardLogic.NewBoard(0, 0, true); // centered for now. will be changed to player choice later. edit: probably will not be changed, because I dont want to make 2 games simultaneously.
@@ -118,13 +118,14 @@ namespace ticTacToe
 
         bool ExamineAction(Player player, int cursorPos) // cursorPos is to support AI moves too
         {
-            cursor.Erase(); 
+ 
             cursor.CursorPos = cursorPos;
             switch (player.playerType)
             {
                 case PlayerType.X_player:
                     if (boardLogic.boardCells[cursorPos].state == CellState.Empty) // check if the cell is empty
                     {
+                        cursor.Erase();
                         boardLogic.ChangeCellstate(CellState.X, cursorPos); // change the cell state to X
                         boardVisuals.DrawCell(CellState.X, cursorPos); // draw the cell on screen
                         cursor.Draw(); // draw the cursor again because DrawCell erases it
@@ -134,6 +135,7 @@ namespace ticTacToe
                 case PlayerType.O_Player:
                     if (boardLogic.boardCells[cursorPos].state == CellState.Empty) // check if the cell is empty
                     {
+                        cursor.Erase();
                         boardLogic.ChangeCellstate(CellState.O, cursorPos); // change the cell state to O
                         boardVisuals.DrawCell(CellState.O, cursorPos); // draw the cell on screen
                         cursor.Draw(); // draw the cursor again because DrawCell erases it

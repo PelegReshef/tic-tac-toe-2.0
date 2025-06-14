@@ -12,6 +12,8 @@ namespace ticTacToe
         MenuLogic menuLogic; // logic for the start screen
         MenuVisuals menuVisuals; // visuals for the start screen
         public MenuCursor menuCursor; // cursor for the start screen
+
+        public bool EngineIsActive = false; 
         static public readonly Dictionary<int, Dictionary<MenuStages, MenuStages>> MenuStageTransitions = new()
         {
             [0] = new Dictionary<MenuStages, MenuStages>
@@ -150,6 +152,20 @@ namespace ticTacToe
                     menuVisuals.DrawExitGameMenu(); 
                     System.Threading.Thread.Sleep(3500);
                     Environment.Exit(0);
+                    break;
+                case MenuStages.Options_engine:
+                    if (EngineIsActive)
+                    {
+                        menuVisuals.DrawEngineInactiveText();
+                    }
+                    else
+                    {
+                        menuVisuals.DrawEngineActiveText();
+                    }
+                    EngineIsActive = !EngineIsActive;
+                    Utilities.GetValidInput();
+                    menuLogic.CurrentMenuStage = MenuStages.MainMenu_Options;
+                    menuVisuals.DrawOptionsMenu();
                     break;
 
                 default:
@@ -311,20 +327,29 @@ namespace ticTacToe
         public void DrawHowToPlayMenu()
         {
             Art.DrawTextFrame();
-            Art.Draw(Art.HowToPlayContent, Art.Frame_CenterX - Art.HowToPlayContent[0].Length/2, Art.Frame_CenterY - Art.HowToPlayContent.Length/2); // draw the how to play menu in the top of the frame
+            Art.Draw(Art.HowToPlayContent, Art.Frame_CenterX - Art.HowToPlayContent[0].Length/2, Art.Frame_CenterY - Art.HowToPlayContent.Length/2);
 
         }
         public void DrawCreditsMenu()
         {
             Art.DrawTextFrame();
-            Art.Draw(Art.CreditsContent, Art.Frame_CenterX - Art.CreditsContent[0].Length / 2, Art.Frame_CenterY - Art.CreditsContent.Length / 2); // draw the credits menu in the top of the frame
+            Art.Draw(Art.CreditsContent, Art.Frame_CenterX - Art.CreditsContent[0].Length / 2, Art.Frame_CenterY - Art.CreditsContent.Length / 2); 
         }
         public void DrawExitGameMenu()
         {
             Art.DrawTextFrame();
-            Art.Draw(Art.ExitGameContent, Art.Frame_CenterX - Art.ExitGameContent[0].Length / 2, Art.Frame_CenterY - Art.ExitGameContent.Length / 2); // draw the exit game menu in the top of the frame
+            Art.Draw(Art.ExitGameContent, Art.Frame_CenterX - Art.ExitGameContent[0].Length / 2, Art.Frame_CenterY - Art.ExitGameContent.Length / 2); 
         }
-
+        public void DrawEngineActiveText()
+        {
+            Art.DrawTextFrame(); 
+            Art.Draw(Art.EngineOnContent, Art.Frame_CenterX - Art.EngineOnContent[0].Length / 2, Art.Frame_CenterY - Art.EngineOnContent.Length / 2); 
+        }
+        public void DrawEngineInactiveText()
+        {
+            Art.DrawTextFrame();
+            Art.Draw(Art.EngineOffContent, Art.Frame_CenterX - Art.EngineOffContent[0].Length / 2, Art.Frame_CenterY - Art.EngineOffContent.Length / 2);
+        }
     }
     public class MenuCursor
     {

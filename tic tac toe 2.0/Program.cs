@@ -41,15 +41,15 @@ namespace ticTacToe
             while (true)
             {
                 ReturnTypes type = MenuLoop();
-                StartNewGame(type);
+                StartNewGame(type, menuManager.EngineIsActive);
                 Utilities.GetValidInput();
             }
 
         }
-        public void StartNewGame(ReturnTypes type)
+        public void StartNewGame(ReturnTypes type, bool engineIsActive)
         {
             Utilities.Setup(); 
-            Game game = new Game(type); 
+            Game game = new Game(type, menuManager.EngineIsActive); 
             
             game.Run(); 
         }
