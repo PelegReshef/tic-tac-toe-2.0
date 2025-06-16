@@ -121,7 +121,7 @@ namespace ticTacToe
         }
         static int Hard(BoardLogic boardLogic) 
         {
-            const int chanceForBestMove = 70;
+            const int chanceForBestMove = 100;
             int randomChance = random.Next(0, 100);
             if (randomChance < chanceForBestMove) // 70% chance to use the best move
             {
@@ -235,29 +235,51 @@ namespace ticTacToe
 
             List<int> availableMoves = GetAvailableMoves(boardLogic); 
 
-            foreach (int move in availableMoves)
+            if (calculatesForX)
             {
-                var boardLogicClone = boardLogic.Clone();
-                boardLogicClone.ChangeCellstate(CellState.O, move); 
-                int score = Minimax(boardLogicClone, calculatesForX);
-                // if calculatesForX is true, then the AI is playing as X and we need to invert the score
-                if (calculatesForX) // if the AI is playing as X, invert the score
+                foreach (int move in availableMoves)
                 {
-                    score = score * (-1);
+                    var boardLogicClone = boardLogic.Clone();
+                    boardLogicClone.ChangeCellstate(CellState.X, move);
+                    int score = Minimax(boardLogicClone, true);
+                    // if calculatesForX is true, then the AI is playing as X and we need to invert the score
+                    switch (score)
+                    {
+                        case 1: // win
+                            moves[2].Add(move); // invert the score to make it a loss for X
+                            break;
+                        case 0: // draw
+                            moves[1].Add(move);
+                            break;
+                        case -1: // loss
+                            moves[0].Add(move); // invert the score to make it a win for X
+                            break;
+                    }
                 }
-                switch (score)
+
+            }
+            else // if calculatesForX is false, then the AI is playing as O and we need to use the original score
+            {
+                foreach (int move in availableMoves)
                 {
-                    case 1: // win
-                        moves[0].Add(move);
-                        break;
-                    case 0: // draw
-                        moves[1].Add(move);
-                        break;
-                    case -1: // loss
-                        moves[2].Add(move);
-                        break;
+                    var boardLogicClone = boardLogic.Clone();
+                    boardLogicClone.ChangeCellstate(CellState.O, move);
+                    int score = Minimax(boardLogicClone, false);
+                    switch (score)
+                    {
+                        case 1: // win
+                            moves[0].Add(move); // win for O
+                            break;
+                        case 0: // draw
+                            moves[1].Add(move);
+                            break;
+                        case -1: // loss
+                            moves[2].Add(move); // loss for O
+                            break;
+                    }
                 }
             }
+
 
             return moves;
 

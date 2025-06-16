@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 
 namespace ticTacToe
@@ -137,7 +138,7 @@ namespace ticTacToe
                     break;
                 // action menu buttons
                 case MenuStages.MainMenu_HowToPlay:
-                    menuVisuals.DrawHowToPlayMenu(); 
+                    menuVisuals.DrawHowToPlayMenu();
                     Utilities.GetValidInput();
                     menuLogic.CurrentMenuStage = MenuStages.MainMenu; 
                     menuVisuals.DrawMainMenu(); 

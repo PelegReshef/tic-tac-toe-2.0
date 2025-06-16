@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,7 +10,8 @@ namespace ticTacToe
     public class Game // control the game: draw the board, swithch turns, end the game, etc.
     {
 
-        bool gameOver = false; 
+        bool gameOver = false;
+        bool engineIsActive;
 
 
         BoardVisuals boardVisuals;
@@ -24,6 +26,7 @@ namespace ticTacToe
             boardVisuals = new BoardVisuals(boardLogic);
             cursor = new Cursor(boardLogic);
             gameType = returnType;
+            engineIsActive = engine;
 
         }
         public void RunPVP()
@@ -36,11 +39,11 @@ namespace ticTacToe
             
             while (!gameOver)
             {
-                RealPlayerMove(xPlayer, "Player 1");
+                RealPlayerMove(xPlayer);
 
                 if (!gameOver) // check if the game is over after player 1's turn
                 {
-                    RealPlayerMove(Oplayer, "Player 2");
+                    RealPlayerMove(Oplayer);
                 }
             }
         }
@@ -52,7 +55,7 @@ namespace ticTacToe
 
             while (!gameOver)
             {
-                RealPlayerMove(player, "player 1");
+                RealPlayerMove(player);
 
                 if (!gameOver) // check if the game is over after player 1's turn
                 {
@@ -99,16 +102,25 @@ namespace ticTacToe
             }
         }
 
-        public void RealPlayerMove(Player player, string playerWinMessage)
+        public void RealPlayerMove(Player player)
         {
             bool validAction = false; // check if the action is valid
+            bool XTurn = player.playerType == PlayerType.X_player; 
 
-            do
+            while (!validAction)
             {
-                int actionPos = cursor.MoveUntilAction(); // move the player icon
-                validAction = ExamineAction(player, actionPos); // examine the action
+                int actionPos = cursor.MoveUntilAction(engineIsActive); 
+                if (actionPos == -1)
+                {
+                    EngineVisualiser engine = new EngineVisualiser(boardLogic, cursor);
+                    engine.DrawEngineResults(XTurn); // draw the engine results for the current player turn
+                    Utilities.GetValidInput(); // wait for the player to press a key to continue
+                    engine.EraseEngineResults(); // erase the engine results after the player pressed a key
+                    continue; // continue the loop to get a valid action
+                }
 
-            } while (!validAction); // repeat until a valid action is made
+                validAction = ExamineAction(player, actionPos);
+            }
 
             GameState gameState = GameLogic.CheckGameState(boardLogic);
             HandleEndOfTHeGame(gameState, player);
@@ -123,27 +135,27 @@ namespace ticTacToe
             switch (player.playerType)
             {
                 case PlayerType.X_player:
-                    if (boardLogic.boardCells[cursorPos].state == CellState.Empty) // check if the cell is empty
+                    if (boardLogic.boardCells[cursorPos].state == CellState.Empty) 
                     {
                         cursor.Erase();
-                        boardLogic.ChangeCellstate(CellState.X, cursorPos); // change the cell state to X
-                        boardVisuals.DrawCell(CellState.X, cursorPos); // draw the cell on screen
+                        boardLogic.ChangeCellstate(CellState.X, cursorPos);
+                        boardVisuals.DrawCell(CellState.X, cursorPos); 
                         cursor.Draw(); // draw the cursor again because DrawCell erases it
                         return true;
                     }
                     break;
                 case PlayerType.O_Player:
-                    if (boardLogic.boardCells[cursorPos].state == CellState.Empty) // check if the cell is empty
+                    if (boardLogic.boardCells[cursorPos].state == CellState.Empty) 
                     {
                         cursor.Erase();
-                        boardLogic.ChangeCellstate(CellState.O, cursorPos); // change the cell state to O
-                        boardVisuals.DrawCell(CellState.O, cursorPos); // draw the cell on screen
+                        boardLogic.ChangeCellstate(CellState.O, cursorPos);
+                        boardVisuals.DrawCell(CellState.O, cursorPos); 
                         cursor.Draw(); // draw the cursor again because DrawCell erases it
                         return true;
                     }
                     break;
                 default:
-                    Utilities.Error("unexpected error. player not recognized"); // if the player type is not recognized
+                    Utilities.Error("unexpected error. player not recognized");
                     return false;
             }
             return false;
@@ -300,6 +312,76 @@ namespace ticTacToe
             Art.Draw(Art.WinMessageDraw, boardLogic.X + ((Art.NewBoard[0].Length - Art.WinMessageDraw[0].Length) / 2), boardLogic.Y - Art.WinMessageDraw.Length - 2);
         }
     }
+    public class EngineVisualiser
+    {
+        BoardLogic boardLogic; 
+        Cursor winCursor;
+        Cursor drawCursor;
+        Cursor lossCursor;
+        Cursor playingCursor;
+
+
+        public EngineVisualiser(BoardLogic boardLogic, Cursor playingCursor)
+        {
+            this.boardLogic = boardLogic; 
+            winCursor = new Cursor(boardLogic);
+            drawCursor = new Cursor(boardLogic);
+            lossCursor = new Cursor(boardLogic);
+            this.playingCursor = playingCursor; // the cursor that is used to play the game. it will be erased after the engine results are drawn
+        }
+        List<int>[] GetEngineResults(bool forXTurn)
+        {
+            return AI.Engine(boardLogic, forXTurn);
+        }
+
+        public void DrawEngineResults(bool forXTurn)
+        {
+            playingCursor.Erase(); 
+            List<int>[] analyzedMoves = GetEngineResults(forXTurn);
+
+            Console.ForegroundColor = ConsoleColor.Green; // winning moves are green
+            foreach (int move in analyzedMoves[0]) 
+            {
+
+                winCursor.CursorPos = move;
+                winCursor.Draw();
+            }
+
+            Console.ForegroundColor = ConsoleColor.Yellow; // drawing moves are yellow
+            foreach (int move in analyzedMoves[1]) 
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow; 
+                drawCursor.CursorPos = move;
+                drawCursor.Draw();
+            }
+
+            Console.ForegroundColor = ConsoleColor.Red; // losing moves are red
+            foreach (int move in analyzedMoves[2]) 
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                lossCursor.CursorPos = move;
+                lossCursor.Draw();
+            }
+            Console.ResetColor(); // reset the color to default
+        }
+        public void EraseEngineResults()
+        {
+            int currentCursorPos = playingCursor.CursorPos; // save the current cursor position to return it after erasing the engine results
+
+            for (int i = 0; i <9; i++)
+            {
+                playingCursor.CursorPos = i;
+                if (i != currentCursorPos) // if the cursor is not in the current position, erase it
+                {
+                    playingCursor.Erase();
+                }
+
+            }
+            playingCursor.CursorPos = currentCursorPos; // return the cursor to the previous position
+            playingCursor.Draw(); // draw the cursor again in the previous position
+        }
+    }
+
     public enum CellState
     {
         Empty,
@@ -391,7 +473,7 @@ namespace ticTacToe
             }
 
         }
-        public int MoveUntilAction()
+        public int MoveUntilAction(bool engineIsActive)
         {
             while (true)
             {
@@ -431,6 +513,16 @@ namespace ticTacToe
                             CursorPos--; // move left
                         }
                         break;
+                    case ConsoleKey.E:
+                        if (engineIsActive)
+                        {
+                            return -1; // engine button
+                        }
+                        else
+                        {
+                            Console.WriteLine("Engine is not active right now. Please turn it on in options.");
+                            continue; 
+                        }
                     case ConsoleKey.Spacebar:
                         return CursorPos;
 

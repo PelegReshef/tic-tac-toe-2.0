@@ -73,6 +73,7 @@ namespace ticTacToe
                     case ConsoleKey.RightArrow:
                     case ConsoleKey.LeftArrow:
                     case ConsoleKey.Spacebar:
+                    case ConsoleKey.E:
                         return keyPressed;
                     default:
 
