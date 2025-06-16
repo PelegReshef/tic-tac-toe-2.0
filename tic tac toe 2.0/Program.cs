@@ -1,17 +1,4 @@
 ﻿
-
-
-/* whats left to do:
-6. AI class - in progress:
-    - medium - block and win if possible - **haven't started**
-    - hard - create a minimax algorithm that chooses the best move - **haven't started**
-7. create a start menu - in progress. should include: 
-   - exit game - **haven't started**
-   - maybe add an option for multiple games simultaneously - **haven't started** - probably not needed
-
-*/
-
-
 namespace ticTacToe
 {
     class Program

@@ -168,7 +168,18 @@ namespace ticTacToe
                     menuLogic.CurrentMenuStage = MenuStages.MainMenu_Options;
                     menuVisuals.DrawOptionsMenu();
                     break;
-
+                case MenuStages.Play_ComingSoon:
+                    menuVisuals.DrawUselessButtonText(); 
+                    Utilities.GetValidInput();
+                    menuLogic.CurrentMenuStage = MenuStages.MainMenu_Play;
+                    menuVisuals.DrawPlayMenu();
+                    break;
+                case MenuStages.Options_controls:
+                    menuVisuals.DrawUselessButtonText();
+                    Utilities.GetValidInput();
+                    menuLogic.CurrentMenuStage = MenuStages.MainMenu_Options;
+                    menuVisuals.DrawOptionsMenu();
+                    break;
                 default:
                     Utilities.Error("this buttons was not implemented yet. press enter then space then enter to go back to home screen (dont ask why).   ( method: HandleMenuButtons)");
                     break;
@@ -350,6 +361,11 @@ namespace ticTacToe
         {
             Art.DrawTextFrame();
             Art.Draw(Art.EngineOffContent, Art.Frame_CenterX - Art.EngineOffContent[0].Length / 2, Art.Frame_CenterY - Art.EngineOffContent.Length / 2);
+        }
+        public void DrawUselessButtonText()
+        {
+            Art.DrawTextFrame();
+            Art.Draw(Art.UselessButtonContent, Art.Frame_CenterX - Art.UselessButtonContent[0].Length / 2, Art.Frame_CenterY - Art.UselessButtonContent.Length / 2);
         }
     }
     public class MenuCursor

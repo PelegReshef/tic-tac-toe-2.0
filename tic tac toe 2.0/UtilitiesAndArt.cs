@@ -462,19 +462,17 @@ namespace ticTacToe
         };
         public static string[] CreditsContent = new string[]
         {
-            "Cretaed by: Peleg Reshef                           ",
+            "Cretaed by: Peleg Reshef                            ",
             "",
             "Thanks to:",
             "",
-            "* patorjk.com — for the ASCII Art used in the game",
-            "",
-            "* GitHub - for backups and sharing my code        ",
+            "* patorjk.com — for the ASCII Art used in the game  ",
             "",
             "* My mom - for design reccomendations and ",
             " emotional support",
             "",
             "",
-            "Project repository: github.com/PelegReshef/tic-tac-toe-2.0",
+            "Project repo: github.com/PelegReshef/tic-tac-toe-2.0",
         };
         public static string[] ExitGameContent = new string[]
         {
@@ -485,25 +483,35 @@ namespace ticTacToe
         };
         public static string[] EngineOnContent = new string[]
         {
-            "Game engine is now active                                   ",
+            "Game engine is now **active**                        ",
             "",
-            "Game engine shows all possible moves from the current board,",
+            "Game engine shows all possible moves from the current",
             "",
-            "sorted to winning, drawing, and losing moves                ",
+            " board, sorted to winning (green), drawing (yellow), ",
             "",
-            "to help you analyze your games.",
+            "and losing moves (red). Press E to activate in game. ",
             ""
         };
         public static string[] EngineOffContent = new string[]
         {
-            "Game engine is now inactive                                 ",
+            "Game engine is now **inactive**                      ",
             "",
-            "Game engine shows all possible moves from the current board,",
+            "Game engine shows all possible moves from the current",
             "",
-            "sorted to winning, drawing, and losing moves                ",
+            " board, sorted to winning (green), drawing (yellow), ",
             "",
-            "to help you analyze your games.                             ",
+            "and losing moves (red). Press E to activate in game. ",
             ""
+        };
+        public static string[] UselessButtonContent = new string[]
+        {
+            "This button does nothing, because I am too lazy     ",
+            "",
+            "to make it do something. If you have suggestions for",
+            "",
+            "this button contact me (you probably know how).     ",
+            "",
+            "Press any key to continue...                        "
         };
     }
 }
