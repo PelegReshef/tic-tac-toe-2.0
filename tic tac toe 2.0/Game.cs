@@ -520,6 +520,7 @@ namespace ticTacToe
                         }
                         else
                         {
+                            Console.SetCursorPosition(0, 0);
                             Console.WriteLine("Engine is not active right now. Please turn it on in options.");
                             continue; 
                         }
