@@ -9,13 +9,8 @@ Thanks for checking it out! :)
 
 ---
 
-## Final Version (hopefully)
-June 17th, 2025:
-
-Tic Tac Toe 2.0 - Final Release
-This project is now complete. Here are the features:
-
-
+## Final Version
+Here are the features:
 ### Bot Difficulties
 
 - Easy - plays randomly.
