@@ -24,6 +24,8 @@ During your turn, pressing the E key activates an in-game engine that shows:
 - Which moves result in a draw - in yellow
 - Which moves lead to a loss - in red
 
+Note that you need to activate it in settings.
+
 ---
-if you find a bug or have a suggestion, you can contact me here.
+If you find a bug or have a suggestion, you can contact me here.
 #### Hope you enjoyed!
