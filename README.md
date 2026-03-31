@@ -1,5 +1,5 @@
-# tic tac toe
-Hi everyone (probably no one),
+# Tic Tac Toe
+Hi everyone,
 
 This is a Tic Tac Toe game I’m creating as a learning project in C#.  
 
